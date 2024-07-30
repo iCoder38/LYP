@@ -9,21 +9,43 @@ import UIKit
 
 class welcome: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    @IBOutlet weak var btn_sign_up:UIButton! {
+        didSet {
+            btn_sign_up.backgroundColor = .white
+            btn_sign_up.layer.cornerRadius = 25
+            btn_sign_up.clipsToBounds = true
+            btn_sign_up.backgroundColor = app_purple_color
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBOutlet weak var btn_login:UIButton! {
+        didSet {
+            btn_login.backgroundColor = .white
+            btn_login.layer.cornerRadius = 25
+            btn_login.clipsToBounds = true
+            btn_login.setTitle("Login", for: .normal)
+            btn_login.setTitleColor(.systemPink, for: .normal)
+        }
     }
-    */
-
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // english
+        UserDefaults.standard.set("en", forKey: default_key_language)
+        
+        self.btn_login.addTarget(self, action: #selector(login_click_method), for: .touchUpInside)
+        self.btn_sign_up.addTarget(self, action: #selector(sign_up_click_method), for: .touchUpInside)
+    }
+    
+    @objc func login_click_method() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "login_id")
+        self.navigationController?.pushViewController(push, animated: true)
+    }
+    
+    @objc func sign_up_click_method() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "registration_id")
+        self.navigationController?.pushViewController(push, animated: true)
+    }
+    
 }

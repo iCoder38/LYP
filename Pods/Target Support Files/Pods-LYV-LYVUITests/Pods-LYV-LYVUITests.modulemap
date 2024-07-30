@@ -1,0 +1,6 @@
+framework module Pods_LYV_LYVUITests {
+  umbrella header "Pods-LYV-LYVUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

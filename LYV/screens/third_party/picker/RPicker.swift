@@ -40,7 +40,7 @@ enum RPickerType {
     
     @objc class func selectDate(title: String? = nil,
                           cancelText: String? = nil,
-                          doneText: String = text_language.common_screen(status: "done"),
+                          doneText: String = "done",
                           datePickerMode: UIDatePicker.Mode = .date,
                           selectedDate: Date = Date(),
                           minDate: Date? = nil,
@@ -70,7 +70,7 @@ enum RPickerType {
     
     class func selectOption(title: String? = nil,
                             cancelText: String? = nil,
-                            doneText: String = text_language.common_screen(status: "done"),
+                            doneText: String = "done",
                             dataArray: Array<String>?,
                             selectedIndex: Int? = nil,
                             didSelectValue : ((_ value: String, _ atIndex: Int)->())?)  {
@@ -97,7 +97,7 @@ enum RPickerType {
     //--> For exposing to Objective C. Same as swift
     @objc class func pickOption(title: String? = nil,
                             cancelText: String? = nil,
-                            doneText: String = text_language.common_screen(status: "dismiss"),
+                            doneText: String = "dismiss",
                             dataArray: Array<String>?,
                             selectedIndex: NSNumber? = nil,
                             didSelectValue : ((_ value: String, _ atIndex: Int)->())?)  {
@@ -116,7 +116,7 @@ enum RPickerType {
     
     private class func controller(title: String? = nil,
                           cancelText: String? = nil,
-                          doneText: String = text_language.common_screen(status: "dismiss"),
+                          doneText: String = "dismiss",
                           datePickerMode: UIDatePicker.Mode = .date,
                           selectedDate: Date = Date(),
                           minDate: Date? = nil,
@@ -182,7 +182,7 @@ class RPickerController: UIViewController {
     var minDate: Date?
     var titleText: String?
     var cancelText: String?
-    var doneText: String = text_language.common_screen(status: "done")
+    var doneText: String = "done"
     var datePickerMode: UIDatePicker.Mode = .date
     var datePickerStyle: RDatePickerStyle = .Wheel //Only for iOS 14 and above
 
@@ -200,7 +200,7 @@ class RPickerController: UIViewController {
     //MARK:- Init
     init(title: String? = nil,
          cancelText: String? = nil,
-         doneText: String = text_language.common_screen(status: "done"),
+         doneText: String = "done",
          datePickerMode: UIDatePicker.Mode = .date,
          selectedDate: Date = Date(),
          minDate: Date? = nil,

@@ -7,13 +7,6 @@
 
 import UIKit
 
-//var  application_base_url = "https://demo4.evirtualservices.net/linkdoc/services/index"
-var application_base_url = "https://app.linkeddocapp.com/services/index"
-// keys
-//
-// henry : 37359e35c6msh46cf0ff20f75d55p1d6501jsn59c2c19695ad
-var str_rapid_api_key = "37359e35c6msh46cf0ff20f75d55p1d6501jsn59c2c19695ad"
-
 let str_save_login_user_data = "keyLoginFullData"
 let str_save_last_api_token = "key_last_api_token"
 
@@ -24,12 +17,13 @@ var english_language = "en"
 var chinese_language = "ch"
 var spanish_language = "sp"
 
-// AIzaSyBnOBYmGv9Pa5JUgxgw52HzcNe95JWii1c
-// henry 2 : AIzaSyCKxiD73rXP7059hKRTP57egdBxB_NMkIc
-var KGoogleApiKey = "AIzaSyCKxiD73rXP7059hKRTP57egdBxB_NMkIc"
+// COLORS
+var app_purple_color = UIColor.init(red: 118.0/255.0, green: 104.0/255.0, blue: 172.0/255.0, alpha: 1)
+
 
 class Utils: NSObject {
 
+     
     class func light_vibrate() {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
@@ -45,4 +39,26 @@ class Utils: NSObject {
         generator.impactOccurred()
     }
     
+}
+
+extension UIViewController {
+    
+    @objc  func back_click_method() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+}
+
+extension UITextField {
+    func setLeftPaddingPoints(_ amount:CGFloat) {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.leftView = paddingView
+        self.leftViewMode = .always
+    }
+    
+    func setRightPaddingPoints(_ amount:CGFloat) {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.rightView = paddingView
+        self.rightViewMode = .always
+    }
 }
