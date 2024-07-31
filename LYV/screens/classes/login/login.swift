@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Alamofire
 
 class login: UIViewController {
-
+    
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
             btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
@@ -62,8 +63,73 @@ class login: UIViewController {
     }
     
     @objc func sign_in_click_method() {
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "home_id")
-        self.navigationController?.pushViewController(push, animated: true)
+        self.login_wb()
+        
     }
     
+    @objc func login_wb() {
+        
+        if (self.txt_email.text == "") {
+            return
+        }
+        
+        if (self.txt_password.text == "") {
+            return
+        }
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        
+        parameters = [
+            "action"    : "login",
+            "email"     : "m001@mailinator.com", // String(self.txt_email.text!),
+            "password"  : "123456", // String(self.txt_password.text!),
+            "device"    : "iOS",
+        ]
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    if strSuccess.lowercased() == "success" {
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "home_id")
+                        self.navigationController?.pushViewController(push, animated: true)
+                        
+                    } else {
+                        ERProgressHud.sharedInstance.hide()
+                        
+                    }
+                    
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                ERProgressHud.sharedInstance.hide()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
 }

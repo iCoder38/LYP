@@ -10,6 +10,17 @@
 		246FA8E4394E902BD0A6A887 /* Pods_LYV_LYVUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FBEA405D33A2434928E424F /* Pods_LYV_LYVUITests.framework */; };
 		679536BCEBB86AC02DE331F2 /* Pods_LYV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9053415FDB2498A101B8B00B /* Pods_LYV.framework */; };
 		7A035750F53897610AF1DDF9 /* Pods_LYVTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC6CC886FA32895000133CF3 /* Pods_LYVTests.framework */; };
+		B950BEF12C5A0C4400557F3E /* token_manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF02C5A0C4400557F3E /* token_manager.swift */; };
+		B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */; };
+		B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */; };
+		B950BEFF2C5A0DBC00557F3E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF72C5A0DBA00557F3E /* Color.swift */; };
+		B950BF002C5A0DBC00557F3E /* LeftPaddingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF82C5A0DBB00557F3E /* LeftPaddingTextField.swift */; };
+		B950BF012C5A0DBC00557F3E /* NewYorkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF92C5A0DBB00557F3E /* NewYorkButton.swift */; };
+		B950BF022C5A0DBC00557F3E /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEFA2C5A0DBB00557F3E /* AlertView.swift */; };
+		B950BF032C5A0DBC00557F3E /* NewYorkAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEFB2C5A0DBB00557F3E /* NewYorkAlertController.swift */; };
+		B950BF042C5A0DBC00557F3E /* UIStackView+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEFC2C5A0DBC00557F3E /* UIStackView+Utility.swift */; };
+		B950BF052C5A0DBC00557F3E /* NewYorkAlertViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEFD2C5A0DBC00557F3E /* NewYorkAlertViewType.swift */; };
+		B950BF082C5A28F400557F3E /* comments.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BF072C5A28F400557F3E /* comments.swift */; };
 		B97C7CC32C578869006C4941 /* welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97C7CC22C578869006C4941 /* welcome.swift */; };
 		B97C7CC72C578B39006C4941 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97C7CC62C578B39006C4941 /* text.swift */; };
 		B97C7CCA2C578C0B006C4941 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97C7CC92C578C0B006C4941 /* Utils.swift */; };
@@ -54,6 +65,17 @@
 		8740180B711A3CA8188D6311 /* Pods-LYV-LYVUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LYV-LYVUITests.debug.xcconfig"; path = "Target Support Files/Pods-LYV-LYVUITests/Pods-LYV-LYVUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9053415FDB2498A101B8B00B /* Pods_LYV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LYV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2FCE23BA03E31ACF91A0E75 /* Pods-LYV-LYVUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LYV-LYVUITests.release.xcconfig"; path = "Target Support Files/Pods-LYV-LYVUITests/Pods-LYV-LYVUITests.release.xcconfig"; sourceTree = "<group>"; };
+		B950BEF02C5A0C4400557F3E /* token_manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = token_manager.swift; sourceTree = "<group>"; };
+		B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ERProgressHud.swift; sourceTree = "<group>"; };
+		B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetView.swift; sourceTree = "<group>"; };
+		B950BEF72C5A0DBA00557F3E /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		B950BEF82C5A0DBB00557F3E /* LeftPaddingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftPaddingTextField.swift; sourceTree = "<group>"; };
+		B950BEF92C5A0DBB00557F3E /* NewYorkButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewYorkButton.swift; sourceTree = "<group>"; };
+		B950BEFA2C5A0DBB00557F3E /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		B950BEFB2C5A0DBB00557F3E /* NewYorkAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewYorkAlertController.swift; sourceTree = "<group>"; };
+		B950BEFC2C5A0DBC00557F3E /* UIStackView+Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStackView+Utility.swift"; sourceTree = "<group>"; };
+		B950BEFD2C5A0DBC00557F3E /* NewYorkAlertViewType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewYorkAlertViewType.swift; sourceTree = "<group>"; };
+		B950BF072C5A28F400557F3E /* comments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = comments.swift; sourceTree = "<group>"; };
 		B97C7CC22C578869006C4941 /* welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = welcome.swift; sourceTree = "<group>"; };
 		B97C7CC62C578B39006C4941 /* text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
 		B97C7CC92C578C0B006C4941 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -117,6 +139,45 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B950BEEF2C5A0C3B00557F3E /* token_manager */ = {
+			isa = PBXGroup;
+			children = (
+				B950BEF02C5A0C4400557F3E /* token_manager.swift */,
+			);
+			path = token_manager;
+			sourceTree = "<group>";
+		};
+		B950BEF22C5A0CA000557F3E /* progress */ = {
+			isa = PBXGroup;
+			children = (
+				B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */,
+			);
+			path = progress;
+			sourceTree = "<group>";
+		};
+		B950BEF52C5A0DAB00557F3E /* alert */ = {
+			isa = PBXGroup;
+			children = (
+				B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */,
+				B950BEFA2C5A0DBB00557F3E /* AlertView.swift */,
+				B950BEF72C5A0DBA00557F3E /* Color.swift */,
+				B950BEF82C5A0DBB00557F3E /* LeftPaddingTextField.swift */,
+				B950BEFB2C5A0DBB00557F3E /* NewYorkAlertController.swift */,
+				B950BEFD2C5A0DBC00557F3E /* NewYorkAlertViewType.swift */,
+				B950BEF92C5A0DBB00557F3E /* NewYorkButton.swift */,
+				B950BEFC2C5A0DBC00557F3E /* UIStackView+Utility.swift */,
+			);
+			path = alert;
+			sourceTree = "<group>";
+		};
+		B950BF062C5A28E200557F3E /* comment */ = {
+			isa = PBXGroup;
+			children = (
+				B950BF072C5A28F400557F3E /* comments.swift */,
+			);
+			path = comment;
+			sourceTree = "<group>";
+		};
 		B97C7CBE2C5784AD006C4941 /* screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +196,7 @@
 				B99FA2862C57BF71005DB636 /* login */,
 				B99FA2892C57C8A0005DB636 /* registration */,
 				B99FA2902C57D18A005DB636 /* home */,
+				B950BF062C5A28E200557F3E /* comment */,
 			);
 			path = classes;
 			sourceTree = "<group>";
@@ -157,6 +219,7 @@
 		B97C7CC42C578B19006C4941 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				B950BEEF2C5A0C3B00557F3E /* token_manager */,
 				B97C7CC82C578C04006C4941 /* utils */,
 				B97C7CC52C578B22006C4941 /* text */,
 			);
@@ -198,6 +261,8 @@
 		B99FA28C2C57CBAF005DB636 /* third_party */ = {
 			isa = PBXGroup;
 			children = (
+				B950BEF52C5A0DAB00557F3E /* alert */,
+				B950BEF22C5A0CA000557F3E /* progress */,
 				B99FA28E2C57CBBC005DB636 /* picker */,
 			);
 			path = third_party;
@@ -526,13 +591,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B950BF002C5A0DBC00557F3E /* LeftPaddingTextField.swift in Sources */,
 				B9F560532C490186003462CA /* ViewController.swift in Sources */,
 				B9F5604F2C490186003462CA /* AppDelegate.swift in Sources */,
+				B950BF052C5A0DBC00557F3E /* NewYorkAlertViewType.swift in Sources */,
 				B97C7CC32C578869006C4941 /* welcome.swift in Sources */,
 				B97C7CCA2C578C0B006C4941 /* Utils.swift in Sources */,
 				B9F560512C490186003462CA /* SceneDelegate.swift in Sources */,
+				B950BEF12C5A0C4400557F3E /* token_manager.swift in Sources */,
+				B950BF032C5A0DBC00557F3E /* NewYorkAlertController.swift in Sources */,
+				B950BF012C5A0DBC00557F3E /* NewYorkButton.swift in Sources */,
+				B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */,
+				B950BF042C5A0DBC00557F3E /* UIStackView+Utility.swift in Sources */,
+				B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */,
+				B950BEFF2C5A0DBC00557F3E /* Color.swift in Sources */,
+				B950BF022C5A0DBC00557F3E /* AlertView.swift in Sources */,
 				B97C7CC72C578B39006C4941 /* text.swift in Sources */,
 				B9F560592C490186003462CA /* LYV.xcdatamodeld in Sources */,
+				B950BF082C5A28F400557F3E /* comments.swift in Sources */,
 				B99FA2882C57BF81005DB636 /* login.swift in Sources */,
 				B99FA2922C57D19B005DB636 /* home.swift in Sources */,
 				B99FA28F2C57CBBC005DB636 /* RPicker.swift in Sources */,
@@ -718,21 +794,24 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = NHVZESNL9B;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LYV/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LYV;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.evs.dev.LYV;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -752,21 +831,24 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = NHVZESNL9B;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LYV/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LYV;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.evs.dev.LYV;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

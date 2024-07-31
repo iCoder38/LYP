@@ -36,6 +36,28 @@ class welcome: UIViewController {
         
         self.btn_login.addTarget(self, action: #selector(login_click_method), for: .touchUpInside)
         self.btn_sign_up.addTarget(self, action: #selector(sign_up_click_method), for: .touchUpInside)
+        
+        self.remember_me()
+    }
+    
+    @objc func remember_me() {
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person as Any)
+            
+            if person["role"] as! String == "Member" {
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "home_id")
+                self.navigationController?.pushViewController(push, animated: true)
+            } else {
+                debugPrint("")
+                // DRIVER
+                // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id")
+                // self.navigationController?.pushViewController(push, animated: true)
+                
+            }
+            
+        }
+        
     }
     
     @objc func login_click_method() {

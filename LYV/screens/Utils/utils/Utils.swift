@@ -7,6 +7,8 @@
 
 import UIKit
 
+let application_base_url = "https://demo4.evirtualservices.net/lyvapp/services/index"
+
 let str_save_login_user_data = "keyLoginFullData"
 let str_save_last_api_token = "key_last_api_token"
 
@@ -19,7 +21,7 @@ var spanish_language = "sp"
 
 // COLORS
 var app_purple_color = UIColor.init(red: 118.0/255.0, green: 104.0/255.0, blue: 172.0/255.0, alpha: 1)
-
+var app_BG = UIColor.init(red: 37.0/255.0, green: 42.0/255.0, blue: 55.0/255.0, alpha: 1)
 
 class Utils: NSObject {
 
@@ -42,6 +44,13 @@ class Utils: NSObject {
 }
 
 extension UIViewController {
+    
+    @objc func please_check_your_internet_connection() {
+        let alert = NewYorkAlertController(title: String("Error").uppercased(), message: String("Please check your Internet Connection"), style: .alert)
+        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+        alert.addButtons([cancel])
+        self.present(alert, animated: true)
+    }
     
     @objc  func back_click_method() {
         navigationController?.popViewController(animated: true)
