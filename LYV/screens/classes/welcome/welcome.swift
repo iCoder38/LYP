@@ -46,7 +46,7 @@ class welcome: UIViewController {
             print(person as Any)
             
             if person["role"] as! String == "Member" {
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "home_id")
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "tab_bar_controller_id")
                 self.navigationController?.pushViewController(push, animated: true)
             } else {
                 debugPrint("")

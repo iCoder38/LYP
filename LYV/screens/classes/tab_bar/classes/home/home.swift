@@ -64,6 +64,7 @@ class home: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = app_BG
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
@@ -432,15 +433,46 @@ class home_table_cell : UITableViewCell {
         }
     }
     
-    @IBOutlet weak var lbl_username:UILabel!
-    @IBOutlet weak var lbl_time:UILabel!
-    @IBOutlet weak var lbl_tags:UILabel!
-    @IBOutlet weak var lbl_description:UILabel!
+    @IBOutlet weak var lbl_username:UILabel! {
+        didSet {
+            lbl_username.textColor = .white
+        }
+    }
     
-    @IBOutlet weak var lbl_likes:UILabel!
-    @IBOutlet weak var btn_like:UIButton!
+    @IBOutlet weak var lbl_time:UILabel! {
+        didSet {
+            lbl_time.textColor = .white
+        }
+    }
     
-    @IBOutlet weak var lbl_comments:UILabel!
+    @IBOutlet weak var lbl_tags:UILabel! {
+        didSet {
+            lbl_tags.textColor = .white
+        }
+    }
+    
+    @IBOutlet weak var lbl_description:UILabel! {
+        didSet {
+            lbl_description.textColor = .white
+        }
+    }
+    
+    @IBOutlet weak var lbl_likes:UILabel! {
+        didSet {
+            lbl_likes.textColor = .white
+        }
+    }
+    @IBOutlet weak var btn_like:UIButton! {
+        didSet {
+             
+        }
+    }
+    
+    @IBOutlet weak var lbl_comments:UILabel!  {
+        didSet {
+            lbl_comments.textColor = .white
+        }
+    }
     
     @IBOutlet weak var img_feed_image:UIImageView! {
         didSet {
