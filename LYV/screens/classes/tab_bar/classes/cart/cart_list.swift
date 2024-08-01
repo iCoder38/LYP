@@ -13,6 +13,8 @@ class cart_list: UIViewController {
 
     var arr_cart_list:NSMutableArray! = []
     
+    var str_product_id_for_delete:String!
+    
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
             tble_view.backgroundColor = .clear
@@ -41,14 +43,17 @@ class cart_list: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = app_BG
         
-        self.cart_counter_WB()
+        self.cart_counter_WB(loader: "yes")
     }
     
-    @objc func cart_counter_WB() {
+    @objc func cart_counter_WB(loader:String) {
        
         var parameters:Dictionary<AnyHashable, Any>!
         
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
       
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
@@ -117,7 +122,7 @@ class cart_list: UIViewController {
                                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                                         
-                                        self.cart_counter_WB()
+                                        self.cart_counter_WB(loader: "no")
                                         
                                     } else if let error = error {
                                         print("Failed to refresh token: \(error.localizedDescription)")
@@ -146,7 +151,102 @@ class cart_list: UIViewController {
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                         
-                        self.cart_counter_WB()
+                        self.cart_counter_WB(loader: "no")
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
+    
+    @objc func delete_item_in_cart_WB() {
+       
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+      
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"    : "cartdelete",
+                    "userId"    : String(myString),
+                    "productId"    : String(self.str_product_id_for_delete),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                            
+                                self.cart_counter_WB(loader: "no")
+                               
+                            } else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.delete_item_in_cart_WB()
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.delete_item_in_cart_WB()
                         
                     } else if let error = error {
                         print("Failed to refresh token: \(error.localizedDescription)")
@@ -210,7 +310,12 @@ extension cart_list: UITableViewDataSource , UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
-            // handle delete (by removing the data from your array and updating the tableview)
+            print(indexPath.row)
+            let item = self.arr_cart_list[indexPath.row] as? [String:Any]
+            print(item as Any)
+            self.str_product_id_for_delete = "\(item!["productId"]!)"
+            
+            self.delete_item_in_cart_WB()
         }
     }
 }

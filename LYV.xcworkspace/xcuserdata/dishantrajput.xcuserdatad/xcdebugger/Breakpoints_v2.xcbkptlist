@@ -14,8 +14,8 @@
             filePath = "LYV/screens/classes/tab_bar/classes/product_details/product_details.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "469"
-            endingLineNumber = "469"
+            startingLineNumber = "474"
+            endingLineNumber = "474"
             landmarkName = "add_to_cart_WB()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "LYV/screens/classes/tab_bar/classes/product_details/product_details.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "400"
-            endingLineNumber = "400"
+            startingLineNumber = "405"
+            endingLineNumber = "405"
             landmarkName = "add_to_cart_WB()"
             landmarkType = "7">
          </BreakpointContent>

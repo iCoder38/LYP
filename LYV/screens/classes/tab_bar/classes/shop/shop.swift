@@ -76,9 +76,6 @@ class shop: UIViewController {
                                 var ar : NSArray!
                                 ar = (JSON["data"] as! Array<Any>) as NSArray
                                 
-                                
-                                
-                                
                                 self.arr_category.removeAllObjects()
                                 
                                 self.arr_category.addObjects(from: ar as! [Any])

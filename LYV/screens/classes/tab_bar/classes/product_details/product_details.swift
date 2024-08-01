@@ -75,6 +75,11 @@ class product_details: UIViewController {
         
         self.btn_cart.addTarget(self, action: #selector(push_to_Cart), for: .touchUpInside)
         
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         self.cart_counter_WB()
     }
     
