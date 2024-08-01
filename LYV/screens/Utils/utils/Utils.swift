@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Foundation
+
 
 let application_base_url = "https://demo4.evirtualservices.net/lyvapp/services/index"
 
@@ -22,6 +24,37 @@ var spanish_language = "sp"
 // COLORS
 var app_purple_color = UIColor.init(red: 118.0/255.0, green: 104.0/255.0, blue: 172.0/255.0, alpha: 1)
 var app_BG = UIColor.init(red: 37.0/255.0, green: 42.0/255.0, blue: 55.0/255.0, alpha: 1)
+
+
+// Step 1: Define the color dictionary
+let colorDictionary: [String: String] = [
+    "1": "Red",
+    "2": "Green",
+    "3": "Yellow",
+    "4": "Blue",
+    "5": "Sky-Blue",
+    "6": "Brown",
+    "7": "Pink",
+    "8": "Purple",
+    "9": "Magenta",
+    "10": "Orange",
+    "11": "White"
+]
+
+// Step 2: Define the reusable method to get color names
+func getColorNames(from colorCodes: String) -> [String] {
+    let codes = colorCodes.split(separator: ",")
+    var colorNames: [String] = []
+    
+    for code in codes {
+        if let colorName = colorDictionary[String(code)] {
+            colorNames.append(colorName)
+        }
+    }
+    
+    return colorNames
+}
+
 
 class Utils: NSObject {
 

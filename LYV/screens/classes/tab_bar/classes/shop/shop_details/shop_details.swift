@@ -15,6 +15,8 @@ class shop_details: UIViewController {
     var get_details:NSDictionary!
     
     var arr_category:NSMutableArray! = []
+    var arr_category_products:NSMutableArray! = []
+    var str_product_id:String!
     
     @IBOutlet weak var lbl_nav:UILabel! {
         didSet {
@@ -22,10 +24,17 @@ class shop_details: UIViewController {
         }
     }
     
-    @IBOutlet weak var collectionView:UICollectionView! {
+    @IBOutlet weak var collectionView1:UICollectionView! {
         didSet {
-            collectionView.isPagingEnabled = false
-            collectionView.backgroundColor = .clear
+            collectionView1.isPagingEnabled = false
+            collectionView1.backgroundColor = .clear
+        }
+    }
+    
+    @IBOutlet weak var collectionView2:UICollectionView! {
+        didSet {
+            collectionView2.isPagingEnabled = false
+            collectionView2.backgroundColor = .clear
         }
     }
     
@@ -51,13 +60,18 @@ class shop_details: UIViewController {
             let item = ar2[indexx] as? [String:Any]
             
             if (indexx == 0) {
-                var custom = [
+                let custom = [
+                    "id"        : "\(item!["id"]!)",
                     "name"      : (item!["name"] as! String),
                     "status"    : "yes",
                 ]
                 self.arr_category.add(custom)
+                
+                self.str_product_id = "\(item!["id"]!)"
+                
             } else {
-                var custom = [
+                let custom = [
+                    "id"        : "\(item!["id"]!)",
                     "name"      : (item!["name"] as! String),
                     "status"    : "no",
                 ]
@@ -67,14 +81,17 @@ class shop_details: UIViewController {
             
         }
         
-        // print(self.arr_category as Any)
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.collectionView.reloadData()
+        
+        
+        self.product_list_WB()
+        self.collectionView1.delegate = self
+        self.collectionView1.dataSource = self
+        self.collectionView1.reloadData()
+        
     }
     
     
-    /*@objc func like_dislike_WB(status:String,postId:String) {
+    @objc func product_list_WB() {
        
         var parameters:Dictionary<AnyHashable, Any>!
         
@@ -93,10 +110,10 @@ class shop_details: UIViewController {
                 ]
                  
                 parameters = [
-                    "action"    : "postlike",
+                    "action"    : "productlist",
                     "userId"    : String(myString),
-                    "postId"    : String(postId),
-                    "status"    : String(status),
+                    "category"    : String(self.str_product_id),
+                    // "status"    : String(status),
                 ]
                 
                 print("parameters-------\(String(describing: parameters))")
@@ -116,7 +133,22 @@ class shop_details: UIViewController {
                             
                             if strSuccess.lowercased() == "success" {
                             
-                                self.feeds_list_WB(loader: "no")
+                                ERProgressHud.sharedInstance.hide()
+                                
+                                var ar : NSArray!
+                                ar = (JSON["data"] as! Array<Any>) as NSArray
+                                
+                                self.arr_category_products.removeAllObjects()
+                                
+                                self.arr_category_products.addObjects(from: ar as! [Any])
+                                print(self.arr_category_products.count)
+                                
+                                if (self.arr_category_products.count != 0) {
+                                    self.collectionView2.delegate = self
+                                    self.collectionView2.dataSource = self
+                                    self.collectionView2.reloadData()
+                                }
+//
                             }
                             else {
                                 TokenManager.shared.refresh_token_WB { token, error in
@@ -127,7 +159,7 @@ class shop_details: UIViewController {
                                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                                         
-                                        self.like_dislike_WB(status: status, postId: postId)
+                                        self.product_list_WB()
                                         
                                     } else if let error = error {
                                         print("Failed to refresh token: \(error.localizedDescription)")
@@ -156,7 +188,7 @@ class shop_details: UIViewController {
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                         
-                        self.like_dislike_WB(status: status, postId: postId)
+                        self.product_list_WB()
                         
                     } else if let error = error {
                         print("Failed to refresh token: \(error.localizedDescription)")
@@ -166,7 +198,7 @@ class shop_details: UIViewController {
             }
         }
         
-    }*/
+    }
     
 }
 
@@ -178,56 +210,169 @@ extension shop_details: UICollectionViewDelegate ,
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return self.arr_category.count
+        if (collectionView == collectionView1) {
+            return self.arr_category.count
+        } else {
+            return self.arr_category_products.count
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shop_details_view_cell", for: indexPath as IndexPath) as! shop_details_view_cell
+        if (collectionView == collectionView1) {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shop_details_view_cell", for: indexPath as IndexPath) as! shop_details_view_cell
 
-        
-        
-        let item = self.arr_category[indexPath.row] as? [String:Any]
-        cell.myLabel.text = (item!["name"] as! String)
-        
-        if (item!["status"] as! String) == "no" {
+            let item = self.arr_category[indexPath.row] as? [String:Any]
+            cell.myLabel.text = (item!["name"] as! String)
             
-            cell.backgroundColor  = app_BG
-            cell.layer.cornerRadius = 12
-            cell.clipsToBounds = true
-            cell.layer.borderWidth = 0.6
-            cell.layer.borderColor = UIColor.white.cgColor
-            cell.myLabel.textColor = .white
+            if (item!["status"] as! String) == "no" {
+                
+                cell.backgroundColor = app_BG
+                cell.layer.cornerRadius = 12
+                cell.clipsToBounds = true
+                cell.layer.borderWidth = 0.6
+                cell.layer.borderColor = UIColor.white.cgColor
+                cell.myLabel.textColor = .white
+                
+            } else {
+                
+                cell.backgroundColor = .white
+                cell.layer.cornerRadius = 12
+                cell.clipsToBounds = true
+                cell.layer.borderWidth = 0.6
+                cell.layer.borderColor = UIColor.white.cgColor
+                cell.myLabel.textColor = .black
+                
+            }
+            
+            return cell
             
         } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "shop_details_view_cell2", for: indexPath as IndexPath) as! shop_details_view_cell2
+
+            let item = self.arr_category_products[indexPath.row] as? [String:Any]
+           
+            cell.lbl_price.text = "$\(item!["price"]!)"
+            cell.img_details.text = "\(item!["name"]!)"
             
-            cell.backgroundColor  = .white
-            cell.layer.cornerRadius = 12
-            cell.clipsToBounds = true
-            cell.layer.borderWidth = 0.6
-            cell.layer.borderColor = UIColor.white.cgColor
-            cell.myLabel.textColor = .black
+            cell.img_product_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_product_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
             
+            cell.configure(with: "\(item!["color"]!)")
+            
+            /*let colorNames = getColorNames(from: "\(item!["color"]!)")
+            if let firstColorName = colorNames.first, let color = getColor(from: firstColorName) {
+                cell.colorDotView.backgroundColor = color
+            }*/
+            
+            /*let colorCodesString = "\(item!["color"]!)"
+            let colorCodesArray = colorCodesString.split(separator: ",").map { String($0) }
+            print(colorCodesArray)
+            let colorCodes = colorCodesArray[indexPath.row]
+            let colorNames = getColorNames(from: colorCodes)
+            if let firstColorName = colorNames.first, let color = getColor(from: firstColorName) {
+                cell.colorDotView.backgroundColor = color
+            }*/
+            
+            return cell
         }
-        
-        return cell
         
     }
     
+    // Helper function to convert color name to UIColor
+        func getColor(from colorName: String) -> UIColor? {
+            switch colorName.lowercased() {
+            case "red":
+                return UIColor.red
+            case "green":
+                return UIColor.green
+            case "yellow":
+                return UIColor.yellow
+            case "blue":
+                return UIColor.blue
+            case "sky-blue":
+                return UIColor.systemTeal
+            case "brown":
+                return UIColor.brown
+            case "pink":
+                return UIColor.systemPink
+            case "purple":
+                return UIColor.purple
+            case "magenta":
+                return UIColor.magenta
+            case "orange":
+                return UIColor.orange
+            case "white":
+                return UIColor.white
+            default:
+                return nil
+            }
+        }
+    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        if (collectionView == collectionView1) {
+            for indexx in 0..<self.arr_category.count {
+                
+                let item2 = self.arr_category[indexx] as? [String:Any]
+                
+                if (indexx == indexPath.row) {
+                   
+                    let custom = [
+                        "id"        : (item2!["id"] as! String),
+                        "name"      : (item2!["name"] as! String),
+                        "status"    : "yes",
+                    ]
+                    
+                    self.arr_category.removeObject(at: indexx)
+                    self.arr_category.insert(custom, at: indexx)
+                    
+                    self.str_product_id = (item2!["id"] as! String)
+                } else {
+                  
+                    let custom = [
+                        "id"        : (item2!["id"] as! String),
+                        "name"      : (item2!["name"] as! String),
+                        "status"    : "no",
+                    ]
+                    
+                    self.arr_category.removeObject(at: indexx)
+                    self.arr_category.insert(custom, at: indexx)
+                }
+               
+            }
+            
+            print(self.arr_category as Any)
+            self.collectionView1.reloadData()
+            self.product_list_WB()
+            
+        }
+        
+    
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        var sizes: CGSize
-        let result = UIScreen.main.bounds.size
-        NSLog("%f",result.height)
-        sizes = CGSize(width: self.view.frame.size.width/3, height: 40)
+        if (collectionView == collectionView1) {
+            var sizes: CGSize
+            let result = UIScreen.main.bounds.size
+            NSLog("%f",result.height)
+            sizes = CGSize(width: self.view.frame.size.width/3, height: 40)
+            
+            return sizes
+        } else {
+            var sizes: CGSize
+            let result = UIScreen.main.bounds.size
+            NSLog("%f",result.height)
+            sizes = CGSize(width: (self.view.frame.size.width/2)-20, height: 330)
+            
+            return sizes
+        }
         
-        return sizes
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -246,7 +391,7 @@ extension shop_details: UICollectionViewDelegate ,
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
     }
     
 }
@@ -261,39 +406,134 @@ class shop_details_view_cell: UICollectionViewCell , UITextFieldDelegate {
         }
     }
     
+    let myLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false // Enable Auto Layout
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .black
+        return label
+    }()
     
-        let myLabel: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false // Enable Auto Layout
-            label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 16)
-            label.textColor = .black
-            return label
-        }()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupLabel()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupLabel()
+    }
+    
+    
+    private func setupLabel() {
+        contentView.addSubview(myLabel)
         
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            setupLabel()
-        }
-        
-        required init?(coder: NSCoder) {
-            super.init(coder: coder)
-            setupLabel()
-        }
-        
-        
-        private func setupLabel() {
-            contentView.addSubview(myLabel)
-            
-            // Set constraints for the label
-            NSLayoutConstraint.activate([
-                myLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-                myLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-                myLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-                myLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-            ])
-        }
+        // Set constraints for the label
+        NSLayoutConstraint.activate([
+            myLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            myLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            myLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            myLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+        ])
+    }
     
 }
 
+class shop_details_view_cell2: UICollectionViewCell {
+    
+    @IBOutlet weak var img_product_image:UIImageView!  {
+        didSet {
+            img_product_image.layer.cornerRadius = 12
+            img_product_image.clipsToBounds = true
+        }
+    }
+    
+    @IBOutlet weak var img_details:UILabel! {
+        didSet {
+            img_details.textColor = .white
+        }
+    }
+    
+    @IBOutlet weak var lbl_price:UILabel!  {
+        didSet {
+            lbl_price.textColor = .white
+        }
+    }
+    
+    @IBOutlet weak var colorDotView: UIView!
+    
+    @IBOutlet weak var colorsStackView: UIStackView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+    
+    func configure(with colorCodes: String) {
+        setupColorDots(from: colorCodes)
+    }
+    
+    private func setupColorDots(from colorCodes: String) {
+        // Remove existing color dot views
+        colorsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        let colorNames = getColorNames(from: colorCodes)
+        
+        let dotSize: CGFloat = 8
+        let dotSpacing: CGFloat = 4
+        
+        for colorName in colorNames {
+            if let color = getColor(from: colorName) {
+                let dotView = UIView()
+                dotView.backgroundColor = color
+                dotView.translatesAutoresizingMaskIntoConstraints = false
+                dotView.widthAnchor.constraint(equalToConstant: dotSize).isActive = true
+                dotView.heightAnchor.constraint(equalToConstant: dotSize).isActive = true
+                dotView.layer.cornerRadius = dotSize / 2 // Half of the width/height to make it a circle
+                dotView.clipsToBounds = true
+                colorsStackView.addArrangedSubview(dotView)
+            }
+        }
+        
+        // Ensure the stack view arranges dots in a horizontal line
+        colorsStackView.axis = .horizontal
+        colorsStackView.spacing = dotSpacing // Adjust spacing as needed
+        colorsStackView.distribution = .fillEqually
+    }
+    
+    // Helper function to convert color name to UIColor
+    private func getColor(from colorName: String) -> UIColor? {
+        switch colorName.lowercased() {
+        case "red":
+            return UIColor.red
+        case "green":
+            return UIColor.green
+        case "yellow":
+            return UIColor.yellow
+        case "blue":
+            return UIColor.blue
+        case "sky-blue":
+            return UIColor.systemTeal
+        case "brown":
+            return UIColor.brown
+        case "pink":
+            return UIColor.systemPink
+        case "purple":
+            return UIColor.purple
+        case "magenta":
+            return UIColor.magenta
+        case "orange":
+            return UIColor.orange
+        case "white":
+            return UIColor.white
+        default:
+            return nil
+        }
+    }
+    
+}
 
+struct CustomItem {
+    let name: String
+    let colorCodes: String
+}
