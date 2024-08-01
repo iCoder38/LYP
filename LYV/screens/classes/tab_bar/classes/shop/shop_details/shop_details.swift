@@ -18,6 +18,8 @@ class shop_details: UIViewController {
     var arr_category_products:NSMutableArray! = []
     var str_product_id:String!
     
+    
+    
     @IBOutlet weak var lbl_nav:UILabel! {
         didSet {
             lbl_nav.textColor = .white
@@ -78,10 +80,7 @@ class shop_details: UIViewController {
                 self.arr_category.add(custom)
             }
             
-            
         }
-        
-        
         
         self.product_list_WB()
         self.collectionView1.delegate = self
@@ -90,6 +89,10 @@ class shop_details: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.product_list_WB()
+    }
     
     @objc func product_list_WB() {
        
@@ -144,9 +147,12 @@ class shop_details: UIViewController {
                                 print(self.arr_category_products.count)
                                 
                                 if (self.arr_category_products.count != 0) {
+                                    self.collectionView2.isHidden = false
                                     self.collectionView2.delegate = self
                                     self.collectionView2.dataSource = self
                                     self.collectionView2.reloadData()
+                                } else {
+                                    self.collectionView2.isHidden = true
                                 }
 //
                             }
@@ -348,6 +354,11 @@ extension shop_details: UICollectionViewDelegate ,
             self.collectionView1.reloadData()
             self.product_list_WB()
             
+        } else {
+            let item = self.arr_category_products[indexPath.row] as? [String:Any]
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "product_details_id") as? product_details
+            push!.dict_product_details = (item! as NSDictionary)
+            self.navigationController?.pushViewController(push!, animated: true)
         }
         
     
@@ -391,7 +402,7 @@ extension shop_details: UICollectionViewDelegate ,
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
     }
     
 }
