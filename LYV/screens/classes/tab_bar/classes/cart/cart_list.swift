@@ -14,6 +14,7 @@ class cart_list: UIViewController {
     var arr_cart_list:NSMutableArray! = []
     
     var str_product_id_for_delete:String!
+    var str_store_total_price:String!
     
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
@@ -44,7 +45,17 @@ class cart_list: UIViewController {
         self.view.backgroundColor = app_BG
         
         self.cart_counter_WB(loader: "yes")
+        
+        self.btn_checkout.addTarget(self, action: #selector(checkout_address_click_method), for: .touchUpInside)
+        
     }
+    
+    @objc func checkout_address_click_method() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "address_id") as? address
+        push!.str_total_price = String(self.str_store_total_price)
+        self.navigationController?.pushViewController(push!, animated: true)
+    }
+    
     
     @objc func cart_counter_WB(loader:String) {
        
@@ -108,6 +119,7 @@ class cart_list: UIViewController {
                                 // print(total as Any)
                                 
                                 self.btn_checkout.setTitle("Checkout: $\(total)", for: .normal)
+                                self.str_store_total_price = "\(total)"
                                 
                                 self.tble_view.delegate = self
                                 self.tble_view.dataSource = self

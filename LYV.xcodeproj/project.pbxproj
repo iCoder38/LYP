@@ -33,6 +33,8 @@
 		B9D7965D2C5A583E00EBF515 /* tab_bar_controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7965C2C5A583E00EBF515 /* tab_bar_controller.swift */; };
 		B9D796612C5A5A9F00EBF515 /* shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D796602C5A5A9F00EBF515 /* shop.swift */; };
 		B9D796642C5A5EC600EBF515 /* shop_details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D796632C5A5EC600EBF515 /* shop_details.swift */; };
+		B9EB60F42C5CAC8A0029D192 /* address.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EB60F32C5CAC8A0029D192 /* address.swift */; };
+		B9EB60F72C5CC7150029D192 /* checkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EB60F62C5CC7150029D192 /* checkout.swift */; };
 		B9F5604F2C490186003462CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F5604E2C490186003462CA /* AppDelegate.swift */; };
 		B9F560512C490186003462CA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F560502C490186003462CA /* SceneDelegate.swift */; };
 		B9F560532C490186003462CA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F560522C490186003462CA /* ViewController.swift */; };
@@ -93,6 +95,8 @@
 		B9D7965C2C5A583E00EBF515 /* tab_bar_controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tab_bar_controller.swift; sourceTree = "<group>"; };
 		B9D796602C5A5A9F00EBF515 /* shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shop.swift; sourceTree = "<group>"; };
 		B9D796632C5A5EC600EBF515 /* shop_details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shop_details.swift; sourceTree = "<group>"; };
+		B9EB60F32C5CAC8A0029D192 /* address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = address.swift; sourceTree = "<group>"; };
+		B9EB60F62C5CC7150029D192 /* checkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = checkout.swift; sourceTree = "<group>"; };
 		B9F5604B2C490186003462CA /* LYV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LYV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F5604E2C490186003462CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9F560502C490186003462CA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -201,6 +205,8 @@
 		B97C7CBF2C5784B3006C4941 /* classes */ = {
 			isa = PBXGroup;
 			children = (
+				B9EB60F52C5CC7080029D192 /* checkout */,
+				B9EB60F22C5CAC7F0029D192 /* address */,
 				B97C7CC12C57885F006C4941 /* welcome */,
 				B97C7CC02C5784BD006C4941 /* splash */,
 				B99FA2862C57BF71005DB636 /* login */,
@@ -345,6 +351,22 @@
 				B9D796632C5A5EC600EBF515 /* shop_details.swift */,
 			);
 			path = shop_details;
+			sourceTree = "<group>";
+		};
+		B9EB60F22C5CAC7F0029D192 /* address */ = {
+			isa = PBXGroup;
+			children = (
+				B9EB60F32C5CAC8A0029D192 /* address.swift */,
+			);
+			path = address;
+			sourceTree = "<group>";
+		};
+		B9EB60F52C5CC7080029D192 /* checkout */ = {
+			isa = PBXGroup;
+			children = (
+				B9EB60F62C5CC7150029D192 /* checkout.swift */,
+			);
+			path = checkout;
 			sourceTree = "<group>";
 		};
 		B9F560422C490186003462CA = {
@@ -657,6 +679,7 @@
 				B950BF002C5A0DBC00557F3E /* LeftPaddingTextField.swift in Sources */,
 				B9D7965D2C5A583E00EBF515 /* tab_bar_controller.swift in Sources */,
 				B9F560532C490186003462CA /* ViewController.swift in Sources */,
+				B9EB60F72C5CC7150029D192 /* checkout.swift in Sources */,
 				B9F5604F2C490186003462CA /* AppDelegate.swift in Sources */,
 				B9D796612C5A5A9F00EBF515 /* shop.swift in Sources */,
 				B9D796642C5A5EC600EBF515 /* shop_details.swift in Sources */,
@@ -668,6 +691,7 @@
 				B950BF032C5A0DBC00557F3E /* NewYorkAlertController.swift in Sources */,
 				B950BF012C5A0DBC00557F3E /* NewYorkButton.swift in Sources */,
 				B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */,
+				B9EB60F42C5CAC8A0029D192 /* address.swift in Sources */,
 				B950BF042C5A0DBC00557F3E /* UIStackView+Utility.swift in Sources */,
 				B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */,
 				B950BEFF2C5A0DBC00557F3E /* Color.swift in Sources */,
