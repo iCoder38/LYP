@@ -184,7 +184,10 @@ extension my_orders: UITableViewDataSource , UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        
+        let item = self.arr_orders[indexPath.row] as? [String:Any]
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "details_id") as? details
+        push!.dict_product_details = (item! as NSDictionary)
+        self.navigationController?.pushViewController(push!, animated: true)
         
     }
     

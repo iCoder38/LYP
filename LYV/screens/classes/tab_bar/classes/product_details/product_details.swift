@@ -39,6 +39,7 @@ class product_details: UIViewController {
             tble_view.dataSource = self
         }
     }
+    
     @IBOutlet weak var btn_cart:UIButton! {
         didSet {
             btn_cart.isHidden = true

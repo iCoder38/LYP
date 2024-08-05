@@ -80,6 +80,24 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
         } else  if (indexPath.row == 2) {
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_orders_id") as? my_orders
             self.navigationController?.pushViewController(push!, animated: true)
+        } else if (indexPath.row == 4) {
+            let alert = NewYorkAlertController(title: String("Logout").uppercased(), message: String("Are you sure your want to logout"), style: .alert)
+            let yes = NewYorkButton(title: "Yes, logout", style: .default) {
+                _ in
+                let defaults = UserDefaults.standard
+                defaults.setValue("", forKey: str_save_login_user_data)
+                defaults.setValue(nil, forKey: str_save_login_user_data)
+                
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "welcome_id")
+                self.navigationController?.pushViewController(push, animated: true)
+                
+            }
+            let no = NewYorkButton(title: "dismiss", style: .cancel) {
+                _ in
+                
+            }
+            alert.addButtons([yes,no])
+            self.present(alert, animated: true)
         }
         
         
