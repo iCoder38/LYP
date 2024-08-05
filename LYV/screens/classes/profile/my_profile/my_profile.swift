@@ -1,19 +1,26 @@
 //
-//  home.swift
+//  my_profile.swift
 //  LYV
 //
-//  Created by Dishant Rajput on 29/07/24.
+//  Created by Dishant Rajput on 05/08/24.
 //
 
 import UIKit
-import Alamofire
 import SDWebImage
+import Alamofire
 import AVKit
 import AVFoundation
 
-class home: UIViewController {
+class my_profile: UIViewController {
 
     var arr_feeds:NSMutableArray! = []
+    
+    @IBOutlet weak var btn_back:UIButton! {
+        didSet {
+            btn_back.tintColor = .white
+            btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+        }
+    }
     
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
@@ -21,56 +28,71 @@ class home: UIViewController {
         }
     }
     
-    @IBOutlet weak var btn_back:UIButton! {
+    @IBOutlet weak var lbl_name:UILabel! {
         didSet {
-            btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+            lbl_name.textColor = .white
         }
     }
-    
-    @IBOutlet weak var txt_search:UITextField! {
+    @IBOutlet weak var lbl_email:UILabel!  {
         didSet {
-            txt_search.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-            txt_search.layer.cornerRadius = 25
-            txt_search.clipsToBounds = true
-            txt_search.placeholder = "Search"
-            txt_search.setLeftPaddingPoints(20)
-            let placeholderText = "Search"
-            let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            txt_search.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: attributes)
+            lbl_email.textColor = .white
         }
     }
     
     @IBOutlet weak var img_profile:UIImageView! {
         didSet {
-            img_profile.layer.cornerRadius = 25
+            img_profile.layer.cornerRadius = 40
             img_profile.clipsToBounds = true
-            img_profile.backgroundColor = .white
+            
         }
     }
     
-    @IBOutlet weak var btn_view_all:UIButton! {
+    @IBOutlet weak var btn_post:UIButton! {
         didSet {
-            btn_view_all.setTitleColor(app_purple_color, for: .normal)
+            btn_post.backgroundColor = .clear
         }
     }
     
-    @IBOutlet weak var collectionView:UICollectionView! {
+    @IBOutlet weak var btn_following:UIButton! {
         didSet {
-            collectionView.isPagingEnabled = false
-            collectionView.backgroundColor = .clear
+            btn_following.backgroundColor = .clear
+        }
+    }
+    
+    @IBOutlet weak var btn_followers:UIButton! {
+        didSet {
+            btn_followers.backgroundColor = .clear
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-        self.img_profile.isUserInteractionEnabled = true
-        self.img_profile.addGestureRecognizer(tapGestureRecognizer)
-        
         self.view.backgroundColor = app_BG
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            self.lbl_name.text = (person["fullName"] as! String)
+            self.lbl_email.text = (person["email"] as! String)
+            
+            self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            self.img_profile.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
+            self.btn_post.setTitle("\(person["TotalPost"]!)\nPost", for: .normal)
+            self.btn_post.titleLabel?.lineBreakMode = .byWordWrapping
+            self.btn_post.titleLabel?.textAlignment = .center
+            
+            self.btn_followers.setTitle("\(person["TotalFollower"]!)\nFollowers", for: .normal)
+            self.btn_followers.titleLabel?.lineBreakMode = .byWordWrapping
+            self.btn_followers.titleLabel?.textAlignment = .center
+            
+            self.btn_following.setTitle("\(person["TotalFollowing"]!)\nFollowing", for: .normal)
+            self.btn_following.titleLabel?.lineBreakMode = .byWordWrapping
+            self.btn_following.titleLabel?.textAlignment = .center
+        }
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -100,7 +122,7 @@ class home: UIViewController {
                 parameters = [
                     "action"    : "postlist",
                     "userId"    : String(myString),
-                    // "type"      : "own",
+                     "type"      : "own",
                 ]
                 
                 print("parameters-------\(String(describing: parameters))")
@@ -133,10 +155,6 @@ class home: UIViewController {
                                 
                                 self.tble_view.delegate = self
                                 self.tble_view.dataSource = self
-                                
-                                self.collectionView.delegate = self
-                                self.collectionView.dataSource = self
-                                self.collectionView.reloadData()
                                 
                                 self.tble_view.reloadData()
                             }
@@ -320,8 +338,9 @@ class home: UIViewController {
     
 }
 
+
 //MARK:- TABLE VIEW -
-extension home: UITableViewDataSource , UITableViewDelegate {
+extension my_profile: UITableViewDataSource , UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -434,7 +453,7 @@ extension home: UITableViewDataSource , UITableViewDelegate {
 
 }
 
-class home_table_cell : UITableViewCell {
+class my_profile_table_cell : UITableViewCell {
     
     @IBOutlet weak var img_profile:UIImageView! {
         didSet {
@@ -496,74 +515,3 @@ class home_table_cell : UITableViewCell {
     
     @IBOutlet weak var btn_comment:UIButton!
 }
-
-//MARK:- COLLECTION VIEW -
-extension home: UICollectionViewDelegate ,
-                     UICollectionViewDataSource ,
-                     UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "home_collection_view_cell", for: indexPath as IndexPath) as! home_collection_view_cell
-
-        cell.backgroundColor  = .clear
-        
-        return cell
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        var sizes: CGSize
-        let result = UIScreen.main.bounds.size
-        NSLog("%f",result.height)
-        sizes = CGSize(width: 140, height: 140)
-        
-        return sizes
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout
-                        collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        
-        return 10
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-    }
-    
-}
-
-class home_collection_view_cell: UICollectionViewCell , UITextFieldDelegate {
-    
-    @IBOutlet weak var img_view:UIImageView! {
-        didSet {
-            img_view.layer.cornerRadius = 12
-            img_view.clipsToBounds = true
-            img_view.backgroundColor = .brown
-        }
-    }
-    
-}
-
-

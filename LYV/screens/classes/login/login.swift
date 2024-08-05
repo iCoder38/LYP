@@ -26,6 +26,7 @@ class login: UIViewController {
             let placeholderText = "Email"
             let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             txt_email.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: attributes)
+            txt_email.textColor = .white
         }
     }
     
@@ -39,6 +40,7 @@ class login: UIViewController {
             let placeholderText = "Password"
             let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             txt_password.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: attributes)
+            txt_password.textColor = .white
         }
     }
     
@@ -83,8 +85,8 @@ class login: UIViewController {
         
         parameters = [
             "action"    : "login",
-            "email"     : "m001@mailinator.com", // String(self.txt_email.text!),
-            "password"  : "123456", // String(self.txt_password.text!),
+            "email"     : String(self.txt_email.text!),// "m001@mailinator.com", // String(self.txt_email.text!),
+            "password"  : String(self.txt_password.text!), // "123456", // String(self.txt_password.text!),
             "device"    : "iOS",
         ]
         

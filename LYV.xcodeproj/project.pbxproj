@@ -10,6 +10,8 @@
 		246FA8E4394E902BD0A6A887 /* Pods_LYV_LYVUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FBEA405D33A2434928E424F /* Pods_LYV_LYVUITests.framework */; };
 		679536BCEBB86AC02DE331F2 /* Pods_LYV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9053415FDB2498A101B8B00B /* Pods_LYV.framework */; };
 		7A035750F53897610AF1DDF9 /* Pods_LYVTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC6CC886FA32895000133CF3 /* Pods_LYVTests.framework */; };
+		B910D3A62C60B00C00639550 /* main_profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B910D3A52C60B00C00639550 /* main_profile.swift */; };
+		B910D3A92C60B47300639550 /* my_profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B910D3A82C60B47300639550 /* my_profile.swift */; };
 		B950BEF12C5A0C4400557F3E /* token_manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF02C5A0C4400557F3E /* token_manager.swift */; };
 		B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */; };
 		B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */; };
@@ -30,6 +32,8 @@
 		B99FA2922C57D19B005DB636 /* home.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99FA2912C57D19B005DB636 /* home.swift */; };
 		B9C137932C5BA17A00A09A00 /* product_details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C137922C5BA17A00A09A00 /* product_details.swift */; };
 		B9C137962C5BBC5800A09A00 /* cart_list.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C137952C5BBC5800A09A00 /* cart_list.swift */; };
+		B9D61F852C60EECC008C27D1 /* change_password.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D61F842C60EECC008C27D1 /* change_password.swift */; };
+		B9D61F882C60F243008C27D1 /* my_orders.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D61F872C60F243008C27D1 /* my_orders.swift */; };
 		B9D7965D2C5A583E00EBF515 /* tab_bar_controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D7965C2C5A583E00EBF515 /* tab_bar_controller.swift */; };
 		B9D796612C5A5A9F00EBF515 /* shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D796602C5A5A9F00EBF515 /* shop.swift */; };
 		B9D796642C5A5EC600EBF515 /* shop_details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D796632C5A5EC600EBF515 /* shop_details.swift */; };
@@ -72,6 +76,8 @@
 		8740180B711A3CA8188D6311 /* Pods-LYV-LYVUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LYV-LYVUITests.debug.xcconfig"; path = "Target Support Files/Pods-LYV-LYVUITests/Pods-LYV-LYVUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9053415FDB2498A101B8B00B /* Pods_LYV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LYV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2FCE23BA03E31ACF91A0E75 /* Pods-LYV-LYVUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LYV-LYVUITests.release.xcconfig"; path = "Target Support Files/Pods-LYV-LYVUITests/Pods-LYV-LYVUITests.release.xcconfig"; sourceTree = "<group>"; };
+		B910D3A52C60B00C00639550 /* main_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main_profile.swift; sourceTree = "<group>"; };
+		B910D3A82C60B47300639550 /* my_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = my_profile.swift; sourceTree = "<group>"; };
 		B950BEF02C5A0C4400557F3E /* token_manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = token_manager.swift; sourceTree = "<group>"; };
 		B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ERProgressHud.swift; sourceTree = "<group>"; };
 		B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetView.swift; sourceTree = "<group>"; };
@@ -92,6 +98,8 @@
 		B99FA2912C57D19B005DB636 /* home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = home.swift; sourceTree = "<group>"; };
 		B9C137922C5BA17A00A09A00 /* product_details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = product_details.swift; sourceTree = "<group>"; };
 		B9C137952C5BBC5800A09A00 /* cart_list.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cart_list.swift; sourceTree = "<group>"; };
+		B9D61F842C60EECC008C27D1 /* change_password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = change_password.swift; sourceTree = "<group>"; };
+		B9D61F872C60F243008C27D1 /* my_orders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = my_orders.swift; sourceTree = "<group>"; };
 		B9D7965C2C5A583E00EBF515 /* tab_bar_controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tab_bar_controller.swift; sourceTree = "<group>"; };
 		B9D796602C5A5A9F00EBF515 /* shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shop.swift; sourceTree = "<group>"; };
 		B9D796632C5A5EC600EBF515 /* shop_details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shop_details.swift; sourceTree = "<group>"; };
@@ -153,6 +161,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B910D3A42C60B00000639550 /* profile */ = {
+			isa = PBXGroup;
+			children = (
+				B910D3A52C60B00C00639550 /* main_profile.swift */,
+				B910D3A72C60B46A00639550 /* my_profile */,
+			);
+			path = profile;
+			sourceTree = "<group>";
+		};
+		B910D3A72C60B46A00639550 /* my_profile */ = {
+			isa = PBXGroup;
+			children = (
+				B910D3A82C60B47300639550 /* my_profile.swift */,
+			);
+			path = my_profile;
+			sourceTree = "<group>";
+		};
 		B950BEEF2C5A0C3B00557F3E /* token_manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,6 +230,9 @@
 		B97C7CBF2C5784B3006C4941 /* classes */ = {
 			isa = PBXGroup;
 			children = (
+				B910D3A42C60B00000639550 /* profile */,
+				B9D61F862C60F238008C27D1 /* my_orders */,
+				B9D61F832C60EEBF008C27D1 /* change_password */,
 				B9EB60F52C5CC7080029D192 /* checkout */,
 				B9EB60F22C5CAC7F0029D192 /* address */,
 				B97C7CC12C57885F006C4941 /* welcome */,
@@ -314,6 +342,22 @@
 				B9C137952C5BBC5800A09A00 /* cart_list.swift */,
 			);
 			path = cart;
+			sourceTree = "<group>";
+		};
+		B9D61F832C60EEBF008C27D1 /* change_password */ = {
+			isa = PBXGroup;
+			children = (
+				B9D61F842C60EECC008C27D1 /* change_password.swift */,
+			);
+			path = change_password;
+			sourceTree = "<group>";
+		};
+		B9D61F862C60F238008C27D1 /* my_orders */ = {
+			isa = PBXGroup;
+			children = (
+				B9D61F872C60F243008C27D1 /* my_orders.swift */,
+			);
+			path = my_orders;
 			sourceTree = "<group>";
 		};
 		B9D796582C5A57E700EBF515 /* tab_bar */ = {
@@ -677,12 +721,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B950BF002C5A0DBC00557F3E /* LeftPaddingTextField.swift in Sources */,
+				B910D3A92C60B47300639550 /* my_profile.swift in Sources */,
+				B9D61F882C60F243008C27D1 /* my_orders.swift in Sources */,
 				B9D7965D2C5A583E00EBF515 /* tab_bar_controller.swift in Sources */,
 				B9F560532C490186003462CA /* ViewController.swift in Sources */,
 				B9EB60F72C5CC7150029D192 /* checkout.swift in Sources */,
 				B9F5604F2C490186003462CA /* AppDelegate.swift in Sources */,
 				B9D796612C5A5A9F00EBF515 /* shop.swift in Sources */,
 				B9D796642C5A5EC600EBF515 /* shop_details.swift in Sources */,
+				B9D61F852C60EECC008C27D1 /* change_password.swift in Sources */,
 				B950BF052C5A0DBC00557F3E /* NewYorkAlertViewType.swift in Sources */,
 				B97C7CC32C578869006C4941 /* welcome.swift in Sources */,
 				B97C7CCA2C578C0B006C4941 /* Utils.swift in Sources */,
@@ -692,6 +739,7 @@
 				B950BF012C5A0DBC00557F3E /* NewYorkButton.swift in Sources */,
 				B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */,
 				B9EB60F42C5CAC8A0029D192 /* address.swift in Sources */,
+				B910D3A62C60B00C00639550 /* main_profile.swift in Sources */,
 				B950BF042C5A0DBC00557F3E /* UIStackView+Utility.swift in Sources */,
 				B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */,
 				B950BEFF2C5A0DBC00557F3E /* Color.swift in Sources */,
