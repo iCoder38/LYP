@@ -105,3 +105,46 @@ extension UITextField {
         self.rightViewMode = .always
     }
 }
+
+
+extension Date {
+    
+    func dateString(_ format: String = "MM-dd-yyyy, hh:mm a") -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    func dateStringCustommmm(_ format: String = "dd/MM, hh:mm a") -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    func dateString2(_ format: String = "yyyy-MM-dd") -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    func dateByAddingYears(_ dYears: Int) -> Date {
+        
+        var dateComponents = DateComponents()
+        dateComponents.year = dYears
+        
+        return Calendar.current.date(byAdding: dateComponents, to: self)!
+    }
+    func dateByAddingDays(_ dDays: Int) -> Date {
+        
+        var dateComponents = DateComponents()
+        dateComponents.day = dDays
+        
+        return Calendar.current.date(byAdding: dateComponents, to: self)!
+    }
+}

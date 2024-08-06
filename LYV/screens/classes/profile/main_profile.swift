@@ -72,15 +72,22 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if (indexPath.row == 0) {
+            
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_profile_id") as? my_profile
             self.navigationController?.pushViewController(push!, animated: true)
+            
         } else  if (indexPath.row == 1) {
+            
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "change_password_id") as? change_password
             self.navigationController?.pushViewController(push!, animated: true)
+            
         } else  if (indexPath.row == 2) {
+            
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_orders_id") as? my_orders
             self.navigationController?.pushViewController(push!, animated: true)
+            
         } else if (indexPath.row == 4) {
+            
             let alert = NewYorkAlertController(title: String("Logout").uppercased(), message: String("Are you sure your want to logout"), style: .alert)
             let yes = NewYorkButton(title: "Yes, logout", style: .default) {
                 _ in
@@ -98,13 +105,14 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
             }
             alert.addButtons([yes,no])
             self.present(alert, animated: true)
+            
         }
         
         
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
+        return 60
     }
 
 }

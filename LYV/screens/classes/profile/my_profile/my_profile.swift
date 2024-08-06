@@ -65,6 +65,18 @@ class my_profile: UIViewController {
         }
     }
     
+    @IBOutlet weak var btn_follow_unfollow:UIButton! {
+        didSet {
+            btn_follow_unfollow.backgroundColor = .clear
+        }
+    }
+    
+    @IBOutlet weak var btn_edit:UIButton! {
+        didSet {
+            btn_edit.backgroundColor = .clear
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -91,8 +103,22 @@ class my_profile: UIViewController {
             self.btn_following.titleLabel?.lineBreakMode = .byWordWrapping
             self.btn_following.titleLabel?.textAlignment = .center
         }
+        
+        self.btn_follow_unfollow.layer.cornerRadius = 12
+        self.btn_follow_unfollow.clipsToBounds = true
+        self.btn_follow_unfollow.layer.borderColor = UIColor.black.cgColor
+        self.btn_follow_unfollow.layer.borderWidth = 0.4
+        self.btn_follow_unfollow.setTitle("Follow", for: .normal)
+        self.btn_follow_unfollow.backgroundColor = app_purple_color
+        
+        self.btn_edit.addTarget(self
+                                , action: #selector(edit_c_m), for: .touchUpInside)
     }
     
+    @objc func edit_c_m() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "edit_profile_id")
+        self.navigationController?.pushViewController(push, animated: true)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
