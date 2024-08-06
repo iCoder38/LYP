@@ -14,6 +14,7 @@ import AVFoundation
 class home: UIViewController {
 
     var arr_feeds:NSMutableArray! = []
+    var arr_discover:NSMutableArray! = []
     
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
@@ -131,14 +132,9 @@ class home: UIViewController {
                                 self.arr_feeds.addObjects(from: ar as! [Any])
                                 print(self.arr_feeds.count)
                                 
-                                self.tble_view.delegate = self
-                                self.tble_view.dataSource = self
                                 
-                                self.collectionView.delegate = self
-                                self.collectionView.dataSource = self
-                                self.collectionView.reloadData()
                                 
-                                self.tble_view.reloadData()
+                                self.discover_WB()
                             }
                             else {
                                 TokenManager.shared.refresh_token_WB { token, error in
@@ -310,6 +306,110 @@ class home: UIViewController {
         
     }
     
+    @objc func discover_WB() {
+       
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+      
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"    : "postlist",
+                    "userId"    : String(myString),
+                    "discover"    : String("1"),
+                    // "status"    : String(status),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
+                                
+                                var ar : NSArray!
+                                ar = (JSON["data"] as! Array<Any>) as NSArray
+                                
+                                self.arr_discover.removeAllObjects()
+                                self.arr_discover.addObjects(from: ar as! [Any])
+                                print(self.arr_discover.count)
+                                
+                                self.tble_view.delegate = self
+                                self.tble_view.dataSource = self
+                                self.tble_view.reloadData()
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.discover_WB()
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.discover_WB()
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
+    
     @objc func comment_click_method(_ sender:UIButton) {
         let item = self.arr_feeds[sender.tag] as? [String:Any]
         
@@ -327,79 +427,97 @@ extension home: UITableViewDataSource , UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.arr_feeds.count
+        return self.arr_feeds.count+1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "home_table_cell") as! home_table_cell
-        
-        cell.backgroundColor = .clear
-        
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = .clear
-        cell.selectedBackgroundView = backgroundView
-        
-        let item = self.arr_feeds[indexPath.row] as? [String:Any]
-        
-        cell.lbl_username.text = (item!["userName"] as! String)
-        cell.lbl_description.text = (item!["title"] as! String)
-        cell.lbl_time.text = (item!["created"] as! String)
-        
-        if "\(item!["totalLike"]!)" == "0" {
-            cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-        } else if "\(item!["totalLike"]!)" == "1" {
-            cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-        } else if "\(item!["totalLike"]!)" == "" {
-            cell.lbl_likes.text = "0 like"
+        if (indexPath.row == 0) {
+            let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "one") as! home_table_cell
+            
+            cell.backgroundColor = .clear
+            
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = .clear
+            cell.selectedBackgroundView = backgroundView
+            
+            cell.collectionView1.delegate = self
+            cell.collectionView1.dataSource = self
+            cell.collectionView1.reloadData()
+            
+            return cell
+            
         } else {
-            cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
+            let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! home_table_cell
+            
+            cell.backgroundColor = .clear
+            
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = .clear
+            cell.selectedBackgroundView = backgroundView
+            
+            let item = self.arr_feeds[indexPath.row] as? [String:Any]
+            
+            cell.lbl_username.text = (item!["userName"] as! String)
+            cell.lbl_description.text = (item!["title"] as! String)
+            cell.lbl_time.text = (item!["created"] as! String)
+            
+            if "\(item!["totalLike"]!)" == "0" {
+                cell.lbl_likes.text = "\(item!["totalLike"]!) like"
+            } else if "\(item!["totalLike"]!)" == "1" {
+                cell.lbl_likes.text = "\(item!["totalLike"]!) like"
+            } else if "\(item!["totalLike"]!)" == "" {
+                cell.lbl_likes.text = "0 like"
+            } else {
+                cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
+            }
+            
+            
+            
+            if "\(item!["totalComment"]!)" == "0" {
+                cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
+            } else if "\(item!["totalComment"]!)" == "1" {
+                cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
+            } else if "\(item!["totalComment"]!)" == "" {
+                cell.lbl_comments.text = "0 comment"
+            } else {
+                cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
+            }
+            
+            
+            cell.btn_like.tag = indexPath.row
+            if (item!["ulike"] as! String) == "No" {
+                cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
+                cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
+                cell.btn_like.tintColor = .gray
+            } else {
+                cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
+                cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                cell.btn_like.tintColor = .systemPink
+            }
+            
+            if (item!["video"] as! String) == "" {
+                cell.btn_play.isHidden = true
+            } else {
+                cell.btn_play.tag = indexPath.row
+                cell.btn_play.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
+                cell.btn_play.isHidden = false
+            }
+            
+            cell.btn_comment.tag = indexPath.row
+            cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
+            
+            cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
+            
+            
+            cell.img_feed_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_feed_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
+            return cell
         }
         
-        
-        
-        if "\(item!["totalComment"]!)" == "0" {
-            cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-        } else if "\(item!["totalComment"]!)" == "1" {
-            cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-        } else if "\(item!["totalComment"]!)" == "" {
-            cell.lbl_comments.text = "0 comment"
-        } else {
-            cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
-        }
-        
-        
-        cell.btn_like.tag = indexPath.row
-        if (item!["ulike"] as! String) == "No" {
-            cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-            cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
-            cell.btn_like.tintColor = .gray
-        } else {
-            cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-            cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            cell.btn_like.tintColor = .systemPink
-        }
-        
-        if (item!["video"] as! String) == "" {
-            cell.btn_play.isHidden = true
-        } else {
-            cell.btn_play.tag = indexPath.row
-            cell.btn_play.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
-            cell.btn_play.isHidden = false
-        }
-        
-        cell.btn_comment.tag = indexPath.row
-        cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
-        
-        cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-        cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
-        
-        
-        
-        cell.img_feed_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-        cell.img_feed_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
-        
-        return cell
         
     }
     
@@ -429,7 +547,17 @@ extension home: UITableViewDataSource , UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        if (indexPath.row == 0) {
+            if (self.arr_discover.count == 0) {
+                return 0
+            } else {
+                return 200
+            }
+            
+        } else {
+            return UITableView.automaticDimension
+        }
+        
     }
 
 }
@@ -441,6 +569,13 @@ class home_table_cell : UITableViewCell {
             img_profile.layer.cornerRadius = 25
             img_profile.clipsToBounds = true
             img_profile.backgroundColor = .brown
+        }
+    }
+    
+    @IBOutlet weak var collectionView1:UICollectionView! {
+        didSet {
+            collectionView1.isPagingEnabled = false
+            collectionView1.backgroundColor = .clear
         }
     }
     
