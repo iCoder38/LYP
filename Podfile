@@ -34,4 +34,6 @@ target 'LYV' do
   pod 'FirebaseFirestore'
   pod 'Firebase/Storage'
 
+  pod 'GrowingTextView'
+  
 end

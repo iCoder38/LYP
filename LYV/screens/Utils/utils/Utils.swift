@@ -26,6 +26,8 @@ var app_purple_color = UIColor.init(red: 118.0/255.0, green: 104.0/255.0, blue: 
 var app_BG = UIColor.init(red: 37.0/255.0, green: 42.0/255.0, blue: 55.0/255.0, alpha: 1)
 
 
+var COLLECTION_PATH_DIALOG = "mode/lyv/chat_history/members/history"
+
 // Step 1: Define the color dictionary
 let colorDictionary: [String: String] = [
     "1": "Red",
@@ -78,6 +80,18 @@ class Utils: NSObject {
 
 extension UIViewController {
     
+    func generateRandomAlphanumericString(length: Int) -> String {
+        let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        var randomString = ""
+        
+        for _ in 0..<length {
+            let randomIndex = Int.random(in: 0..<characters.count)
+            let index = characters.index(characters.startIndex, offsetBy: randomIndex)
+            randomString.append(characters[index])
+        }
+        
+        return randomString
+    }
     
     @objc func please_check_your_internet_connection() {
         let alert = NewYorkAlertController(title: String("Error").uppercased(), message: String("Please check your Internet Connection"), style: .alert)

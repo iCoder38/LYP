@@ -1308,6 +1308,7 @@ PODS:
   - GoogleUtilities/UserDefaults (8.0.1):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
+  - GrowingTextView (0.7.2)
   - "gRPC-C++ (1.65.2)":
     - "gRPC-C++/Implementation (= 1.65.2)"
     - "gRPC-C++/Interface (= 1.65.2)"
@@ -1422,6 +1423,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Firebase/Storage
   - FirebaseFirestore
+  - GrowingTextView
   - SDWebImage
   - SwiftyJSON
   - Toast-Swift
@@ -1449,6 +1451,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
+    - GrowingTextView
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
@@ -1482,6 +1485,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 6e49ffac7d3f2c3ded9cc663f912a13b67bbd0de
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 52f677b52b0d2bed24e7b9c94455b1f7353a09f8
+  GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   "gRPC-C++": ee7ad8da2f509e22126e2c24797eea5ed46f953f
   gRPC-Core: cf4749e456fa9cb609a7a10182fb399bb22b3dab
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
@@ -1493,6 +1497,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
   Toast-Swift: 7a03a532afe3a560d4044bc7c237e2864d295173
 
-PODFILE CHECKSUM: 9cc30a7f96079e06dcf214d3adaca21c83703932
+PODFILE CHECKSUM: a23cbcf8e1524da07517b128d77e92f19463ff33
 
 COCOAPODS: 1.15.2

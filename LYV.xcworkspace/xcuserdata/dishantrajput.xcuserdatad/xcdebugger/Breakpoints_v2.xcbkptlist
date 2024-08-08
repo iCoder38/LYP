@@ -112,38 +112,56 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "587"
             endingLineNumber = "587"
-            landmarkName = "uploadVideo(fileURL:to:parameters:token:)"
+            landmarkName = "validation_before_upload()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - 813e885a1379b31e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.MultipartFormData) -&gt; () in LYV.add_post.uploadVideo(fileURL: Foundation.URL, to: Swift.String, parameters: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, token: Swift.String) -&gt; ()"
-                  moduleName = "LYV"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "587"
-                  endingLineNumber = "587">
-               </Location>
-               <Location
-                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - 813e885a1379b31e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.MultipartFormData) -&gt; () in LYV.add_post.uploadVideo(fileURL: Foundation.URL, to: Swift.String, parameters: Swift.Dictionary&lt;Swift.String, Swift.String&gt;, token: Swift.String) -&gt; ()"
-                  moduleName = "LYV"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "587"
-                  endingLineNumber = "587">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B2520B74-539A-4B2F-8E13-D1FEDB5D7C26"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LYV/screens/classes/message/chat/BooCheckChat.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "465"
+            endingLineNumber = "465"
+            landmarkName = "sendMessageWithoutAttachment()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B93D894B-2DB0-4A3B-9715-F96D50953962"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LYV/screens/classes/message/chat/BooCheckChat.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "660"
+            endingLineNumber = "660"
+            landmarkName = "sendMessage(toChatId:messageText:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DE79DF60-1D96-4CED-92BC-BFC2DF129840"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LYV/screens/classes/message/chat/BooCheckChat.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "628"
+            endingLineNumber = "628"
+            landmarkName = "sendMessage(toChatId:messageText:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

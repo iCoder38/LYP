@@ -13,6 +13,10 @@
 		B910D3A62C60B00C00639550 /* main_profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B910D3A52C60B00C00639550 /* main_profile.swift */; };
 		B910D3A92C60B47300639550 /* my_profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B910D3A82C60B47300639550 /* my_profile.swift */; };
 		B91C589E2C64A9800060169B /* add_post.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91C589D2C64A9800060169B /* add_post.swift */; };
+		B932B1232C64D89900916AB3 /* all_messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932B1222C64D89900916AB3 /* all_messages.swift */; };
+		B932B1272C64E0A800916AB3 /* BooCheckChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932B1252C64E0A800916AB3 /* BooCheckChat.swift */; };
+		B932B1282C64E0A800916AB3 /* BooCheckTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932B1262C64E0A800916AB3 /* BooCheckTableCell.swift */; };
+		B932B12A2C64E76F00916AB3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B932B1292C64E76F00916AB3 /* GoogleService-Info.plist */; };
 		B950BEF12C5A0C4400557F3E /* token_manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF02C5A0C4400557F3E /* token_manager.swift */; };
 		B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */; };
 		B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */; };
@@ -82,6 +86,10 @@
 		B910D3A52C60B00C00639550 /* main_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main_profile.swift; sourceTree = "<group>"; };
 		B910D3A82C60B47300639550 /* my_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = my_profile.swift; sourceTree = "<group>"; };
 		B91C589D2C64A9800060169B /* add_post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = add_post.swift; sourceTree = "<group>"; };
+		B932B1222C64D89900916AB3 /* all_messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = all_messages.swift; sourceTree = "<group>"; };
+		B932B1252C64E0A800916AB3 /* BooCheckChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckChat.swift; sourceTree = "<group>"; };
+		B932B1262C64E0A800916AB3 /* BooCheckTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckTableCell.swift; sourceTree = "<group>"; };
+		B932B1292C64E76F00916AB3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B950BEF02C5A0C4400557F3E /* token_manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = token_manager.swift; sourceTree = "<group>"; };
 		B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ERProgressHud.swift; sourceTree = "<group>"; };
 		B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetView.swift; sourceTree = "<group>"; };
@@ -192,6 +200,24 @@
 			path = add_group;
 			sourceTree = "<group>";
 		};
+		B932B1212C64D87B00916AB3 /* message */ = {
+			isa = PBXGroup;
+			children = (
+				B932B1222C64D89900916AB3 /* all_messages.swift */,
+				B932B1242C64E09D00916AB3 /* chat */,
+			);
+			path = message;
+			sourceTree = "<group>";
+		};
+		B932B1242C64E09D00916AB3 /* chat */ = {
+			isa = PBXGroup;
+			children = (
+				B932B1252C64E0A800916AB3 /* BooCheckChat.swift */,
+				B932B1262C64E0A800916AB3 /* BooCheckTableCell.swift */,
+			);
+			path = chat;
+			sourceTree = "<group>";
+		};
 		B950BEEF2C5A0C3B00557F3E /* token_manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +270,7 @@
 		B97C7CBF2C5784B3006C4941 /* classes */ = {
 			isa = PBXGroup;
 			children = (
+				B932B1212C64D87B00916AB3 /* message */,
 				B9E8917A2C6209640067422D /* edit_profile */,
 				B910D3A42C60B00000639550 /* profile */,
 				B9D61F862C60F238008C27D1 /* my_orders */,
@@ -471,6 +498,7 @@
 				B9F5605A2C490188003462CA /* Assets.xcassets */,
 				B9F5605C2C490188003462CA /* LaunchScreen.storyboard */,
 				B9F5605F2C490188003462CA /* Info.plist */,
+				B932B1292C64E76F00916AB3 /* GoogleService-Info.plist */,
 				B9F560572C490186003462CA /* LYV.xcdatamodeld */,
 			);
 			path = LYV;
@@ -616,6 +644,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9F5605B2C490188003462CA /* Assets.xcassets in Resources */,
+				B932B12A2C64E76F00916AB3 /* GoogleService-Info.plist in Resources */,
 				B9F5605E2C490188003462CA /* Base in Resources */,
 				B9F560562C490186003462CA /* Base in Resources */,
 			);
@@ -758,6 +787,7 @@
 				B9D796642C5A5EC600EBF515 /* shop_details.swift in Sources */,
 				B9D61F852C60EECC008C27D1 /* change_password.swift in Sources */,
 				B950BF052C5A0DBC00557F3E /* NewYorkAlertViewType.swift in Sources */,
+				B932B1232C64D89900916AB3 /* all_messages.swift in Sources */,
 				B97C7CC32C578869006C4941 /* welcome.swift in Sources */,
 				B97C7CCA2C578C0B006C4941 /* Utils.swift in Sources */,
 				B9F560512C490186003462CA /* SceneDelegate.swift in Sources */,
@@ -767,6 +797,7 @@
 				B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */,
 				B9EB60F42C5CAC8A0029D192 /* address.swift in Sources */,
 				B910D3A62C60B00C00639550 /* main_profile.swift in Sources */,
+				B932B1282C64E0A800916AB3 /* BooCheckTableCell.swift in Sources */,
 				B950BF042C5A0DBC00557F3E /* UIStackView+Utility.swift in Sources */,
 				B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */,
 				B950BEFF2C5A0DBC00557F3E /* Color.swift in Sources */,
@@ -775,6 +806,7 @@
 				B97C7CC72C578B39006C4941 /* text.swift in Sources */,
 				B9F560592C490186003462CA /* LYV.xcdatamodeld in Sources */,
 				B950BF082C5A28F400557F3E /* comments.swift in Sources */,
+				B932B1272C64E0A800916AB3 /* BooCheckChat.swift in Sources */,
 				B99FA2882C57BF81005DB636 /* login.swift in Sources */,
 				B9C137932C5BA17A00A09A00 /* product_details.swift in Sources */,
 				B9C137962C5BBC5800A09A00 /* cart_list.swift in Sources */,
