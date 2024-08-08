@@ -163,9 +163,9 @@ extension all_messages: UITableViewDataSource , UITableViewDelegate {
         cell.selectedBackgroundView = backgroundView
         
         let item = self.chatArray[indexPath.row] as? [String:Any]
-        print(item as Any)
-        print(item!["usersUnreadNotification"] as Any)
-        print(type(of: item!["usersUnreadNotification"]))
+        // print(item as Any)
+        // print(item!["usersUnreadNotification"] as Any)
+        // print(type(of: item!["usersUnreadNotification"]))
         if "\(item!["senderId"]!)" == self.str_login_user_id {
             // login user
             cell.lbl_name.text = "\(item!["receiver_name"]!)"
@@ -179,8 +179,6 @@ extension all_messages: UITableViewDataSource , UITableViewDelegate {
         }
         
         cell.lbl_message.text = "\(item!["message"]!)"
-        
-        
         
         // cell.lbl_notification_counter.text =
         

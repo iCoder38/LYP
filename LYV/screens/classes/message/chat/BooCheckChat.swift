@@ -510,7 +510,11 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                                 "message": messageText,
                                 "time_stamp": timestamp,
                                 "usersUnreadNotification.\(self.str_receiver_firebase_id!)": FieldValue.increment(Int64(1)),
-                                "usersUnreadNotification.\(self.str_login_user_id!)": 0
+                                "usersUnreadNotification.\(self.str_login_user_id!)": 0,
+                                "sender_device"     : "iOS",
+                                "sender_deviceToken": "",
+                                "sender_name"       : String(self.str_login_user_name),
+                                "sender_image"      : String(self.str_login_user_image)
                             ]
 
                             updateDocumentByDialogId(collectionPath: collectionPath, dialogId: dialogId, dataToUpdate: dataToUpdate) { error in

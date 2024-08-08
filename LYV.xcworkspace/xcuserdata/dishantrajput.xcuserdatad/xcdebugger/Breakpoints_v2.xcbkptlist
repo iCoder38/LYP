@@ -142,8 +142,8 @@
             filePath = "LYV/screens/classes/message/chat/BooCheckChat.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "660"
-            endingLineNumber = "660"
+            startingLineNumber = "664"
+            endingLineNumber = "664"
             landmarkName = "sendMessage(toChatId:messageText:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "LYV/screens/classes/message/chat/BooCheckChat.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "628"
-            endingLineNumber = "628"
+            startingLineNumber = "632"
+            endingLineNumber = "632"
             landmarkName = "sendMessage(toChatId:messageText:completion:)"
             landmarkType = "7">
          </BreakpointContent>
