@@ -113,8 +113,6 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tble_view.cellForRow(at: indexPath) as! edit_profile_table_cell
         
-        // let selectedDate = Date().dateByAddingDays(-6)
-        
         RPicker.selectDate(title: "Select date", cancelText: "Cancel", datePickerMode: .date, maxDate: Date.now, didSelectDate: { (selectedDate) in
              
             cell.txt_dob.text = selectedDate.dateString("yyyy-MM-dd")
@@ -166,11 +164,10 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
                     "userId"        : String(myString),
                     "fullName"      : String(cell.txt_username.text!),
                     "contactNumber" : String(cell.txt_phone.text!),
-                     "gender"       : String(cell.txt_gender.text!),
+                    "gender"        : String(cell.txt_gender.text!),
                     "dob"           : String(cell.txt_dob.text!),
                     "device"        : String("iOS"),
                 ]
-                
                 
                 print("parameters-------\(String(describing: parameters))")
                 
@@ -198,7 +195,6 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
                                 
                                 /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "complete_profile_two_id")
                                  self.navigationController?.pushViewController(push, animated: true)*/
-                                
                                 
                             }
                             else {
