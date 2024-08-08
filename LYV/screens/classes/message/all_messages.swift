@@ -72,7 +72,7 @@ class all_messages: UIViewController {
         
         let listener = collectionRef
             .whereField("members", arrayContains: myID)
-            .order(by: "time_stamp", descending: true) // Sort by timestamp, latest first
+            .order(by: "time_stamp", descending: true)
             .addSnapshotListener { (querySnapshot, error) in
                 if let error = error {
                     print("Error getting documents: \(error)")
@@ -96,7 +96,6 @@ class all_messages: UIViewController {
                     self.tble_view.reloadData()
                 }
                 
-                // Call the completion handler with the latest data
                 completion(dataArray, nil)
             }
         

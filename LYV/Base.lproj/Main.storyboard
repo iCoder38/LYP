@@ -3869,8 +3869,7 @@ shipped in 2-4 international days.</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xuF-RP-K2W">
-                                <rect key="frame" x="0.0" y="0.0" width="409" height="88"/>
-                                <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="88"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="88" id="q7e-G0-rb0"/>
                                 </constraints>
@@ -3901,7 +3900,7 @@ shipped in 2-4 international days.</string>
                                             <constraint firstAttribute="height" constant="40" id="y5u-ip-Yzh"/>
                                         </constraints>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1L-qk-FGY">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1L-qk-FGY">
                                         <rect key="frame" x="359" y="5" width="34" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="5tM-df-lAY"/>
@@ -3910,7 +3909,7 @@ shipped in 2-4 international days.</string>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="video.fill" catalog="system"/>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fo1-3k-lRU">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fo1-3k-lRU">
                                         <rect key="frame" x="317" y="5" width="34" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="34" id="N1D-hf-C9T"/>
@@ -4213,7 +4212,7 @@ shipped in 2-4 international days.</string>
                             <constraint firstItem="w4s-yG-Slv" firstAttribute="trailing" secondItem="W4D-9j-SlU" secondAttribute="trailing" id="Tgd-ff-4hi"/>
                             <constraint firstItem="eVw-gF-30e" firstAttribute="trailing" secondItem="W4D-9j-SlU" secondAttribute="trailing" id="VAg-DT-VxD"/>
                             <constraint firstItem="eVw-gF-30e" firstAttribute="leading" secondItem="nav-RE-ime" secondAttribute="leading" id="WM7-sk-baL"/>
-                            <constraint firstItem="xuF-RP-K2W" firstAttribute="trailing" secondItem="W4D-9j-SlU" secondAttribute="trailing" constant="16" id="Waa-Yb-1Gg"/>
+                            <constraint firstItem="xuF-RP-K2W" firstAttribute="trailing" secondItem="W4D-9j-SlU" secondAttribute="trailing" id="Waa-Yb-1Gg"/>
                             <constraint firstItem="W4D-9j-SlU" firstAttribute="trailing" secondItem="x2v-Aa-T4y" secondAttribute="trailing" constant="40" id="Wso-fz-iyp"/>
                             <constraint firstItem="eVw-gF-30e" firstAttribute="leading" secondItem="W4D-9j-SlU" secondAttribute="leading" id="ahT-IX-YQt"/>
                             <constraint firstItem="Fba-9U-I1f" firstAttribute="trailing" secondItem="W4D-9j-SlU" secondAttribute="trailing" id="dDJ-QD-1GJ"/>
@@ -4253,7 +4252,7 @@ shipped in 2-4 international days.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Jd-7n-Avw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4691" y="1632"/>
+            <point key="canvasLocation" x="4690.8396946564881" y="1631.6901408450706"/>
         </scene>
     </scenes>
     <resources>
@@ -4305,9 +4304,6 @@ shipped in 2-4 international days.</string>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
