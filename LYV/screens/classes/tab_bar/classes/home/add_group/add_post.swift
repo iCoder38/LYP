@@ -172,6 +172,7 @@ class add_post: UIViewController, UITextFieldDelegate, UINavigationControllerDel
             self.img_video1.isHidden = false
             videoURL = info[UIImagePickerController.InfoKey.mediaURL]as? NSURL
             print(videoURL!)
+            self.str_select_video = "3"
             do {
                 let asset = AVURLAsset(url: videoURL! as URL , options: nil)
                 let imgGenerator = AVAssetImageGenerator(asset: asset)
@@ -222,7 +223,7 @@ class add_post: UIViewController, UITextFieldDelegate, UINavigationControllerDel
             return
         }
         
-        if (self.str_select_video == "2") {
+        if (self.str_select_video == "3") {
             self.validation_before_upload()
            
             return
@@ -440,37 +441,12 @@ class add_post: UIViewController, UITextFieldDelegate, UINavigationControllerDel
                                     ERProgressHud.sharedInstance.hide()
                                     self.navigationController?.popViewController(animated: true)
                                
-                                
-                                
                             } else if (dictionary["status"] as! String) == "Success" {
                                 print("yes")
                                 
-                                if (self.str_user_select_image == "2") {
-                                    
-                                    if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-                                        
-                                        let x : Int = person["userId"] as! Int
-                                        let myString = String(x)
-
-                                        if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
-                                            let parameters: [String: String] = [
-                                                "action": "postadd",
-                                                    "userId": String(myString),
-                                                    "title": String(self.txt_view.text!)
-                                                ]
-                                                
-                                                let token = token_id_is
-                                                
-                                            self.uploadVideo(fileURL: self.videoURL! as URL, to: application_base_url, parameters: parameters, token: token)
-                                        }
-                                    }
-                                    
-                                    return
-                                } else {
                                     ERProgressHud.sharedInstance.hide()
                                     self.navigationController?.popViewController(animated: true)
-                                }
-                                
+                               
                             } else {
                                 ERProgressHud.sharedInstance.hide()
                                 self.refresh_token_WB4()
@@ -559,7 +535,7 @@ class add_post: UIViewController, UITextFieldDelegate, UINavigationControllerDel
     
     @objc func validation_before_upload() {
         
-        if (self.str_user_select_image == "1" && self.str_select_video == "2") {
+        if (self.str_user_select_image == "1" && self.str_select_video == "3") {
             // both image and video
            
             if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
@@ -583,7 +559,7 @@ class add_post: UIViewController, UITextFieldDelegate, UINavigationControllerDel
             
              
 
-        } else if (self.str_select_video == "2") {
+        } else if (self.str_select_video == "3") {
             if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
                 
                 let x : Int = person["userId"] as! Int

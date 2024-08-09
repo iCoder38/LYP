@@ -129,6 +129,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
     
     // NEW FIRESTORE
     //
+    var str_from_dialog:String!
     var get_chat_data:NSDictionary!
     var str_login_user_id:String!
     var str_room_id:String!
@@ -168,12 +169,6 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
     @objc func manage_and_parse() {
         print(self.get_chat_data as Any)
         
-        self.str_room_id = "\(self.get_chat_data["receverId"]!)+\(self.get_chat_data["senderId"]!)"
-        self.str_reverse_room_id = "\(self.get_chat_data["senderId"]!)+\(self.get_chat_data["receverId"]!)"
-        
-        print(self.str_room_id as Any)
-        print(self.str_reverse_room_id as Any)
-        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
@@ -185,9 +180,23 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
             self.str_login_user_image = (person["image"] as! String)
         }
         
+        if (self.str_from_dialog == "no") {
+            self.str_room_id = "\(self.str_login_user_id!)+\(self.get_chat_data["userId"]!)"
+            self.str_reverse_room_id = "\(self.get_chat_data["userId"]!)+\(self.str_login_user_id!)"
+        } else {
+            self.str_room_id = "\(self.get_chat_data["receverId"]!)+\(self.get_chat_data["senderId"]!)"
+            self.str_reverse_room_id = "\(self.get_chat_data["senderId"]!)+\(self.get_chat_data["receverId"]!)"
+        }
+        
+        
+        print(self.str_room_id as Any)
+        print(self.str_reverse_room_id as Any)
+        
         // manage counter
-        // self.manage_notification_counter(dialogId: (self.get_chat_data["dialogId"] as! String))
-        self.updateNotificationCount(matchingField: "dialogId", matchingValue: (self.get_chat_data["dialogId"] as! String))
+        if (self.str_from_dialog != "no") {
+            self.updateNotificationCount(matchingField: "dialogId", matchingValue: (self.get_chat_data["dialogId"] as! String))
+        }
+        
         self.startListeningForChats(myID: self.str_room_id)
        
     }
@@ -494,7 +503,15 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
 
                     let collectionPath = COLLECTION_PATH_DIALOG
                     let field = "dialogId"
-                    let value = (self.get_chat_data["dialogId"] as! String)
+                    
+                    let value:String!
+                    
+                    if (self.str_from_dialog == "no") {
+                        value = ""
+                    } else {
+                        value = (self.get_chat_data["dialogId"] as! String)
+                    }
+                    
 
                     checkIfDocumentExistsByField(collectionPath: collectionPath, field: field, value: value) { [self] exists, error in
                         if let error = error {

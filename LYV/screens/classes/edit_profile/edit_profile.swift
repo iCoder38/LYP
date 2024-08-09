@@ -545,7 +545,12 @@ class edit_profile_table_cell : UITableViewCell {
     }
     
     @IBOutlet weak var txt_username:UITextField!
-    @IBOutlet weak var txt_email:UITextField!
+    @IBOutlet weak var txt_email:UITextField! {
+        didSet {
+            txt_email.isUserInteractionEnabled = false
+        }
+    }
+    
     @IBOutlet weak var txt_phone:UITextField!
     @IBOutlet weak var txt_gender:UITextField!
     @IBOutlet weak var txt_dob:UITextField!

@@ -102,42 +102,9 @@ class all_messages: UIViewController {
         self.listener = listener
     }
     
-    /*func fetchFilteredData(myID: String, completion: @escaping ([[String: Any]]?, Error?) -> Void) {
-        let db = Firestore.firestore()
-        let collectionRef = db.collection(COLLECTION_PATH_DIALOG)
-        
-        
-        collectionRef
-            .whereField("members", arrayContains: myID)
-            .order(by: "time_stamp", descending: true) // Sort by timestamp, latest first
-            .getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                    completion(nil, error)
-                } else {
-                    var dataArray: [[String: Any]] = []
-                    self.chatArray.removeAllObjects() // Clear the current chat array
-                    
-                    for document in querySnapshot!.documents {
-                        let data = document.data()
-                        dataArray.append(data) // Add the data to the array
-                        self.chatArray.add(data)
-                    }
-                    
-                    // Reload the table view with the sorted data
-                    DispatchQueue.main.async {
-                        self.tble_view.delegate = self
-                        self.tble_view.dataSource = self
-                        self.tble_view.reloadData()
-                    }
-                    
-                    completion(dataArray, nil)
-                }
-            }
-    }*/
-
     @objc func add_user_chat() {
-        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "all_users_id") as? all_users
+        self.navigationController?.pushViewController(push!, animated: true)
     }
         
 }
@@ -213,6 +180,7 @@ extension all_messages: UITableViewDataSource , UITableViewDelegate {
         let item = self.chatArray[indexPath.row] as? [String:Any]
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChat") as? BooCheckChat
         push!.get_chat_data = item! as NSDictionary
+        push!.str_from_dialog = "yes"
         if "\(item!["senderId"]!)" == self.str_login_user_id {
             // login user
             push!.str_receiver_firebase_id = "\(item!["receverId"]!)"

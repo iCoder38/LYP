@@ -23,6 +23,7 @@ class login: UIViewController {
             txt_email.clipsToBounds = true
             txt_email.placeholder = "Email"
             txt_email.setLeftPaddingPoints(20)
+            txt_email.keyboardType = .emailAddress
             let placeholderText = "Email"
             let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             txt_email.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: attributes)
@@ -79,14 +80,18 @@ class login: UIViewController {
             return
         }
         
+        let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.prepare()
+                generator.impactOccurred()
+        
         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
         var parameters:Dictionary<AnyHashable, Any>!
         
         
         parameters = [
             "action"    : "login",
-            "email"     : String(self.txt_email.text!),// "m001@mailinator.com", // String(self.txt_email.text!),
-            "password"  : String(self.txt_password.text!), // "123456", // String(self.txt_password.text!),
+            "email"     : String(self.txt_email.text!),
+            "password"  : String(self.txt_password.text!),
             "device"    : "iOS",
         ]
         

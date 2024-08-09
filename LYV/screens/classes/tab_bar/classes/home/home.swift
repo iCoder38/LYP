@@ -11,7 +11,7 @@ import SDWebImage
 import AVKit
 import AVFoundation
 
-class home: UIViewController {
+class home: UIViewController, UITextFieldDelegate {
 
     var arr_feeds:NSMutableArray! = []
     var arr_discover:NSMutableArray! = []
@@ -74,6 +74,8 @@ class home: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.txt_search.delegate = self
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         self.img_profile.isUserInteractionEnabled = true
         self.img_profile.addGestureRecognizer(tapGestureRecognizer)
@@ -81,13 +83,28 @@ class home: UIViewController {
         self.view.backgroundColor = app_BG
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
+        
+        
         self.btn_add.addTarget(self
                                , action: #selector(add_c_m), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            // print(person)
+            
+            self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            self.img_profile.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
+        }
+        
         self.feeds_list_WB(loader: "yes")
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
     }
     
     @objc func add_c_m() {
@@ -575,6 +592,72 @@ extension home: UITableViewDataSource , UITableViewDelegate {
                     cell.btn_play.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
                     cell.btn_play.isHidden = false
                 }
+                
+                cell.btn_comment.tag = indexPath.row-1
+                cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
+                
+                cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
+                
+                cell.img_feed_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                cell.img_feed_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
+                
+                return cell
+            } else if (item!["image_1"] as! String) != "" && (item!["video"] as! String) != ""  {
+                // both image and video is there
+                let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! home_table_cell
+                
+                cell.backgroundColor = .clear
+                
+                let backgroundView = UIView()
+                backgroundView.backgroundColor = .clear
+                cell.selectedBackgroundView = backgroundView
+                
+                cell.lbl_username.text = (item!["userName"] as! String)
+                cell.lbl_description.text = (item!["title"] as! String)
+                cell.lbl_time.text = (item!["created"] as! String)
+                
+                if "\(item!["totalLike"]!)" == "0" {
+                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
+                } else if "\(item!["totalLike"]!)" == "1" {
+                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
+                } else if "\(item!["totalLike"]!)" == "" {
+                    cell.lbl_likes.text = "0 like"
+                } else {
+                    cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
+                }
+                
+                if "\(item!["totalComment"]!)" == "0" {
+                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
+                } else if "\(item!["totalComment"]!)" == "1" {
+                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
+                } else if "\(item!["totalComment"]!)" == "" {
+                    cell.lbl_comments.text = "0 comment"
+                } else {
+                    cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
+                }
+                
+                
+                cell.btn_like.tag = indexPath.row-1
+                if (item!["ulike"] as! String) == "No" {
+                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
+                    cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
+                    cell.btn_like.tintColor = .gray
+                } else {
+                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
+                    cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    cell.btn_like.tintColor = .systemPink
+                }
+                
+                cell.btn_play.isHidden = true
+                
+                /*if (item!["video"] as! String) == "" {
+                    cell.btn_play.isHidden = true
+                } else {
+                    cell.btn_play.tag = indexPath.row-1
+                    cell.btn_play.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
+                    cell.btn_play.isHidden = false
+                }*/
                 
                 cell.btn_comment.tag = indexPath.row-1
                 cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
