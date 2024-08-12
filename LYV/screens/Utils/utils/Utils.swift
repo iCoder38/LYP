@@ -11,9 +11,13 @@ import Foundation
 
 let application_base_url = "https://demo4.evirtualservices.net/lyvapp/services/index"
 
+// let AGORA_APP_ID = "927cf853c57347a4b15355a027485d8c"// "dd002b2584734a9f9ad23da29f08c69f"
 let AGORA_APP_ID = "dd002b2584734a9f9ad23da29f08c69f"
 let AGORA_PRIMARY_CERTIFICATE_KEY = "e6da09477b5e4b1f998edbb7457726df"
+//let AGORA_TEMP_TOKEN = "007eJxTYDiV6K6rea/f9difMyoBczwaXquIvtylUMQp7bdXP7d13zkFBksj8+Q0C1PjZFNzYxPzRJMkQ1NjU9NEAyNzEwvTFIvkBY+3pDUEMjJs/FTFwsgAgSA+F0NwYklmcYaDoZExAwMA6bMhFA=="
+
 let AGORA_TEMP_TOKEN = "007eJxTYJi4REm+6H968kKPJn73jikpC766/XsXlqz4c7PS1oCC/RoKDCkpBgZGSUamFibmxiaJlmmWiSlGximJRpZpBhbJZpZpKpt3pjUEMjJMZTFjZWSAQBCfnyHTPzg+JLW4JDMvPd4nMoyBAQCy8iLn"
+//
 
 let str_save_login_user_data = "keyLoginFullData"
 let str_save_last_api_token = "key_last_api_token"
@@ -31,6 +35,7 @@ var app_BG = UIColor.init(red: 37.0/255.0, green: 42.0/255.0, blue: 55.0/255.0, 
 
 
 var COLLECTION_PATH_DIALOG = "mode/lyv/chat_history/members/history"
+var COLLECTION_PATH_LIVE_STREAM = "mode/lyv/live_streaming"
 
 // Step 1: Define the color dictionary
 let colorDictionary: [String: String] = [
@@ -83,6 +88,12 @@ class Utils: NSObject {
 }
 
 extension UIViewController {
+    
+    func getCurrentTimestampInMilliseconds() -> Int64 {
+        let currentDate = Date()
+        let timestampInMilliseconds = Int64(currentDate.timeIntervalSince1970 * 1000)
+        return timestampInMilliseconds
+    }
     
     func generateRandomAlphanumericString(length: Int) -> String {
         let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

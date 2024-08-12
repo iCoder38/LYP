@@ -463,11 +463,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         self.uploadingImageView.isHidden = true
     }*/
     
-    func getCurrentTimestampInMilliseconds() -> Int64 {
-        let currentDate = Date()
-        let timestampInMilliseconds = Int64(currentDate.timeIntervalSince1970 * 1000)
-        return timestampInMilliseconds
-    }
+    
     
     // MARK:- SEND IMAGE WITHOUT ATTACHMENT -
     @objc func sendMessageWithoutAttachment() {

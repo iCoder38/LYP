@@ -82,6 +82,36 @@
             endingLineNumber = "563"
             landmarkName = "validation_before_upload()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LYV.add_post.validation_before_upload() -&gt; ()"
+                  moduleName = "LYV"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "563"
+                  endingLineNumber = "563">
+               </Location>
+               <Location
+                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LYV.add_post.validation_before_upload() -&gt; ()"
+                  moduleName = "LYV"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "563"
+                  endingLineNumber = "563">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -103,48 +133,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F577E5C2-4B73-441F-8CDA-048B904BC4E3"
+            uuid = "CB383AF9-3C31-4DA4-AD31-6B8BF14DCD55"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LYV/screens/classes/live_stream/live_stream.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "buttonAction(sender:)"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
+            landmarkName = "rtcEngine(_:didJoinedOfUid:elapsed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "94A062C7-99A4-490A-9957-8B9E585B3879"
+            uuid = "E5C58C08-9BC2-4E82-AD14-2E16848DB564"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LYV/screens/classes/live_stream/live_stream.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "buttonAction(sender:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5FD15095-A1F4-4993-8683-D9E6EB757DFA"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LYV/screens/classes/live_stream/live_stream.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "buttonAction(sender:)"
+            startingLineNumber = "323"
+            endingLineNumber = "323"
+            landmarkName = "rtcEngine(_:firstRemoteVideoFrameOfUid:size:elapsed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

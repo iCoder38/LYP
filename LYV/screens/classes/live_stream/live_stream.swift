@@ -9,8 +9,12 @@ import UIKit
 import AgoraRtcKit
 import AVKit
 import GrowingTextView
+import Firebase
 
 class liveStreamingController: UIViewController {
+    
+    var str_audience:String!
+    var str_channel_name:String!
     
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
@@ -77,11 +81,79 @@ class liveStreamingController: UIViewController {
         if !joined {
             sender.isEnabled = false
             Task {
+                // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "creating live panel...")
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.prepare()
+                generator.impactOccurred()
+                
                 await joinChannel()
                 sender.isEnabled = true
+                self.userJoinAndConnected()
             }
         } else {
             leaveChannel()
+        }
+    }
+    
+    @objc func userJoinAndConnected() {
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
+            
+//            let db = Firestore.firestore()
+//            let messagesRef = db.collection("mode/lyv/live_streaming")
+//            
+//            let randomString = generateRandomAlphanumericString(length: 10)
+//            
+//            let timestamp = getCurrentTimestampInMilliseconds()
+//            
+//            // Create a dictionary with message data
+//            let messageData: [String: Any] = [
+//                "liveId"        : randomString,
+//                "userId"        : "\(person["userId"]!)",
+//                "channelName"   : "Satish@123",
+//                "timeStamp"     : timestamp,
+//            ]
+//            
+//            // Add a new document with a generated ID
+//            messagesRef.addDocument(data: messageData) { error in
+//                if let error = error {
+//                    print("Error adding message: \(error)")
+//                    // completion(error)
+//                } else {
+//                    print("Live stream added successfully")
+//                    // completion(nil)
+//                }
+//            }
+            let db = Firestore.firestore()
+            let messagesRef = db.collection(COLLECTION_PATH_LIVE_STREAM)
+
+            let randomString = generateRandomAlphanumericString(length: 10)
+            let timestamp = getCurrentTimestampInMilliseconds()
+
+            print(person as Any)
+            
+            let messageData: [String: Any] = [
+                // "liveId"        : randomString,
+                "userId"        : "\(person["userId"]!)",
+                "userName"      : "\(person["fullName"]!)",
+                "userImage"     : "\(person["image"]!)",
+                "userEmail"     : "\(person["email"]!)",
+                "userDevice"    : "iOS",
+                "userDeviceToken"    : "\(person["deviceToken"]!)",
+                "channelName"   : "Satish@123",
+                "timeStamp"     : timestamp,
+                "active"        : true,
+                
+            ]
+
+            messagesRef.document("\(person["userId"]!)").setData(messageData) { error in
+                if let error = error {
+                    print("Error setting message: \(error)")
+                } else {
+                    print("Live stream added successfully")
+                    ERProgressHud.sharedInstance.hide()
+                }
+            }
+
         }
     }
     
@@ -119,7 +191,7 @@ class liveStreamingController: UIViewController {
 
         let option = AgoraRtcChannelMediaOptions()
 
-        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
+        /*if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
             
             if (person["email"] as! String) == "purnimaevs@gmail.com" {
                 option.clientRoleType = .broadcaster
@@ -129,15 +201,15 @@ class liveStreamingController: UIViewController {
                 setupLocalVideoForAudience()
             }
             
-        }
-        /*
+        }*/
+        
          if self.userRole == .broadcaster {
              option.clientRoleType = .broadcaster
              setupLocalVideo()
          } else {
              option.clientRoleType = .audience
          }
-         */
+         
         print("USER ROLE IS: ====> \(option.clientRoleType)")
 
         option.channelProfile = .liveBroadcasting
@@ -152,10 +224,26 @@ class liveStreamingController: UIViewController {
     }
 
     func leaveChannel() {
-        agoraEngine.stopPreview()
-        let result = agoraEngine.leaveChannel(nil)
-        // Check if leaving the channel was successful and set joined Bool accordingly
-        if result == 0 { joined = false }
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
+            let db = Firestore.firestore()
+            let messagesRef = db.collection(COLLECTION_PATH_LIVE_STREAM)
+            
+            // Delete the document with the specified ID (documentId)
+            messagesRef.document("\(person["userId"]!)").delete() { error in
+                if let error = error {
+                    print("Error deleting document: \(error.localizedDescription)")
+                    // Handle the error appropriately (e.g., notify the user, retry, etc.)
+                } else {
+                    print("Live stream ended successfully")
+                    self.agoraEngine.stopPreview()
+                    let result = self.agoraEngine.leaveChannel(nil)
+                    // Check if leaving the channel was successful and set joined Bool accordingly
+                    if result == 0 { self.joined = false }
+                }
+            }
+            
+        }
+        
     }
 
     /*override func viewDidLayoutSubviews() {
