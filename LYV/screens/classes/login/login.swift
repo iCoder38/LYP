@@ -81,8 +81,8 @@ class login: UIViewController {
         }
         
         let generator = UIImpactFeedbackGenerator(style: .light)
-                generator.prepare()
-                generator.impactOccurred()
+        generator.prepare()
+        generator.impactOccurred()
         
         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
         var parameters:Dictionary<AnyHashable, Any>!

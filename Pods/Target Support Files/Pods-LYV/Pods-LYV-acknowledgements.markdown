@@ -1,6 +1,11 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
+## AgoraRtcEngine_iOS
+
+Copyright 2023 agora.io. All rights reserved.
+
+
 ## Alamofire
 
 Copyright (c) 2014-2022 Alamofire Software Foundation (http://alamofire.org/)

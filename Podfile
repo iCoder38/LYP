@@ -35,5 +35,6 @@ target 'LYV' do
   pod 'Firebase/Storage'
 
   pod 'GrowingTextView'
+  pod 'AgoraRtcEngine_iOS'
   
 end

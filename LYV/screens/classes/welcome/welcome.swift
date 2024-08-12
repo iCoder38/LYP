@@ -61,11 +61,19 @@ class welcome: UIViewController {
     }
     
     @objc func login_click_method() {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
+        
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "login_id")
         self.navigationController?.pushViewController(push, animated: true)
     }
     
     @objc func sign_up_click_method() {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
+        
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "registration_id")
         self.navigationController?.pushViewController(push, animated: true)
     }
