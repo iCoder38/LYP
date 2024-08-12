@@ -117,7 +117,7 @@ class home: UIViewController, UITextFieldDelegate {
                 } else if let dataArray = dataArray {
                     print("Fetched data: \(dataArray)")
                     
-                    self.feeds_list_WB(loader: "yes")
+                    self.feeds_list_WB(loader: "no")
                     
                 }
             }
@@ -129,10 +129,10 @@ class home: UIViewController, UITextFieldDelegate {
         let db = Firestore.firestore()
         let collectionRef = db.collection(COLLECTION_PATH_LIVE_STREAM)
         
-        // Query with filtering by userId (if needed) and sorting by timestamp
-        collectionRef
+        let listener = collectionRef
+            // .whereField("userId", isEqualTo: myID)
             .order(by: "timeStamp", descending: true)
-            .getDocuments { (querySnapshot, error) in
+            .addSnapshotListener { (querySnapshot, error) in
                 if let error = error {
                     print("Error getting documents: \(error)")
                     completion(nil, error)
@@ -142,18 +142,17 @@ class home: UIViewController, UITextFieldDelegate {
                 var dataArray: [[String: Any]] = []
                 self.liveArray.removeAllObjects()
                 
-                if let documents = querySnapshot?.documents {
-                    for document in documents {
-                        let data = document.data()
-                        dataArray.append(data)
-                        self.liveArray.add(data)
-                    }
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    dataArray.append(data)
+                    self.liveArray.add(data)
                 }
                 
                 completion(dataArray, nil)
             }
+        
+        self.listener = listener
     }
-
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
@@ -167,7 +166,7 @@ class home: UIViewController, UITextFieldDelegate {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "liveStreamingController_id") as? liveStreamingController
         
         push!.str_audience = "no"
-        push!.str_channel_name = "dummy"
+        // push!.str_channel_name = "dummy"
         
         self.navigationController?.pushViewController(push!, animated: true)
     }

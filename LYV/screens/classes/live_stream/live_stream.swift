@@ -54,6 +54,10 @@ class liveStreamingController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        self.str_channel_name = String(self.channelName)
+        print(self.str_channel_name as Any)
+        
         initViews()
         
         initializeAgoraEngine()
@@ -88,7 +92,11 @@ class liveStreamingController: UIViewController {
                 
                 await joinChannel()
                 sender.isEnabled = true
-                self.userJoinAndConnected()
+                
+                if (self.str_audience != "yes") {
+                    self.userJoinAndConnected()
+                }
+                
             }
         } else {
             leaveChannel()
@@ -139,7 +147,7 @@ class liveStreamingController: UIViewController {
                 "userEmail"     : "\(person["email"]!)",
                 "userDevice"    : "iOS",
                 "userDeviceToken"    : "\(person["deviceToken"]!)",
-                "channelName"   : "Satish@123",
+                "channelName"   : String(self.str_channel_name),
                 "timeStamp"     : timestamp,
                 "active"        : true,
                 
@@ -178,7 +186,7 @@ class liveStreamingController: UIViewController {
         let videoCanvas = AgoraRtcVideoCanvas()
         videoCanvas.uid = 0
         videoCanvas.renderMode = .hidden
-        videoCanvas.view = remoteView
+        videoCanvas.view = localView
         // Set the local video view
         agoraEngine.setupLocalVideo(videoCanvas)
     }
@@ -202,13 +210,14 @@ class liveStreamingController: UIViewController {
             }
             
         }*/
-        
-         if self.userRole == .broadcaster {
-             option.clientRoleType = .broadcaster
-             setupLocalVideo()
-         } else {
-             option.clientRoleType = .audience
-         }
+        if (self.str_audience == "yes") {
+            option.clientRoleType = .audience
+            setupLocalVideoForAudience()
+        } else {
+            option.clientRoleType = .broadcaster
+            setupLocalVideo()
+        }
+         
          
         print("USER ROLE IS: ====> \(option.clientRoleType)")
 
@@ -216,7 +225,7 @@ class liveStreamingController: UIViewController {
 
         // Join the channel with a temp token. Pass in your token and channel name here
         let result  = agoraEngine.joinChannel(
-            byToken: token, channelId: channelName, uid: 0, mediaOptions: option,
+            byToken: token, channelId: String(self.str_channel_name), uid: 0, mediaOptions: option,
             joinSuccess: nil
         )
         
