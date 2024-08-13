@@ -159,16 +159,11 @@ class home: UIViewController, UITextFieldDelegate {
     }
     
     @objc func add_c_m() {
-//        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_post_id") as? add_post
-//        self.navigationController?.pushViewController(push!, animated: true)
-        
-        
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "liveStreamingController_id") as? liveStreamingController
-        
-        push!.str_audience = "no"
-        // push!.str_channel_name = "dummy"
-        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_post_id") as? add_post
         self.navigationController?.pushViewController(push!, animated: true)
+        
+        
+        
     }
     
     @objc func feeds_list_WB(loader:String) {

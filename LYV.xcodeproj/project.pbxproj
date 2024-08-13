@@ -58,6 +58,7 @@
 		B9F560692C490188003462CA /* LYVTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F560682C490188003462CA /* LYVTests.swift */; };
 		B9F560732C490188003462CA /* LYVUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F560722C490188003462CA /* LYVUITests.swift */; };
 		B9F560752C490188003462CA /* LYVUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F560742C490188003462CA /* LYVUITestsLaunchTests.swift */; };
+		B9FDBF122C6B395000E3B35A /* live_stream_welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FDBF112C6B395000E3B35A /* live_stream_welcome.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +138,7 @@
 		B9F5606E2C490188003462CA /* LYVUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LYVUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F560722C490188003462CA /* LYVUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LYVUITests.swift; sourceTree = "<group>"; };
 		B9F560742C490188003462CA /* LYVUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LYVUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B9FDBF112C6B395000E3B35A /* live_stream_welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = live_stream_welcome.swift; sourceTree = "<group>"; };
 		DC6CC886FA32895000133CF3 /* Pods_LYVTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LYVTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6153ED684BC6D8604AAE2EA /* Pods-LYV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LYV.release.xcconfig"; path = "Target Support Files/Pods-LYV/Pods-LYV.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -483,6 +485,7 @@
 			isa = PBXGroup;
 			children = (
 				B9EC88C82C69E86F00710D2E /* live_stream.swift */,
+				B9FDBF102C6B394200E3B35A /* live_stream_welcome */,
 			);
 			path = live_stream;
 			sourceTree = "<group>";
@@ -541,6 +544,14 @@
 				B9F560742C490188003462CA /* LYVUITestsLaunchTests.swift */,
 			);
 			path = LYVUITests;
+			sourceTree = "<group>";
+		};
+		B9FDBF102C6B394200E3B35A /* live_stream_welcome */ = {
+			isa = PBXGroup;
+			children = (
+				B9FDBF112C6B395000E3B35A /* live_stream_welcome.swift */,
+			);
+			path = live_stream_welcome;
 			sourceTree = "<group>";
 		};
 		C59E1AEC86D1E87462131CE4 /* Pods */ = {
@@ -808,6 +819,7 @@
 				B9D796612C5A5A9F00EBF515 /* shop.swift in Sources */,
 				B9D796642C5A5EC600EBF515 /* shop_details.swift in Sources */,
 				B9D61F852C60EECC008C27D1 /* change_password.swift in Sources */,
+				B9FDBF122C6B395000E3B35A /* live_stream_welcome.swift in Sources */,
 				B950BF052C5A0DBC00557F3E /* NewYorkAlertViewType.swift in Sources */,
 				B932B1232C64D89900916AB3 /* all_messages.swift in Sources */,
 				B97C7CC32C578869006C4941 /* welcome.swift in Sources */,

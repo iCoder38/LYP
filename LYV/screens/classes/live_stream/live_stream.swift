@@ -10,11 +10,25 @@ import AgoraRtcKit
 import AVKit
 import GrowingTextView
 import Firebase
+import SDWebImage
 
 class liveStreamingController: UIViewController {
     
     var str_audience:String!
     var str_channel_name:String!
+    
+    var liveChat:NSMutableArray! = []
+    
+    var listener: ListenerRegistration?
+    
+    @IBOutlet weak var btn_send:UIButton!
+    
+    @IBOutlet weak var tble_view:UITableView! {
+        didSet {
+            tble_view.backgroundColor = .clear
+            tble_view.isHidden = true
+        }
+    }
     
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
@@ -32,7 +46,7 @@ class liveStreamingController: UIViewController {
 
     let appID = AGORA_APP_ID
     var token = AGORA_TEMP_TOKEN
-    var channelName = "iOS_Testing_LYV"
+    // var channelName = "iOS_Testing_LYV"
     
     @IBOutlet weak var inputToolbar: UIView!
     @IBOutlet weak var textView: GrowingTextView!
@@ -55,12 +69,73 @@ class liveStreamingController: UIViewController {
         super.viewDidLoad()
         
         
-        self.str_channel_name = String(self.channelName)
+        // self.str_channel_name = String(self.channelName)
         print(self.str_channel_name as Any)
         
-        initViews()
+        self.btn_send.addTarget(self, action: #selector(addLiveChat), for: .touchUpInside)
+        textView.layer.cornerRadius = 4.0
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
-        initializeAgoraEngine()
+        self.initViews()
+        
+        self.initializeAgoraEngine()
+        
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            let myID = String(myString)
+            // self.str_login_user_id = myID
+            
+            fetchFilteredData(myID: myID) { (dataArray, error) in
+                if let error = error {
+                    print("Error: \(error)")
+                } else if let dataArray = dataArray {
+                    print("Fetched data: \(dataArray)")
+                    
+                    if (dataArray.count != 0){
+                        self.tble_view.isHidden = false
+                        self.tble_view.delegate = self
+                        self.tble_view.dataSource = self
+                        self.tble_view.reloadData()
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+    }
+    
+    // get teal time chats
+    func fetchFilteredData(myID: String, completion: @escaping ([[String: Any]]?, Error?) -> Void) {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("mode/lyv/live_streaming_chat/\(self.str_channel_name!)/list")
+        
+        let listener = collectionRef
+            .order(by: "timeStamp", descending: true)
+            .addSnapshotListener { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                    completion(nil, error)
+                    return
+                }
+                
+                var dataArray: [[String: Any]] = []
+                self.liveChat.removeAllObjects()
+                
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    dataArray.append(data)
+                    self.liveChat.add(data)
+                }
+                
+                completion(dataArray, nil)
+            }
+        
+        self.listener = listener
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -79,6 +154,19 @@ class liveStreamingController: UIViewController {
         config.appId = appID
         // Use AgoraRtcEngineDelegate for the following delegate parameter.
         agoraEngine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
+    }
+    
+    @objc private func keyboardWillChangeFrame(_ notification: Notification) {
+        if let endFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            var keyboardHeight = UIScreen.main.bounds.height - endFrame.origin.y
+            if #available(iOS 11, *) {
+                if keyboardHeight > 0 {
+                    keyboardHeight = keyboardHeight - view.safeAreaInsets.bottom
+                }
+            }
+            textViewBottomConstraint.constant = keyboardHeight + 8
+            view.layoutIfNeeded()
+        }
     }
     
     @objc func buttonAction(sender: UIButton!) {
@@ -134,7 +222,6 @@ class liveStreamingController: UIViewController {
             let db = Firestore.firestore()
             let messagesRef = db.collection(COLLECTION_PATH_LIVE_STREAM)
 
-            let randomString = generateRandomAlphanumericString(length: 10)
             let timestamp = getCurrentTimestampInMilliseconds()
 
             print(person as Any)
@@ -153,7 +240,8 @@ class liveStreamingController: UIViewController {
                 
             ]
 
-            messagesRef.document("\(person["userId"]!)").setData(messageData) { error in
+             messagesRef.document("\(person["userId"]!)").setData(messageData) { error in
+            // messagesRef.document("iOS_Testing").setData(messageData) { error in
                 if let error = error {
                     print("Error setting message: \(error)")
                 } else {
@@ -210,6 +298,7 @@ class liveStreamingController: UIViewController {
             }
             
         }*/
+        
         if (self.str_audience == "yes") {
             option.clientRoleType = .audience
             setupLocalVideoForAudience()
@@ -218,12 +307,10 @@ class liveStreamingController: UIViewController {
             setupLocalVideo()
         }
          
-         
         print("USER ROLE IS: ====> \(option.clientRoleType)")
 
         option.channelProfile = .liveBroadcasting
 
-        // Join the channel with a temp token. Pass in your token and channel name here
         let result  = agoraEngine.joinChannel(
             byToken: token, channelId: String(self.str_channel_name), uid: 0, mediaOptions: option,
             joinSuccess: nil
@@ -233,6 +320,7 @@ class liveStreamingController: UIViewController {
     }
 
     func leaveChannel() {
+        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
             let db = Firestore.firestore()
             let messagesRef = db.collection(COLLECTION_PATH_LIVE_STREAM)
@@ -292,6 +380,44 @@ class liveStreamingController: UIViewController {
             alert.dismiss(animated: true, completion: nil)
         })
     }
+    
+    
+    
+    @objc func addLiveChat() {
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
+            
+            let db = Firestore.firestore()
+            let messagesRef = db.collection("mode/lyv/live_streaming_chat/\(self.str_channel_name!)/list")
+
+            let timestamp = getCurrentTimestampInMilliseconds()
+
+            print(person as Any)
+            
+            let messageData: [String: Any] = [
+                "userId"        : "\(person["userId"]!)",
+                "userName"      : "\(person["fullName"]!)",
+                "userImage"     : "\(person["image"]!)",
+                "userEmail"     : "\(person["email"]!)",
+                "userDevice"    : "iOS",
+                "userDeviceToken" : "\(person["deviceToken"]!)",
+                "channelName"   : String(self.str_channel_name),
+                "timeStamp"     : timestamp,
+                "active"        : true,
+                "message"       : String(self.textView.text!),
+            ]
+
+            // Use addDocument to add a new document with a generated ID
+            messagesRef.addDocument(data: messageData) { error in
+                if let error = error {
+                    print("Error adding message: \(error)")
+                } else {
+                    print("Message added successfully")
+                    ERProgressHud.sharedInstance.hide()
+                }
+            }
+        }
+    }
+
 }
 
 extension liveStreamingController: AgoraRtcEngineDelegate {
@@ -362,5 +488,87 @@ extension liveStreamingController: AgoraRtcEngineDelegate {
     /// @param stats stats struct for current call statistics
     func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStats stats: AgoraRtcRemoteAudioStats) {
         print("remoteAudioStats == \(stats)")
+    }
+}
+
+//MARK:- TABLE VIEW -
+extension liveStreamingController: UITableViewDataSource , UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.liveChat.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell:liveStreamingController_table_cell = tableView.dequeueReusableCell(withIdentifier: "liveStreamingController_table_cell") as! liveStreamingController_table_cell
+        
+        cell.backgroundColor = .clear
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .clear
+        cell.selectedBackgroundView = backgroundView
+        
+        cell.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        cell.contentView.backgroundColor = UIColor.clear
+        
+        let item = self.liveChat[indexPath.row] as? [String:Any]
+        
+        cell.lbl_name.text = (item!["userName"] as! String)
+        cell.lbl_message.text = (item!["message"] as! String)
+        
+        cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+        cell.img_profile.sd_setImage(with: URL(string: (item!["userImage"] as! String)), placeholderImage: UIImage(named: "1024"))
+        
+        return cell
+        
+    }
+     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        // let item = self.arr_category[indexPath.row] as? [String:Any]
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+}
+
+class liveStreamingController_table_cell : UITableViewCell {
+    
+    @IBOutlet weak var img_profile:UIImageView! {
+        didSet {
+            img_profile.layer.cornerRadius = 10
+            img_profile.clipsToBounds = true
+            img_profile.backgroundColor = .white
+        }
+    }
+    
+    
+    @IBOutlet weak var lbl_name:UILabel! {
+        didSet {
+            lbl_name.textColor = .white
+        }
+    }
+    
+    @IBOutlet weak var lbl_message:UILabel! {
+        didSet {
+            lbl_message.textColor = .white
+        }
+    }
+   
+}
+
+extension liveStreamingController: GrowingTextViewDelegate {
+    // *** Call layoutIfNeeded on superview for animation when changing height ***
+    func textViewDidChangeHeight(_ textView: GrowingTextView, height: CGFloat) {
+        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [.curveLinear], animations: { () -> Void in
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
 }
