@@ -358,6 +358,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
             self.tbleView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
+    
     @objc func convertSelectedImageFromGallery(img1 :UIImage) {
     }
     /*@objc func cellTappedMethod1(){

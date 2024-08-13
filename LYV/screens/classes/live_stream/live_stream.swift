@@ -80,7 +80,6 @@ class liveStreamingController: UIViewController {
         
         self.initializeAgoraEngine()
         
-        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
@@ -100,6 +99,8 @@ class liveStreamingController: UIViewController {
                         self.tble_view.delegate = self
                         self.tble_view.dataSource = self
                         self.tble_view.reloadData()
+                        
+                        self.scrollToBottom()
                     }
                     
                     
@@ -109,13 +110,20 @@ class liveStreamingController: UIViewController {
         
     }
     
+    func scrollToBottom() {
+        DispatchQueue.main.async {
+            let indexPath = IndexPath(row: self.liveChat.count-1, section: 0)
+            self.tble_view.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+    }
+    
     // get teal time chats
     func fetchFilteredData(myID: String, completion: @escaping ([[String: Any]]?, Error?) -> Void) {
         let db = Firestore.firestore()
         let collectionRef = db.collection("mode/lyv/live_streaming_chat/\(self.str_channel_name!)/list")
         
         let listener = collectionRef
-            .order(by: "timeStamp", descending: true)
+            .order(by: "timeStamp", descending: false)
             .addSnapshotListener { (querySnapshot, error) in
                 if let error = error {
                     print("Error getting documents: \(error)")
@@ -145,7 +153,9 @@ class liveStreamingController: UIViewController {
     }
     
     private func initViews() {
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "creating live panel...")
         joinButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        buttonAcction2()
     }
     
     private func initializeAgoraEngine() {
@@ -170,8 +180,8 @@ class liveStreamingController: UIViewController {
     }
     
     @objc func buttonAction(sender: UIButton!) {
-        if !joined {
-            sender.isEnabled = false
+        /*if !joined {
+            // sender.isEnabled = false
             Task {
                 // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "creating live panel...")
                 let generator = UIImpactFeedbackGenerator(style: .light)
@@ -179,7 +189,30 @@ class liveStreamingController: UIViewController {
                 generator.impactOccurred()
                 
                 await joinChannel()
-                sender.isEnabled = true
+                // sender.isEnabled = true
+                
+                if (self.str_audience != "yes") {
+                    self.userJoinAndConnected()
+                }
+                
+            }
+        } else {
+            leaveChannel()
+        }*/
+        leaveChannel()
+    }
+    
+    @objc func buttonAcction2() {
+        if !joined {
+            // sender.isEnabled = false
+            Task {
+                 
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.prepare()
+                generator.impactOccurred()
+                
+                await joinChannel()
+                // sender.isEnabled = true
                 
                 if (self.str_audience != "yes") {
                     self.userJoinAndConnected()
@@ -193,32 +226,7 @@ class liveStreamingController: UIViewController {
     
     @objc func userJoinAndConnected() {
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
-            
-//            let db = Firestore.firestore()
-//            let messagesRef = db.collection("mode/lyv/live_streaming")
-//            
-//            let randomString = generateRandomAlphanumericString(length: 10)
-//            
-//            let timestamp = getCurrentTimestampInMilliseconds()
-//            
-//            // Create a dictionary with message data
-//            let messageData: [String: Any] = [
-//                "liveId"        : randomString,
-//                "userId"        : "\(person["userId"]!)",
-//                "channelName"   : "Satish@123",
-//                "timeStamp"     : timestamp,
-//            ]
-//            
-//            // Add a new document with a generated ID
-//            messagesRef.addDocument(data: messageData) { error in
-//                if let error = error {
-//                    print("Error adding message: \(error)")
-//                    // completion(error)
-//                } else {
-//                    print("Live stream added successfully")
-//                    // completion(nil)
-//                }
-//            }
+
             let db = Firestore.firestore()
             let messagesRef = db.collection(COLLECTION_PATH_LIVE_STREAM)
 
@@ -406,12 +414,13 @@ class liveStreamingController: UIViewController {
                 "message"       : String(self.textView.text!),
             ]
 
-            // Use addDocument to add a new document with a generated ID
             messagesRef.addDocument(data: messageData) { error in
                 if let error = error {
                     print("Error adding message: \(error)")
                 } else {
                     print("Message added successfully")
+                    self.textView.text = ""
+                    self.view.endEditing(true)
                     ERProgressHud.sharedInstance.hide()
                 }
             }
@@ -464,18 +473,21 @@ extension liveStreamingController: AgoraRtcEngineDelegate {
     
     func rtcEngine(_ engine: AgoraRtcEngineKit, networkQuality uid: UInt, txQuality: AgoraNetworkQuality, rxQuality: AgoraNetworkQuality) {
         print("uid == \(uid)  txQuality == \(txQuality.rawValue) rxQuality == \(rxQuality.rawValue)")
+        
     }
     
     /// Reports the statistics of the current call. The SDK triggers this callback once every two seconds after the user joins the channel.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportRtcStats stats: AgoraChannelStats) {
         print("reportRtcStats == \(stats)")
+        ERProgressHud.sharedInstance.hide()
     }
     
     /// Reports the statistics of the uploading local audio streams once every two seconds.
     /// @param stats stats struct
     func rtcEngine(_ engine: AgoraRtcEngineKit, localAudioStats stats: AgoraRtcLocalAudioStats) {
         print("reportRtcStats == \(stats)")
+        ERProgressHud.sharedInstance.hide()
     }
     
     /// Reports the statistics of the video stream from each remote user/host.

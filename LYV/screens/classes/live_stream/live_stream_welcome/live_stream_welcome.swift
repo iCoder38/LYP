@@ -48,6 +48,7 @@ class live_stream_welcome: UIViewController, UITextFieldDelegate {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "liveStreamingController_id") as? liveStreamingController
         
         push!.str_audience = "no"
+        // String(self.txt_password.text!)
         push!.str_channel_name = "iOS_Testing_LYV"
         
         self.navigationController?.pushViewController(push!, animated: true)
