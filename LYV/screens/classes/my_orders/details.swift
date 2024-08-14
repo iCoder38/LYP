@@ -27,6 +27,16 @@ class details: UIViewController {
         }
     }
     
+    @IBOutlet weak var btn_shipped:UIButton! {
+        didSet {
+            btn_shipped.backgroundColor = .white
+            btn_shipped.layer.cornerRadius = 25
+            btn_shipped.clipsToBounds = true
+            btn_shipped.setTitle("Shipped", for: .normal)
+            btn_shipped.backgroundColor = app_purple_color
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = app_BG
@@ -100,7 +110,7 @@ extension details: UITableViewDataSource , UITableViewDelegate {
             cell.lbl_color.text = (self.dict_product_details["p_color"] as! String)
             cell.lbl_size.text = (self.dict_product_details["p_size"] as! String)
             cell.lbl_quantity.text = "\(self.dict_product_details["p_quantity"]!)"
-            cell.lbl_price.text = (self.dict_product_details["created"] as! String)
+            cell.lbl_price.text = "$\(self.dict_product_details["p_price"]!)"
             cell.lbl_address.text = (self.dict_product_details["S_address"] as! String)
             cell.lbl_total_price.text = "$\(self.dict_product_details["p_price"]!)"
             
@@ -243,4 +253,6 @@ class details_table_cell : UITableViewCell {
             lbl_total_price.textColor = .white
         }
     }
+    
+    
 }

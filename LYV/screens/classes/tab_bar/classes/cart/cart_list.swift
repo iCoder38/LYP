@@ -10,7 +10,7 @@ import Alamofire
 import SDWebImage
 
 class cart_list: UIViewController {
-
+    
     var arr_cart_list:NSMutableArray! = []
     
     var str_product_id_for_delete:String!
@@ -58,14 +58,14 @@ class cart_list: UIViewController {
     
     
     @objc func cart_counter_WB(loader:String) {
-       
+        
         var parameters:Dictionary<AnyHashable, Any>!
         
         if (loader == "yes") {
             ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
         }
         
-      
+        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
@@ -77,7 +77,7 @@ class cart_list: UIViewController {
                 let headers: HTTPHeaders = [
                     "token":String(token_id_is),
                 ]
-                 
+                
                 parameters = [
                     "action"    : "cartlist",
                     "userId"    : String(myString),
@@ -99,7 +99,7 @@ class cart_list: UIViewController {
                             strSuccess = JSON["status"] as? String
                             
                             if strSuccess.lowercased() == "success" {
-                            
+                                
                                 ERProgressHud.sharedInstance.hide()
                                 var ar : NSArray!
                                 ar = (JSON["data"] as! Array<Any>) as NSArray
@@ -112,11 +112,13 @@ class cart_list: UIViewController {
                                     let item = self.arr_cart_list[indexx] as? [String:Any]
                                     
                                     if let price = Decimal(string: "\(item!["price"]!)") {
-                                        total += price
+                                        var quantity = Decimal(string: "\(item!["quantity"]!)")
+                                        total += price*quantity!
                                     }
                                 }
                                 
-                                // print(total as Any)
+                                // var multiplyQuantityWithTotal = to
+                                 print(total as Any)
                                 
                                 self.btn_checkout.setTitle("Checkout: $\(total)", for: .normal)
                                 self.str_store_total_price = "\(total)"
@@ -124,7 +126,7 @@ class cart_list: UIViewController {
                                 self.tble_view.delegate = self
                                 self.tble_view.dataSource = self
                                 self.tble_view.reloadData()
-                               
+                                
                             } else {
                                 TokenManager.shared.refresh_token_WB { token, error in
                                     if let token = token {
@@ -141,7 +143,7 @@ class cart_list: UIViewController {
                                         // Handle the error
                                     }
                                 }
-
+                                
                             }
                             
                         }
@@ -178,11 +180,11 @@ class cart_list: UIViewController {
     
     
     @objc func delete_item_in_cart_WB() {
-       
+        
         var parameters:Dictionary<AnyHashable, Any>!
         
         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-      
+        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
@@ -194,7 +196,7 @@ class cart_list: UIViewController {
                 let headers: HTTPHeaders = [
                     "token":String(token_id_is),
                 ]
-                 
+                
                 parameters = [
                     "action"    : "cartdelete",
                     "userId"    : String(myString),
@@ -217,9 +219,9 @@ class cart_list: UIViewController {
                             strSuccess = JSON["status"] as? String
                             
                             if strSuccess.lowercased() == "success" {
-                            
+                                
                                 self.cart_counter_WB(loader: "no")
-                               
+                                
                             } else {
                                 TokenManager.shared.refresh_token_WB { token, error in
                                     if let token = token {
@@ -236,7 +238,7 @@ class cart_list: UIViewController {
                                         // Handle the error
                                     }
                                 }
-
+                                
                             }
                             
                         }
@@ -269,6 +271,239 @@ class cart_list: UIViewController {
         }
         
     }
+    
+    @objc func addItemQuantityClick(_ sender:UIButton) {
+        
+        let item = self.arr_cart_list[sender.tag] as? [String:Any]
+        self.str_product_id_for_delete = "\(item!["productId"]!)"
+        
+        
+        self.addItemQuantityInExistingItemsWB(loader: "yes", quantity: (item!["quantity"] as! Int))
+    }
+    
+    @objc func addItemQuantityInExistingItemsWB(loader:String,quantity:Int) {
+        
+        var addoneQuantity:Int! = 0
+        
+        addoneQuantity = quantity + 1
+        
+        
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"    : "cartadd",
+                    "userId"    : String(myString),
+                    "productId" : String(self.str_product_id_for_delete),
+                    "quantity"  : "\(addoneQuantity!)",
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                
+                                self.cart_counter_WB(loader: "no")
+                                
+                            } else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.addItemQuantityInExistingItemsWB(loader: "no", quantity: quantity)
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.addItemQuantityInExistingItemsWB(loader: "no", quantity: quantity)
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+        
+        
+    }
+    
+    
+    @objc func minusItemQuantityClick(_ sender:UIButton) {
+        
+        let item = self.arr_cart_list[sender.tag] as? [String:Any]
+        self.str_product_id_for_delete = "\(item!["productId"]!)"
+        
+        if "\(item!["quantity"]!)" == "1" {
+            self.delete_item_in_cart_WB()
+        } else {
+            self.minusItemQuantityInExistingItemsWB(loader: "yes", quantity: (item!["quantity"] as! Int))
+        }
+    }
+    
+    @objc func minusItemQuantityInExistingItemsWB(loader:String,quantity:Int) {
+        
+        var addoneQuantity:Int! = 0
+        
+        addoneQuantity = quantity - 1
+        
+        
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"    : "cartadd",
+                    "userId"    : String(myString),
+                    "productId" : String(self.str_product_id_for_delete),
+                    "quantity"  : "\(addoneQuantity!)",
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                
+                                self.cart_counter_WB(loader: "no")
+                                
+                            } else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.addItemQuantityInExistingItemsWB(loader: "no", quantity: quantity)
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.addItemQuantityInExistingItemsWB(loader: "no", quantity: quantity)
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+        
+        
+    }
+    
 }
 
 //MARK:- TABLE VIEW -
@@ -293,7 +528,7 @@ extension cart_list: UITableViewDataSource , UITableViewDelegate {
         
         let item = self.arr_cart_list[indexPath.row] as? [String:Any]
         
-        cell.lbl_product_price.text = "$\(item!["price"]!)"
+        cell.lbl_product_price.text = "$\(item!["price"]!) (\(item!["quantity"]!))"
         cell.lbl_product_title.text = "\(item!["name"]!)"
         
         cell.lbl_product_quantity.text = "\(item!["quantity"]!)"
@@ -301,7 +536,16 @@ extension cart_list: UITableViewDataSource , UITableViewDelegate {
         cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_profile.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
         
-        // calculate
+        cell.btnAddItemQuantity.tag = indexPath.row
+        cell.btnMinusItemQuantity.tag = indexPath.row
+        
+        cell.btnAddItemQuantity.addTarget(self
+                                          , action: #selector(addItemQuantityClick), for: .touchUpInside)
+        
+        cell.btnMinusItemQuantity.addTarget(self
+                                          , action: #selector(minusItemQuantityClick), for: .touchUpInside)
+        
+        
         
         return cell
         
@@ -365,4 +609,23 @@ class cart_list_table_cell : UITableViewCell {
         }
     }
    
+    @IBOutlet weak var btnAddItemQuantity:UIButton! {
+        didSet {
+            btnAddItemQuantity.tintColor = .white
+        }
+    }
+    
+    @IBOutlet weak var btnMinusItemQuantity:UIButton! {
+        didSet {
+            btnMinusItemQuantity.tintColor = .white
+        }
+    }
+    
+    @IBOutlet weak var viewBG:UIView! {
+        didSet {
+            viewBG.backgroundColor = app_BG
+            viewBG.layer.cornerRadius = 4
+            viewBG.clipsToBounds = true
+        }
+    }
 }

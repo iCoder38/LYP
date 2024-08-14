@@ -82,7 +82,8 @@ class shop_details: UIViewController {
             
         }
         
-        self.product_list_WB()
+        self.product_list_WB(loader: "yes")
+        
         self.collectionView1.delegate = self
         self.collectionView1.dataSource = self
         self.collectionView1.reloadData()
@@ -91,14 +92,17 @@ class shop_details: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.product_list_WB()
+        self.product_list_WB(loader: "yes")
     }
     
-    @objc func product_list_WB() {
+    @objc func product_list_WB(loader:String) {
        
         var parameters:Dictionary<AnyHashable, Any>!
         
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
       
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
@@ -165,7 +169,7 @@ class shop_details: UIViewController {
                                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                                         
-                                        self.product_list_WB()
+                                        self.product_list_WB(loader: "no")
                                         
                                     } else if let error = error {
                                         print("Failed to refresh token: \(error.localizedDescription)")
@@ -194,7 +198,7 @@ class shop_details: UIViewController {
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                         
-                        self.product_list_WB()
+                        self.product_list_WB(loader: "no")
                         
                     } else if let error = error {
                         print("Failed to refresh token: \(error.localizedDescription)")
@@ -206,6 +210,111 @@ class shop_details: UIViewController {
         
     }
     
+    
+    @objc func likeItemClickMethod(_ sender:UIButton) {
+        let item = self.arr_category_products[sender.tag] as? [String:Any]
+        print(item as Any)
+        
+        var status:String!
+        
+        if "\(item!["ulike"]!)" == "No" {
+            status = "1"
+        } else {
+            status = "0"
+        }
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+      
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"    : "productlike",
+                    "userId"    : String(myString),
+                    "productId" : "\(item!["productId"]!)",
+                     "status"    : String(status),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                            
+                                self.product_list_WB(loader: "no")
+//
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        // self.product_list_WB()
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        // self.likeItemClickMethod()
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
 }
 
 
@@ -267,6 +376,16 @@ extension shop_details: UICollectionViewDelegate ,
             
             cell.configure(with: "\(item!["color"]!)")
             
+            cell.btnLike.tag = indexPath.row
+            cell.btnLike.addTarget(self, action: #selector(likeItemClickMethod), for: .touchUpInside)
+            
+            if "\(item!["ulike"]!)" == "No" {
+                cell.btnLike.setImage(UIImage(systemName: "heart"), for: .normal)
+                cell.btnLike.tintColor = .darkGray
+            } else {
+                cell.btnLike.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                cell.btnLike.tintColor = .systemPink
+            }
             /*let colorNames = getColorNames(from: "\(item!["color"]!)")
             if let firstColorName = colorNames.first, let color = getColor(from: firstColorName) {
                 cell.colorDotView.backgroundColor = color
@@ -352,7 +471,7 @@ extension shop_details: UICollectionViewDelegate ,
             
             print(self.arr_category as Any)
             self.collectionView1.reloadData()
-            self.product_list_WB()
+            self.product_list_WB(loader: "no")
             
         } else {
             let item = self.arr_category_products[indexPath.row] as? [String:Any]
@@ -449,10 +568,11 @@ class shop_details_view_cell: UICollectionViewCell , UITextFieldDelegate {
         ])
     }
     
+   
 }
 
 class shop_details_view_cell2: UICollectionViewCell {
-    
+    @IBOutlet weak var btnLike:UIButton!
     @IBOutlet weak var img_product_image:UIImageView!  {
         didSet {
             img_product_image.layer.cornerRadius = 12

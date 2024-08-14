@@ -164,7 +164,7 @@ extension shop: UITableViewDataSource , UITableViewDelegate {
         
         var ar2 : NSArray!
         ar2 = (item!["child"] as! Array<Any>) as NSArray
-        cell.lbl_category_count.text = "\(ar2.count) items"
+        // cell.lbl_category_count.text = "\(ar2.count) items"
         
         cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_profile.sd_setImage(with: URL(string: (item!["image"] as! String)), placeholderImage: UIImage(named: "1024"))
@@ -211,6 +211,10 @@ class shop_table_cell : UITableViewCell {
     @IBOutlet weak var lbl_category:UILabel! {
         didSet {
             lbl_category.textColor = .white
+            lbl_category.backgroundColor = app_purple_color
+            lbl_category.textAlignment = .center
+            lbl_category.layer.cornerRadius = 15
+            lbl_category.clipsToBounds = true
         }
     }
     

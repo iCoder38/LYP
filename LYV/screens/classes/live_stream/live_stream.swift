@@ -111,10 +111,13 @@ class liveStreamingController: UIViewController {
     }
     
     func scrollToBottom() {
-        DispatchQueue.main.async {
-            let indexPath = IndexPath(row: self.liveChat.count-1, section: 0)
-            self.tble_view.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        if (self.liveChat.count != 0) {
+            DispatchQueue.main.async {
+                let indexPath = IndexPath(row: self.liveChat.count-1, section: 0)
+                self.tble_view.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
         }
+        
     }
     
     // get teal time chats
@@ -340,16 +343,52 @@ class liveStreamingController: UIViewController {
                     // Handle the error appropriately (e.g., notify the user, retry, etc.)
                 } else {
                     print("Live stream ended successfully")
-                    self.agoraEngine.stopPreview()
-                    let result = self.agoraEngine.leaveChannel(nil)
-                    // Check if leaving the channel was successful and set joined Bool accordingly
-                    if result == 0 { self.joined = false }
+                    self.deleteLiveChatsAfterStream()
                 }
             }
             
         }
         
     }
+    
+    func deleteLiveChatsAfterStream() {
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
+            let db = Firestore.firestore()
+            let messagesRef = db.collection("mode/lyv/live_streaming_chat/\(self.str_channel_name!)/list")
+            
+            messagesRef.document("\(person["userId"]!)").delete() { error in
+                if let error = error {
+                    print("Error deleting document: \(error.localizedDescription)")
+                    // Handle the error appropriately (e.g., notify the user, retry, etc.)
+                } else {
+                    print("Chat deleted successfully")
+                    self.clearAgoraSession()
+                }
+            }
+            
+        }
+    }
+    
+    func deleteDocument(at documentPath: String) {
+        let db = Firestore.firestore()
+        
+        db.document(documentPath).delete { error in
+            if let error = error {
+                print("Error deleting document: \(error.localizedDescription)")
+            } else {
+                print("Document successfully deleted!")
+            }
+        }
+    }
+
+    
+    func clearAgoraSession() {
+        self.agoraEngine.stopPreview()
+        let result = self.agoraEngine.leaveChannel(nil)
+        // Check if leaving the channel was successful and set joined Bool accordingly
+        if result == 0 { self.joined = false }
+    }
+    
 
     /*override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -427,6 +466,8 @@ class liveStreamingController: UIViewController {
         }
     }
 
+    
+    
 }
 
 extension liveStreamingController: AgoraRtcEngineDelegate {

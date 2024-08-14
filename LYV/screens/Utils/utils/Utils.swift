@@ -11,13 +11,13 @@ import Foundation
 
 let application_base_url = "https://demo4.evirtualservices.net/lyvapp/services/index"
 
-  let AGORA_APP_ID = "bbe938fe04a746fd9019971106fa51ff"
-  let AGORA_TEMP_TOKEN = ""
+  /*let AGORA_APP_ID = "bbe938fe04a746fd9019971106fa51ff"
+  let AGORA_TEMP_TOKEN = ""*/
 
 
-/*let AGORA_APP_ID = "dd002b2584734a9f9ad23da29f08c69f"
+let AGORA_APP_ID = "dd002b2584734a9f9ad23da29f08c69f"
 let AGORA_PRIMARY_CERTIFICATE_KEY = "e6da09477b5e4b1f998edbb7457726df"
-let AGORA_TEMP_TOKEN = "007eJxTYDjd8KZ1rar7JbYNq1RDayW/Pls8q//Ad5f9KQur/NyX+v1XYEhJMTAwSjIytTAxNzZJtEyzTEwxMk5JNLJMM7BINrNMeyuzK60hkJHB8cQJVkYGCATx+Rky/YPjQ1KLSzLz0uN9IsMYGACGBiXd"*/
+let AGORA_TEMP_TOKEN = "007eJxTYDjd8KZ1rar7JbYNq1RDayW/Pls8q//Ad5f9KQur/NyX+v1XYEhJMTAwSjIytTAxNzZJtEyzTEwxMk5JNLJMM7BINrNMeyuzK60hkJHB8cQJVkYGCATx+Rky/YPjQ1KLSzLz0uN9IsMYGACGBiXd"
 
 let str_save_login_user_data = "keyLoginFullData"
 let str_save_last_api_token = "key_last_api_token"

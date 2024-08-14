@@ -191,6 +191,9 @@ class product_details: UIViewController {
                                     self.btn_cart.isHidden = false
                                     self.lbl_cart_counter.isHidden = false
                                     self.lbl_cart_counter.text = "\(ar.count)"
+                                } else {
+                                    self.btn_cart.isHidden = true
+                                    self.lbl_cart_counter.isHidden = true
                                 }
                             } else {
                                 TokenManager.shared.refresh_token_WB { token, error in
