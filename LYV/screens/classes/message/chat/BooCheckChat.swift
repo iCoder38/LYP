@@ -162,6 +162,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         
         self.view.backgroundColor = app_BG
         
+        // imgReceiverProfilePicture
         self.manage_and_parse()
         
     }
@@ -181,9 +182,25 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         }
         
         if (self.str_from_dialog == "no") {
+            self.imgReceiverProfilePicture.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            self.imgReceiverProfilePicture.sd_setImage(with: URL(string: (get_chat_data!["image"] as! String)), placeholderImage: UIImage(named: "1024"))
             self.str_room_id = "\(self.str_login_user_id!)+\(self.get_chat_data["userId"]!)"
             self.str_reverse_room_id = "\(self.get_chat_data["userId"]!)+\(self.str_login_user_id!)"
         } else {
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                if myString == (self.get_chat_data["senderId"] as! String) {
+                    self.imgReceiverProfilePicture.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                    self.imgReceiverProfilePicture.sd_setImage(with: URL(string: (get_chat_data!["receiver_image"] as! String)), placeholderImage: UIImage(named: "1024"))
+                } else {
+                    self.imgReceiverProfilePicture.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                    self.imgReceiverProfilePicture.sd_setImage(with: URL(string: (get_chat_data!["sender_image"] as! String)), placeholderImage: UIImage(named: "1024"))
+                }
+            }
+            
             self.str_room_id = "\(self.get_chat_data["receverId"]!)+\(self.get_chat_data["senderId"]!)"
             self.str_reverse_room_id = "\(self.get_chat_data["senderId"]!)+\(self.get_chat_data["receverId"]!)"
         }
@@ -280,6 +297,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
             }
             
             self.tbleView.reloadData()
+            scrollToBottom()
         }
     }
        
@@ -313,7 +331,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         self.navigationController?.popViewController(animated: true)
     }
     
-    func manage_data_before_send_notification(get_type:String,getCallId:String) {
+    /*func manage_data_before_send_notification(get_type:String,getCallId:String) {
         
         print("============================")
         print(self.receiverData as Any)
@@ -349,14 +367,17 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         
         
         
-    }
+    }*/
    
     
     func scrollToBottom() {
-        DispatchQueue.main.async {
-            let indexPath = IndexPath(row: self.chatMessages.count-1, section: 0)
-            self.tbleView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        if (self.chatMessages.count != 0){
+            DispatchQueue.main.async {
+                let indexPath = IndexPath(row: self.chatMessages.count-1, section: 0)
+                self.tbleView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
         }
+        
     }
     
     @objc func convertSelectedImageFromGallery(img1 :UIImage) {
@@ -494,6 +515,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                     print("Error sending message: \(error)")
                 } else {
                     print("Message sent successfully")
+                    
                     
                     let userId = String(self.str_room_id)
                     print(userId as Any)
@@ -676,6 +698,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                 completion(error)
             } else {
                 print("Message added successfully")
+                self.scrollToBottom()
                 completion(nil)
             }
         }
@@ -749,7 +772,7 @@ extension BooCheckChat: UITableViewDataSource {
             if item!["type"] as! String == "Text" {
                 
                 let cell2 = tableView.dequeueReusableCell(withIdentifier: "cellTwo") as! BooCheckTableCell
-                 cell2.receiverName.text = "receiver name"//(receiverData["sender_name"] as! String)// (item!["chat_receiver"] as! String)
+                 cell2.receiverName.text = (item!["sender_name"] as! String)
                  cell2.receiverText.text = (item!["message"] as! String)
                  cell2.backgroundColor = .clear
                 cell2.imgReceiver.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge

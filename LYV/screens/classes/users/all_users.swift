@@ -50,6 +50,14 @@ class all_users: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         self.view.backgroundColor = app_BG
         
+       
+        
+        self.btn_search.addTarget(self
+                                  , action: #selector(search_user_c_m), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
@@ -59,16 +67,8 @@ class all_users: UIViewController, UITextFieldDelegate {
             self.str_login_user_id = myID
            
         }
-        
+        self.arr_all_users.removeAllObjects()
         self.feeds_list_WB(loader:"no",pageNumber: 1)
-        
-        self.btn_search.addTarget(self
-                                  , action: #selector(search_user_c_m), for: .touchUpInside)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -249,8 +249,26 @@ class all_users: UIViewController, UITextFieldDelegate {
                                 
                                 // self.arr_all_users.removeAllObjects()
                                 
-                                self.arr_all_users.addObjects(from: ar as! [Any])
-                                print(self.arr_all_users.count)
+                                for indexx in 0..<ar.count {
+                                    let item = ar[indexx] as? [String:Any]
+                                    
+                                    var custom = [
+                                        "created"       : "\(item!["created"]!)",
+                                        "profile_picture":"\(item!["profile_picture"]!)",
+                                        "ufollowing"    : "\(item!["ufollowing"]!)",
+                                        "userAddress"   : "\(item!["userAddress"]!)",
+                                        "userContact"   : "\(item!["userContact"]!)",
+                                        "userEmail"     : "\(item!["userEmail"]!)",
+                                        "userId"        : "\(item!["userId"]!)",
+                                        "userName"      : "\(item!["userName"]!)",
+                                    ]
+                                    
+//                                     self.arr_all_users.addObjects(from: ar as! [Any])
+                                    self.arr_all_users.add(custom)
+                               
+                                }
+                                
+                                
                                 
                                 self.tble_view.delegate = self
                                 self.tble_view.dataSource = self
@@ -306,6 +324,167 @@ class all_users: UIViewController, UITextFieldDelegate {
         }
         
     }
+    
+    @objc func get_index(_ sender:UIButton) {
+        lightImpactVibration()
+        
+        let item = self.arr_all_users[sender.tag] as? [String:Any]
+        // self.arr_all_users.removeAllObjects()
+        
+//        var custom = [
+//            "created"       : "\(item!["created"]!)",
+//            "profile_picture":"\(item!["profile_picture"]!)",
+//            "ufollowing"    : "\(item!["ufollowing"]!)",
+//            "userAddress"   : "\(item!["userAddress"]!)",
+//            "userContact"   : "\(item!["userContact"]!)",
+//            "userEmail"     : "\(item!["userEmail"]!)",
+//            "userId"        : "\(item!["userId"]!)",
+//            "userName"      : "\(item!["userName"]!)",
+//        ]
+        
+        if (item!["ufollowing"] as! String) == "Yes" {
+            self.arr_all_users.removeObject(at: sender.tag)
+            
+            let custom = [
+                "created"       : "\(item!["created"]!)",
+                "profile_picture":"\(item!["profile_picture"]!)",
+                "ufollowing"    : "No",
+                "userAddress"   : "\(item!["userAddress"]!)",
+                "userContact"   : "\(item!["userContact"]!)",
+                "userEmail"     : "\(item!["userEmail"]!)",
+                "userId"        : "\(item!["userId"]!)",
+                "userName"      : "\(item!["userName"]!)",
+            ]
+            
+            self.arr_all_users.insert(custom, at: sender.tag)
+            self.follow_click_method(loader: "yes", friendId: "\(item!["userId"]!)", status: "0")
+        } else {
+            self.arr_all_users.removeObject(at: sender.tag)
+            
+            let custom = [
+                "created"       : "\(item!["created"]!)",
+                "profile_picture":"\(item!["profile_picture"]!)",
+                "ufollowing"    : "Yes",
+                "userAddress"   : "\(item!["userAddress"]!)",
+                "userContact"   : "\(item!["userContact"]!)",
+                "userEmail"     : "\(item!["userEmail"]!)",
+                "userId"        : "\(item!["userId"]!)",
+                "userName"      : "\(item!["userName"]!)",
+            ]
+            self.arr_all_users.insert(custom, at: sender.tag)
+            self.follow_click_method(loader: "yes", friendId: "\(item!["userId"]!)", status: "1")
+        }
+        
+        // print(self.arr_all_users as Any)
+        
+        self.tble_view.reloadData()
+        
+        
+        /*if (item!["ufollowing"] as! String) == "Yes" {
+            self.follow_click_method(loader: "yes", friendId: "\(item!["userId"]!)", status: "0")
+        } else {
+            self.follow_click_method(loader: "yes", friendId: "\(item!["userId"]!)", status: "1")
+        }*/
+        
+    }
+    
+    @objc func follow_click_method(loader:String,friendId:String,status:String) {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        /*if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }*/
+       
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"        : "follow",
+                    "followerId"    : String(friendId),
+                    "followingId"   : String(myString),
+                    "status"        : String(status),
+                   
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+//                                ERProgressHud.sharedInstance.hide()
+//                                
+                                // self.feeds_list_WB(loader:"no",pageNumber: 1)
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.follow_click_method(loader: "no", friendId: friendId, status: status)
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.follow_click_method(loader: "no", friendId: friendId, status: status)
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
 }
 
 
@@ -334,6 +513,22 @@ extension all_users: UITableViewDataSource , UITableViewDelegate {
         cell.lbl_name.text = (item!["userName"] as! String)
         cell.lbl_email.text = (item!["userEmail"] as! String)
         
+        cell.btn_follow.tag = indexPath.row
+        
+        if (item!["ufollowing"] as! String) == "Yes" {
+            cell.btn_follow.setTitle("Unfollow", for: .normal)
+            cell.btn_follow.backgroundColor = app_BG
+            cell.btn_follow.layer.borderWidth = 0.5
+            cell.btn_follow.layer.borderColor = UIColor.white.cgColor
+        } else {
+            cell.btn_follow.setTitle("Follow", for: .normal)
+            cell.btn_follow.backgroundColor = app_purple_color
+            cell.btn_follow.layer.borderWidth = 0.5
+            cell.btn_follow.layer.borderColor = UIColor.clear.cgColor
+        }
+        
+        cell.btn_follow.addTarget(self, action: #selector(get_index), for: .touchUpInside)
+        
         cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
         
@@ -347,20 +542,8 @@ extension all_users: UITableViewDataSource , UITableViewDelegate {
         let item = self.arr_all_users[indexPath.row] as? [String:Any]
         print(item as Any)
         
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChat") as? BooCheckChat
-        push!.get_chat_data = item! as NSDictionary
-        push!.str_from_dialog = "no"
-        if "\(item!["userId"]!)" == self.str_login_user_id {
-            // login user
-            push!.str_receiver_firebase_id = "\(item!["userId"]!)"
-            push!.str_receiver_firebase_name = "\(item!["userName"]!)"
-            push!.str_receiver_firebase_image = "\(item!["profile_picture"]!)"
-        } else {
-            // receiver
-            push!.str_receiver_firebase_id = "\(item!["userId"]!)"
-            push!.str_receiver_firebase_name = "\(item!["userName"]!)"
-            push!.str_receiver_firebase_image = "\(item!["profile_picture"]!)"
-        }
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_profile_id") as? my_profile
+        push!.strUserId = "\(item!["userId"]!)"
         self.navigationController?.pushViewController(push!, animated: true)
         
     }
@@ -391,6 +574,13 @@ class all_users_table_cell : UITableViewCell {
     @IBOutlet weak var lbl_email:UILabel! {
         didSet {
             lbl_email.textColor = .white
+        }
+    }
+    
+    @IBOutlet weak var btn_follow:UIButton! {
+        didSet {
+            btn_follow.layer.cornerRadius =  15
+            btn_follow.clipsToBounds = true
         }
     }
    

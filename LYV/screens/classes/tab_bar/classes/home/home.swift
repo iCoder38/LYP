@@ -792,8 +792,12 @@ extension home: UITableViewDataSource , UITableViewDelegate {
     }
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "main_profile_id") as? main_profile
-        self.navigationController?.pushViewController(push!, animated: true)
+        
+        
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "main_profile_id") as? main_profile
+            
+            self.navigationController?.pushViewController(push!, animated: true)
+         
     }
     
     @objc func playVideo(_ sender:UIButton) {

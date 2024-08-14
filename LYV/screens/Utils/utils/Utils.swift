@@ -90,6 +90,12 @@ class Utils: NSObject {
 
 extension UIViewController {
     
+    func lightImpactVibration() {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        generator.impactOccurred()
+    }
+    
     func getCurrentTimestampInMilliseconds() -> Int64 {
         let currentDate = Date()
         let timestampInMilliseconds = Int64(currentDate.timeIntervalSince1970 * 1000)

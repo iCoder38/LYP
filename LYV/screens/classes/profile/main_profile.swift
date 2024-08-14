@@ -73,8 +73,11 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
         
         if (indexPath.row == 0) {
             
-            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_profile_id") as? my_profile
-            self.navigationController?.pushViewController(push!, animated: true)
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_profile_id") as? my_profile
+                push!.strUserId = "\(person["userId"]!)"
+                self.navigationController?.pushViewController(push!, animated: true)
+            }
             
         } else  if (indexPath.row == 1) {
             
