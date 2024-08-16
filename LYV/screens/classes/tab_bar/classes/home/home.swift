@@ -23,6 +23,9 @@ class home: UIViewController, UITextFieldDelegate {
     var userWhichIndex:String! = "0"
     var data: [[String]] = []
     var dataMutable:NSMutableArray! = []
+    
+    var strVideoKeyHit:Bool! = false
+    
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
             tble_view.backgroundColor = .clear
@@ -596,48 +599,68 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             
             self.userWhichIndex = "1"
             
+            // self.dataMutable.removeAllObjects()
+            
+            self.data.removeAll()
+            
             if (item!["image_1"] as! String) != "" {
-                self.data.append([item!["image_1"] as! String])
+                 self.data.append(contentsOf: (item!["image_1"] as! String))
                 self.dataMutable.add(item!["image_1"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_2"] as! String) != "" {
-                self.data.append([item!["image_2"] as! String])
+                self.data.append(item!["image_2"] as! String)
                 self.dataMutable.add(item!["image_2"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_3"] as! String) != "" {
-                self.data.append([item!["image_3"] as! String])
+                self.data.append(item!["image_3"] as! String)
                 self.dataMutable.add(item!["image_3"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_4"] as! String) != "" {
-                self.data.append([item!["image_4"] as! String])
+                self.data.append(item!["image_4"] as! String)
                 self.dataMutable.add(item!["image_4"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_5"] as! String) != "" {
-                self.data.append([item!["image_5"] as! String])
+                self.data.append(item!["image_5"] as! String)
                 self.dataMutable.add(item!["image_5"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_6"] as! String) != "" {
-                self.data.append([item!["image_6"] as! String])
+                 self.data.append(item!["image_6"] as! String)
                 self.dataMutable.add(item!["image_6"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_7"] as! String) != "" {
-                self.data.append([item!["image_7"] as! String])
+                 self.data.append(item!["image_7"] as! String)
                 self.dataMutable.add(item!["image_7"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_8"] as! String) != "" {
-                self.data.append([item!["image_8"] as! String])
+                 self.data.append(item!["image_8"] as! String)
                 self.dataMutable.add(item!["image_8"] as! String)
+                self.strVideoKeyHit = false
             }
             if (item!["image_9"] as! String) != "" {
-                self.data.append([item!["image_9"] as! String])
+                 self.data.append(item!["image_9"] as! String)
                 self.dataMutable.add(item!["image_9"] as! String)
+                self.strVideoKeyHit = false
             }
+            /*if (item!["video"] as! String) != "" {
+                // self.data.append([item!["video"] as! String])
+                self.dataMutable.add(item!["video"] as! String)
+                self.strVideoKeyHit = true
+            }*/
             
+             print(data as Any)
+            // print(dataMutable as Any)
             cell.collectionView2.tag = indexPath.row
             cell.collectionView2.delegate = self
             cell.collectionView2.dataSource = self
-            cell.collectionView2.reloadData()
-            cell.collectionView2.reloadData()
+            // cell.collectionView2.reloadData()
+            
           
             return cell
             
@@ -780,9 +803,7 @@ extension home: UICollectionViewDelegate ,
             return self.liveArray.count
         } else {
             let rowIndex = collectionView.tag
-             // return data[rowIndex].count
-            return self.dataMutable.count
-//            return data.count
+            return data[rowIndex].count
         }
     }
     
@@ -811,13 +832,31 @@ extension home: UICollectionViewDelegate ,
 
             cell.backgroundColor  = .clear
             
-            let imageUrl = dataMutable[indexPath.item]
-            cell.img_view.sd_setImage(with: URL(string: imageUrl as! String), placeholderImage: UIImage(named: "1024"))
+            let rowIndex = collectionView.tag
+            print(rowIndex as Any)
+            print(data as Any)
+            print(data[rowIndex] as Any)
+            print(data[indexPath.item] as Any)
+            // print(data[rowIndex] as Any)
+            // print(data[indexPath.item] as Any)
+            // cell.img_view.sd_setImage(with: URL(string: data[indexPath.row]), placeholderImage: UIImage(named: "1024"))
+            /*let imageUrl = dataMutable[indexPath.item]
+            print(imageUrl as Any)
+            
+            /*let last3 = (imageUrl as! String).suffix(3)
+            print(last3)
+            if (last3) == "mov" {
+                
+            } else if (last3) == "mp4" {
+                
+            } else {*/
+                cell.img_view.sd_setImage(with: URL(string: imageUrl as! String), placeholderImage: UIImage(named: "1024"))
+            // }
             
             cell.img_view.isUserInteractionEnabled = true
             cell.img_view.tag = indexPath.item
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
-            cell.img_view.addGestureRecognizer(tapGesture)
+            cell.img_view.addGestureRecognizer(tapGesture)*/
             
             return cell
             

@@ -188,14 +188,14 @@ class comments: UIViewController, UITextFieldDelegate {
        
         var parameters:Dictionary<AnyHashable, Any>!
         
-         
-            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
             
         if self.txt_comment.text! == "" {
-            
             return
         }
+        
+        self.view.endEditing(true)
+        
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
@@ -232,6 +232,7 @@ class comments: UIViewController, UITextFieldDelegate {
                             strSuccess = JSON["status"] as? String
                             
                             if strSuccess.lowercased() == "success" {
+                                self.txt_comment.text = ""
                                 self.comment_list_WB(loader: "no")
                             }
                             else {
