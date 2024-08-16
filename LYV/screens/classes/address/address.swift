@@ -208,7 +208,7 @@ extension address: UITableViewDataSource , UITableViewDelegate {
         setPlaceholderColor(textField: cell.txt_city, placeholder: "City", color: .white)
         setPlaceholderColor(textField: cell.txt_zipcode, placeholder: "Zipcode", color: .white)
         setPlaceholderColor(textField: cell.txt_country, placeholder: "Country", color: .white)
-        setPlaceholderColor(textField: cell.txt_shipping_method, placeholder: "Shipping Method", color: .white)
+        // setPlaceholderColor(textField: cell.txt_shipping_method, placeholder: "Shipping Method", color: .white)
         
         cell.btn_next.addTarget(self, action: #selector(next_click_method), for: .touchUpInside)
         

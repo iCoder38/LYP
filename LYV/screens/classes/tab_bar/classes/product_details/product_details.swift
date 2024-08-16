@@ -75,31 +75,31 @@ class product_details: UIViewController {
         if (self.dict_product_details["image_1"] as! String) != "" {
             let originalURL = self.dict_product_details["image_1"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            var custom = ["image":encodedURL!]
+            let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
         if (self.dict_product_details["image_2"] as! String) != "" {
-            let originalURL = self.dict_product_details["image_1"] as! String
+            let originalURL = self.dict_product_details["image_2"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            var custom = ["image":encodedURL!]
+            let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
         if (self.dict_product_details["image_3"] as! String) != "" {
-            let originalURL = self.dict_product_details["image_1"] as! String
+            let originalURL = self.dict_product_details["image_3"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            var custom = ["image":encodedURL!]
+            let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
         if (self.dict_product_details["image_4"] as! String) != "" {
-            let originalURL = self.dict_product_details["image_1"] as! String
+            let originalURL = self.dict_product_details["image_4"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            var custom = ["image":encodedURL!]
+            let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
         if (self.dict_product_details["image_5"] as! String) != "" {
-            let originalURL = self.dict_product_details["image_1"] as! String
+            let originalURL = self.dict_product_details["image_5"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            var custom = ["image":encodedURL!]
+            let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
         print(self.arrAddImages as Any)
@@ -743,27 +743,34 @@ extension product_details: UICollectionViewDelegate ,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "product_details_collection_view_cell", for: indexPath as IndexPath) as! product_details_collection_view_cell
-
+        
         cell.backgroundColor  = .clear
         
-        /*cell.img_view.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-        cell.img_view.sd_setImage(with: URL(string: self.arrAddImages[indexPath.row] as! String), placeholderImage: UIImage(named: "1024"))
-        cell.img_view.isHidden = true*/
+        
         let item = self.arrAddImages[indexPath.row] as! [String:Any]
-        // let imageView = UIImageView()
+        
         cell.img_view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 420)
         cell.img_view.contentMode = .scaleAspectFill
         cell.img_view.clipsToBounds = true
         cell.img_view.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_view.sd_setImage(with: URL(string: (item["image"] as! String)), placeholderImage: UIImage(named: "1024"))
-        // collectionView.addSubview(imageView)
+        cell.img_view.isUserInteractionEnabled = true
+        cell.img_view.tag = indexPath.item
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        cell.img_view.addGestureRecognizer(tapGesture)
         
         return cell
         
     }
     
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        if let imageView = sender.view as? UIImageView {
+            ImageZoomHelper.presentZoomedImage(from: imageView, in: self)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//
+
     }
     
     func collectionView(_ collectionView: UICollectionView,
