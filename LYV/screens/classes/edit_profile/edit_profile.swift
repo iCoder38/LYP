@@ -166,6 +166,7 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
                     "contactNumber" : String(cell.txt_phone.text!),
                     "gender"        : String(cell.txt_gender.text!),
                     "dob"           : String(cell.txt_dob.text!),
+                    "about"           : String(cell.txt_view.text!),
                     "device"        : String("iOS"),
                 ]
                 
@@ -370,6 +371,7 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
                 parameterDict.setValue(String(cell.txt_phone.text!), forKey: "contactNumber")
                  parameterDict.setValue(String(cell.txt_gender.text!), forKey: "gender")
                 parameterDict.setValue(String(cell.txt_dob.text!), forKey: "dob")
+                parameterDict.setValue(String(cell.txt_view.text!), forKey: "about")
                 parameterDict.setValue("iOS", forKey: "device")
                 
                 
@@ -507,6 +509,7 @@ extension edit_profile: UITableViewDataSource , UITableViewDelegate {
             cell.txt_phone.text = (person["contactNumber"] as! String)
             cell.txt_gender.text = (person["gender"] as! String)
             cell.txt_username.text = (person["fullName"] as! String)
+            cell.txt_view.text = (person["about"] as! String)
             
             cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
             cell.img_profile.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
@@ -529,7 +532,7 @@ extension edit_profile: UITableViewDataSource , UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 1000
+        return 1200
     }
 
 }
@@ -548,6 +551,16 @@ class edit_profile_table_cell : UITableViewCell {
     @IBOutlet weak var txt_email:UITextField! {
         didSet {
             txt_email.isUserInteractionEnabled = false
+        }
+    }
+    
+    @IBOutlet weak var txt_view:UITextView! {
+        didSet {
+            txt_view.layer.borderColor = UIColor.white.cgColor
+            txt_view.layer.borderWidth = 0.2
+            txt_view.layer.cornerRadius = 25
+            txt_view.clipsToBounds = true
+            txt_view.textColor = .white
         }
     }
     
