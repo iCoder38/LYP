@@ -96,7 +96,6 @@ extension details: UITableViewDataSource , UITableViewDelegate {
             
             return cell
             
-        
         } else if (indexPath.row == 3) {
             let cell:details_table_cell = tableView.dequeueReusableCell(withIdentifier: "four") as! details_table_cell
             
@@ -116,7 +115,6 @@ extension details: UITableViewDataSource , UITableViewDelegate {
             
             return cell
             
-        
         } else {
             let cell:details_table_cell = tableView.dequeueReusableCell(withIdentifier: "one") as! details_table_cell
             

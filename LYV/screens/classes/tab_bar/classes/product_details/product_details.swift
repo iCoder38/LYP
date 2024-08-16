@@ -15,7 +15,7 @@ class product_details: UIViewController {
     
     var str_select_color:String! = "0"
     var str_select_size:String! = "0"
-    
+     
     let reverseColorDictionary: [String: String] = {
         var dict = [String: String]()
         for (key, value) in colorDictionary {
@@ -37,6 +37,7 @@ class product_details: UIViewController {
             tble_view.backgroundColor = .clear
             tble_view.delegate = self
             tble_view.dataSource = self
+            
         }
     }
     
@@ -58,11 +59,51 @@ class product_details: UIViewController {
         }
     }
     
+    var imageArrays: [[String]] = [
+            ["https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2.png",
+             "https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2 (1).png"]
+        ]
+    
+    var arrAddImages:NSMutableArray! = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = app_BG
         
-        print(self.dict_product_details as Any)
+        // print(self.dict_product_details as Any)
+        
+        if (self.dict_product_details["image_1"] as! String) != "" {
+            let originalURL = self.dict_product_details["image_1"] as! String
+            let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            var custom = ["image":encodedURL!]
+            arrAddImages.add(custom)
+        }
+        if (self.dict_product_details["image_2"] as! String) != "" {
+            let originalURL = self.dict_product_details["image_1"] as! String
+            let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            var custom = ["image":encodedURL!]
+            arrAddImages.add(custom)
+        }
+        if (self.dict_product_details["image_3"] as! String) != "" {
+            let originalURL = self.dict_product_details["image_1"] as! String
+            let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            var custom = ["image":encodedURL!]
+            arrAddImages.add(custom)
+        }
+        if (self.dict_product_details["image_4"] as! String) != "" {
+            let originalURL = self.dict_product_details["image_1"] as! String
+            let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            var custom = ["image":encodedURL!]
+            arrAddImages.add(custom)
+        }
+        if (self.dict_product_details["image_5"] as! String) != "" {
+            let originalURL = self.dict_product_details["image_1"] as! String
+            let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            var custom = ["image":encodedURL!]
+            arrAddImages.add(custom)
+        }
+        print(self.arrAddImages as Any)
+        
         
         if (self.dict_product_details["ulike"] as! String) == "No" {
             self.btn_heart.tag = 0
@@ -75,8 +116,8 @@ class product_details: UIViewController {
         self.btn_heart.addTarget(self, action: #selector(heart_click_method), for: .touchUpInside)
         
         self.btn_cart.addTarget(self, action: #selector(push_to_Cart), for: .touchUpInside)
-        
-        
+        self.tble_view.reloadData()
+         
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -478,6 +519,19 @@ class product_details: UIViewController {
         
         
     }
+    
+    
+    func fetchImagesFromServer() {
+        // Implement your server call here and update imageArrays with the result.
+        // For example:
+        imageArrays = [
+            ["https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2.png", "https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2 (1).png"],
+        ]
+        tble_view.delegate = self
+        tble_view.dataSource = self
+        self.tble_view.reloadData()
+    }
+    
 }
 
 
@@ -515,8 +569,14 @@ extension product_details: UITableViewDataSource , UITableViewDelegate {
             backgroundView.backgroundColor = .clear
             cell.selectedBackgroundView = backgroundView
             
-            cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-            cell.img_profile.sd_setImage(with: URL(string: (self.dict_product_details!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
+            /*cell.images = imageArrays[0]
+            
+            cell.img_profile.isHidden = true*/
+            // cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            // cell.img_profile.sd_setImage(with: URL(string: (self.dict_product_details!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
+            cell.collectionView1.delegate = self
+            cell.collectionView1.dataSource = self
+            cell.collectionView1.reloadData()
             
             return cell
             
@@ -661,4 +721,95 @@ class product_details_table_cell : UITableViewCell {
         }
     }
     
+    @IBOutlet weak var collectionView1:UICollectionView! {
+        didSet {
+            collectionView1.isPagingEnabled = true
+            collectionView1.backgroundColor = .clear
+        }
+    }
+ 
 }
+
+//MARK:- COLLECTION VIEW -
+extension product_details: UICollectionViewDelegate ,
+                     UICollectionViewDataSource ,
+                     UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return self.arrAddImages.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "product_details_collection_view_cell", for: indexPath as IndexPath) as! product_details_collection_view_cell
+
+        cell.backgroundColor  = .clear
+        
+        /*cell.img_view.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+        cell.img_view.sd_setImage(with: URL(string: self.arrAddImages[indexPath.row] as! String), placeholderImage: UIImage(named: "1024"))
+        cell.img_view.isHidden = true*/
+        let item = self.arrAddImages[indexPath.row] as! [String:Any]
+        // let imageView = UIImageView()
+        cell.img_view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 420)
+        cell.img_view.contentMode = .scaleAspectFill
+        cell.img_view.clipsToBounds = true
+        cell.img_view.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+        cell.img_view.sd_setImage(with: URL(string: (item["image"] as! String)), placeholderImage: UIImage(named: "1024"))
+        // collectionView.addSubview(imageView)
+        
+        return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        var sizes: CGSize
+        let result = UIScreen.main.bounds.size
+        NSLog("%f",result.height)
+        sizes = CGSize(width: self.view.frame.size.width, height: 420)
+        
+        return sizes
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout
+                        collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return 0
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+}
+
+class product_details_collection_view_cell: UICollectionViewCell , UITextFieldDelegate {
+    
+    @IBOutlet weak var img_view:UIImageView! {
+        didSet {
+            img_view.layer.cornerRadius = 12
+            img_view.clipsToBounds = true
+            img_view.backgroundColor = .brown
+        }
+    }
+    
+    
+}
+
+

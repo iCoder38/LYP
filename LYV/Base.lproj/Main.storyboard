@@ -1315,30 +1315,57 @@ nearby</string>
                                             <outlet property="lbl_product_name" destination="H3i-ar-kve" id="3bg-ac-OEv"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="two" rowHeight="40" id="pds-on-He6" customClass="product_details_table_cell" customModule="LYV" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="110" width="393" height="40"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="two" rowHeight="420" id="pds-on-He6" customClass="product_details_table_cell" customModule="LYV" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="110" width="393" height="420"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pds-on-He6" id="RgX-wn-M64">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="420"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cxX-Dz-943">
-                                                    <rect key="frame" x="20" y="11" width="353" height="18"/>
-                                                </imageView>
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="MId-bo-eiB">
+                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="420"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="X69-OV-C4I">
+                                                        <size key="itemSize" width="396" height="413"/>
+                                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    </collectionViewFlowLayout>
+                                                    <cells>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="product_details_collection_view_cell" id="ncx-SN-Z11" customClass="product_details_collection_view_cell" customModule="LYV" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="396" height="420"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="57S-7V-aS0">
+                                                                <rect key="frame" x="0.0" y="0.0" width="396" height="420"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1024" translatesAutoresizingMaskIntoConstraints="NO" id="SMw-Mp-8Pq">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="420"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    </imageView>
+                                                                </subviews>
+                                                            </collectionViewCellContentView>
+                                                            <size key="customSize" width="396" height="420"/>
+                                                            <connections>
+                                                                <outlet property="img_view" destination="SMw-Mp-8Pq" id="2rr-aK-DcA"/>
+                                                            </connections>
+                                                        </collectionViewCell>
+                                                    </cells>
+                                                </collectionView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="cxX-Dz-943" firstAttribute="trailing" secondItem="RgX-wn-M64" secondAttribute="trailingMargin" id="XbC-Wu-Ba7"/>
-                                                <constraint firstItem="cxX-Dz-943" firstAttribute="bottom" secondItem="RgX-wn-M64" secondAttribute="bottomMargin" id="nA9-PU-yeU"/>
-                                                <constraint firstItem="cxX-Dz-943" firstAttribute="top" secondItem="RgX-wn-M64" secondAttribute="topMargin" id="pBI-u2-sgE"/>
-                                                <constraint firstItem="cxX-Dz-943" firstAttribute="leading" secondItem="RgX-wn-M64" secondAttribute="leadingMargin" id="vOq-a5-hyM"/>
+                                                <constraint firstAttribute="trailing" secondItem="MId-bo-eiB" secondAttribute="trailing" id="Lik-YS-6zw"/>
+                                                <constraint firstItem="MId-bo-eiB" firstAttribute="top" secondItem="RgX-wn-M64" secondAttribute="top" id="bTi-bm-xym"/>
+                                                <constraint firstAttribute="bottom" secondItem="MId-bo-eiB" secondAttribute="bottom" id="dUo-O2-1Rp"/>
+                                                <constraint firstItem="MId-bo-eiB" firstAttribute="leading" secondItem="RgX-wn-M64" secondAttribute="leading" id="gWe-x1-oZv"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="img_profile" destination="cxX-Dz-943" id="cOZ-4Z-akz"/>
+                                            <outlet property="collectionView1" destination="MId-bo-eiB" id="kkn-Dl-5KO"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="three" rowHeight="60" id="mbm-4f-u52" customClass="product_details_table_cell" customModule="LYV" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="150" width="393" height="60"/>
+                                        <rect key="frame" x="0.0" y="530" width="393" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mbm-4f-u52" id="ocz-wd-aWW">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
@@ -1363,7 +1390,7 @@ nearby</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="four" rowHeight="60" id="G2g-vX-ikE" customClass="product_details_table_cell" customModule="LYV" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="210" width="393" height="60"/>
+                                        <rect key="frame" x="0.0" y="590" width="393" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="G2g-vX-ikE" id="wt8-oD-K8l">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
@@ -1388,7 +1415,7 @@ nearby</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="five" rowHeight="122" id="30r-kV-KAK" customClass="product_details_table_cell" customModule="LYV" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="270" width="393" height="122"/>
+                                        <rect key="frame" x="0.0" y="650" width="393" height="122"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="30r-kV-KAK" id="E23-zE-CJB">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="122"/>
@@ -3836,11 +3863,11 @@ shipped in 2-4 working days.</string>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="w4s-yG-Slv">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVw-gF-30e">
-                                <rect key="frame" x="0.0" y="773" width="393" height="79"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eVw-gF-30e">
+                                <rect key="frame" x="0.0" y="770" width="393" height="82"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="x2v-Aa-T4y" customClass="GrowingTextView" customModule="GrowingTextView">
-                                        <rect key="frame" x="50" y="8" width="303" height="30"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="x2v-Aa-T4y" customClass="GrowingTextView" customModule="GrowingTextView">
+                                        <rect key="frame" x="50" y="8" width="303" height="33"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -3952,8 +3979,8 @@ shipped in 2-4 working days.</string>
                                     <constraint firstAttribute="height" constant="44" id="wK8-aj-P84"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Fba-9U-I1f">
-                                <rect key="frame" x="0.0" y="88" width="393" height="685"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Fba-9U-I1f">
+                                <rect key="frame" x="0.0" y="88" width="393" height="682"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellOne" rowHeight="70" id="hiy-wW-9Al" customClass="BooCheckTableCell" customModule="LYV" customModuleProvider="target">
@@ -4514,8 +4541,8 @@ shipped in 2-4 working days.</string>
                                 <rect key="frame" x="0.0" y="96" width="393" height="756"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vRc-P1-1f0">
-                                <rect key="frame" x="0.0" y="617.33333333333337" width="393" height="148"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vRc-P1-1f0">
+                                <rect key="frame" x="0.0" y="612" width="393" height="148"/>
                                 <color key="backgroundColor" red="0.77647060160000003" green="0.85882353779999998" blue="0.96862745289999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="148" id="p5a-yB-bMh"/>
@@ -4571,11 +4598,11 @@ shipped in 2-4 working days.</string>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ciF-e3-Dgg">
-                                <rect key="frame" x="0.0" y="773" width="393" height="79"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ciF-e3-Dgg">
+                                <rect key="frame" x="0.0" y="767.66666666666663" width="393" height="84.333333333333371"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rth-BW-TYt" customClass="GrowingTextView" customModule="GrowingTextView">
-                                        <rect key="frame" x="8" y="8" width="345" height="30"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rth-BW-TYt" customClass="GrowingTextView" customModule="GrowingTextView">
+                                        <rect key="frame" x="8" y="8" width="345" height="35.333333333333336"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="textColor" systemColor="viewFlipsideBackgroundColor"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
@@ -4740,6 +4767,14 @@ shipped in 2-4 working days.</string>
             <point key="canvasLocation" x="4678.6259541984728" y="2295.7746478873241"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="rth-BW-TYt">
+            <size key="intrinsicContentSize" width="-1" height="30"/>
+        </designable>
+        <designable name="x2v-Aa-T4y">
+            <size key="intrinsicContentSize" width="-1" height="30"/>
+        </designable>
+    </designables>
     <resources>
         <image name="1024" width="1024" height="1024"/>
         <image name="2" width="1242" height="2248"/>
