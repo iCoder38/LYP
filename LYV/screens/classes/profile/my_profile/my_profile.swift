@@ -50,6 +50,14 @@ class my_profile: UIViewController {
         }
     }
     
+    @IBOutlet weak var imgBanner:UIImageView! {
+        didSet {
+            imgBanner.layer.cornerRadius = 2
+            imgBanner.clipsToBounds = true
+            
+        }
+    }
+    
     @IBOutlet weak var btn_post:UIButton! {
         didSet {
             btn_post.backgroundColor = .clear
@@ -109,6 +117,9 @@ class my_profile: UIViewController {
                 
                 self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
                 self.img_profile.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
+                
+                self.imgBanner.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                self.imgBanner.sd_setImage(with: URL(string: (person["banner"] as! String)), placeholderImage: UIImage(named: "1024"))
                 
                 self.btn_post.setTitle("\(person["TotalPost"]!)\nPost", for: .normal)
                 self.btn_post.titleLabel?.lineBreakMode = .byWordWrapping

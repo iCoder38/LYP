@@ -46,8 +46,8 @@
             filePath = "LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
             landmarkName = "add_post_only_title_WB()"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "add_post_only_title_WB()"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,13 +78,13 @@
             filePath = "LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "563"
-            endingLineNumber = "563"
+            startingLineNumber = "564"
+            endingLineNumber = "564"
             landmarkName = "validation_before_upload()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1da"
+                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1bb"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -94,11 +94,11 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "563"
-                  endingLineNumber = "563">
+                  startingLineNumber = "564"
+                  endingLineNumber = "564">
                </Location>
                <Location
-                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1da"
+                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1bb"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -108,26 +108,10 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "563"
-                  endingLineNumber = "563">
+                  startingLineNumber = "564"
+                  endingLineNumber = "564">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F9DBF6BD-1E3E-4365-96B4-81C7974A39BB"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
-            landmarkName = "add_post_only_title_WB()"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

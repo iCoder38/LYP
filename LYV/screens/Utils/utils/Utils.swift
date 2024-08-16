@@ -90,6 +90,20 @@ class Utils: NSObject {
 
 extension UIViewController {
     
+    func createCustomDictionary(from dict: [String: Any], forKey key: String) -> [String: String]? {
+        guard let originalURL = dict[key] as? String,
+              let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            // Return nil if the key is not found or URL encoding fails
+            return nil
+        }
+        
+        return ["image": encodedURL]
+    }
+
+    // Usage:
+    
+
+        
     func lightImpactVibration() {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.prepare()

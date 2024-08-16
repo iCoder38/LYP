@@ -78,39 +78,46 @@ class product_details: UIViewController {
             let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
+        
         if (self.dict_product_details["image_2"] as! String) != "" {
             let originalURL = self.dict_product_details["image_2"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
+        
         if (self.dict_product_details["image_3"] as! String) != "" {
             let originalURL = self.dict_product_details["image_3"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
+        
         if (self.dict_product_details["image_4"] as! String) != "" {
             let originalURL = self.dict_product_details["image_4"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
+        
         if (self.dict_product_details["image_5"] as! String) != "" {
             let originalURL = self.dict_product_details["image_5"] as! String
             let encodedURL = originalURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             let custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
-        print(self.arrAddImages as Any)
+        
+        // print(self.arrAddImages as Any)
         
         
         if (self.dict_product_details["ulike"] as! String) == "No" {
             self.btn_heart.tag = 0
             self.btn_heart.setImage(UIImage(systemName: "heart"), for: .normal)
+            self.btn_heart.tintColor = .white
         } else {
             self.btn_heart.tag = 1
             self.btn_heart.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            self.btn_heart.tintColor = .systemPink
         }
         
         self.btn_heart.addTarget(self, action: #selector(heart_click_method), for: .touchUpInside)

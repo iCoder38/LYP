@@ -232,6 +232,7 @@ class add_post: UIViewController, UITextFieldDelegate, UINavigationControllerDel
         if (self.txt_view.text == "") {
             return
         }
+        
         var parameters:Dictionary<AnyHashable, Any>!
         
         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
@@ -631,6 +632,8 @@ class add_post: UIViewController, UITextFieldDelegate, UINavigationControllerDel
         
         
         AF.upload(multipartFormData: { multipartFormData in
+            
+            
             // Append the image data
             multipartFormData.append(self.img_data_banner, withName: "image_1", fileName: "image.jpg", mimeType: "image/jpeg")
             

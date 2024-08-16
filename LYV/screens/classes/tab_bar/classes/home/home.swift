@@ -20,6 +20,9 @@ class home: UIViewController, UITextFieldDelegate {
     
     var listener: ListenerRegistration?
     
+    var userWhichIndex:String! = "0"
+    var data: [[String]] = []
+    var dataMutable:NSMutableArray! = []
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
             tble_view.backgroundColor = .clear
@@ -528,6 +531,8 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             backgroundView.backgroundColor = .clear
             cell.selectedBackgroundView = backgroundView
             
+            self.userWhichIndex = "0"
+            
             cell.collectionView1.delegate = self
             cell.collectionView1.dataSource = self
             cell.collectionView1.reloadData()
@@ -537,267 +542,112 @@ extension home: UITableViewDataSource , UITableViewDelegate {
         } else {
             
             let item = self.arr_feeds[indexPath.row-1] as? [String:Any]
+            let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! home_table_cell
             
-            if (item!["image_1"] as! String) == "" && (item!["video"] as! String) == ""  {
-                let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "three") as! home_table_cell
-                
-                cell.backgroundColor = .clear
-                
-                let backgroundView = UIView()
-                backgroundView.backgroundColor = .clear
-                cell.selectedBackgroundView = backgroundView
-                
-                
-                
-                cell.lbl_username.text = (item!["userName"] as! String)
-                cell.lbl_description.text = (item!["title"] as! String)
-                cell.lbl_time.text = (item!["created"] as! String)
-                
-                if "\(item!["totalLike"]!)" == "0" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "1" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "" {
-                    cell.lbl_likes.text = "0 like"
-                } else {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
-                }
-                
-                
-                
-                if "\(item!["totalComment"]!)" == "0" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "1" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "" {
-                    cell.lbl_comments.text = "0 comment"
-                } else {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
-                }
-                
-                
-                cell.btn_like.tag = indexPath.row-1
-                if (item!["ulike"] as! String) == "No" {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
-                    cell.btn_like.tintColor = .gray
-                } else {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                    cell.btn_like.tintColor = .systemPink
-                }
-                
-                cell.btn_comment.tag = indexPath.row-1
-                cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
-                
-                return cell
-                
-            } else if (item!["image_1"] as! String) == "" && (item!["video"] as! String) != ""  {
-                // only video
-                let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! home_table_cell
-                
-                cell.backgroundColor = .clear
-                
-                let backgroundView = UIView()
-                backgroundView.backgroundColor = .clear
-                cell.selectedBackgroundView = backgroundView
-                
-                cell.lbl_username.text = (item!["userName"] as! String)
-                cell.lbl_description.text = (item!["title"] as! String)
-                cell.lbl_time.text = (item!["created"] as! String)
-                
-                if "\(item!["totalLike"]!)" == "0" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "1" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "" {
-                    cell.lbl_likes.text = "0 like"
-                } else {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
-                }
-                
-                if "\(item!["totalComment"]!)" == "0" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "1" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "" {
-                    cell.lbl_comments.text = "0 comment"
-                } else {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
-                }
-                
-                
-                cell.btn_like.tag = indexPath.row-1
-                if (item!["ulike"] as! String) == "No" {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
-                    cell.btn_like.tintColor = .gray
-                } else {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                    cell.btn_like.tintColor = .systemPink
-                }
-                
-                if (item!["video"] as! String) == "" {
-                    cell.btn_play.isHidden = true
-                } else {
-                    cell.btn_play.tag = indexPath.row-1
-                    cell.btn_play.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
-                    cell.btn_play.isHidden = false
-                }
-                
-                cell.btn_comment.tag = indexPath.row-1
-                cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
-                
-                cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-                cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
-                
-                cell.img_feed_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-                cell.img_feed_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
-                
-                return cell
-            } else if (item!["image_1"] as! String) != "" && (item!["video"] as! String) != ""  {
-                // both image and video is there
-                let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! home_table_cell
-                
-                cell.backgroundColor = .clear
-                
-                let backgroundView = UIView()
-                backgroundView.backgroundColor = .clear
-                cell.selectedBackgroundView = backgroundView
-                
-                cell.lbl_username.text = (item!["userName"] as! String)
-                cell.lbl_description.text = (item!["title"] as! String)
-                cell.lbl_time.text = (item!["created"] as! String)
-                
-                if "\(item!["totalLike"]!)" == "0" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "1" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "" {
-                    cell.lbl_likes.text = "0 like"
-                } else {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
-                }
-                
-                if "\(item!["totalComment"]!)" == "0" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "1" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "" {
-                    cell.lbl_comments.text = "0 comment"
-                } else {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
-                }
-                
-                
-                cell.btn_like.tag = indexPath.row-1
-                if (item!["ulike"] as! String) == "No" {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
-                    cell.btn_like.tintColor = .gray
-                } else {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                    cell.btn_like.tintColor = .systemPink
-                }
-                
-                cell.btn_play.isHidden = true
-                
-                /*if (item!["video"] as! String) == "" {
-                    cell.btn_play.isHidden = true
-                } else {
-                    cell.btn_play.tag = indexPath.row-1
-                    cell.btn_play.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
-                    cell.btn_play.isHidden = false
-                }*/
-                
-                cell.btn_comment.tag = indexPath.row-1
-                cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
-                
-                cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-                cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
-                
-                cell.img_feed_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-                cell.img_feed_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
-                
-                return cell
+            
+            
+            cell.backgroundColor = .clear
+            
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = .clear
+            cell.selectedBackgroundView = backgroundView
+            
+            cell.lbl_username.text = (item!["userName"] as! String)
+            cell.lbl_description.text = (item!["title"] as! String)
+            cell.lbl_time.text = (item!["created"] as! String)
+            
+            if "\(item!["totalLike"]!)" == "0" {
+                cell.lbl_likes.text = "\(item!["totalLike"]!) like"
+            } else if "\(item!["totalLike"]!)" == "1" {
+                cell.lbl_likes.text = "\(item!["totalLike"]!) like"
+            } else if "\(item!["totalLike"]!)" == "" {
+                cell.lbl_likes.text = "0 like"
             } else {
-                let cell:home_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! home_table_cell
-                
-                cell.backgroundColor = .clear
-                
-                let backgroundView = UIView()
-                backgroundView.backgroundColor = .clear
-                cell.selectedBackgroundView = backgroundView
-                
-                cell.lbl_username.text = (item!["userName"] as! String)
-                cell.lbl_description.text = (item!["title"] as! String)
-                cell.lbl_time.text = (item!["created"] as! String)
-                
-                if "\(item!["totalLike"]!)" == "0" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "1" {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) like"
-                } else if "\(item!["totalLike"]!)" == "" {
-                    cell.lbl_likes.text = "0 like"
-                } else {
-                    cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
-                }
-                
-                if "\(item!["totalComment"]!)" == "0" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "1" {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
-                } else if "\(item!["totalComment"]!)" == "" {
-                    cell.lbl_comments.text = "0 comment"
-                } else {
-                    cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
-                }
-                
-                
-                cell.btn_like.tag = indexPath.row-1
-                if (item!["ulike"] as! String) == "No" {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
-                    cell.btn_like.tintColor = .gray
-                } else {
-                    cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
-                    cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                    cell.btn_like.tintColor = .systemPink
-                }
-                
-                if (item!["video"] as! String) == "" {
-                    cell.btn_play.isHidden = true
-                } else {
-                    cell.btn_play.tag = indexPath.row-1
-                    cell.btn_play.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
-                    cell.btn_play.isHidden = false
-                }
-                
-                cell.btn_comment.tag = indexPath.row-1
-                cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
-                
-                cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-                cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
-                
-                cell.img_feed_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-                cell.img_feed_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
-                
-                return cell
+                cell.lbl_likes.text = "\(item!["totalLike"]!) likes"
             }
+            
+            if "\(item!["totalComment"]!)" == "0" {
+                cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
+            } else if "\(item!["totalComment"]!)" == "1" {
+                cell.lbl_comments.text = "\(item!["totalComment"]!) comment"
+            } else if "\(item!["totalComment"]!)" == "" {
+                cell.lbl_comments.text = "0 comment"
+            } else {
+                cell.lbl_comments.text = "\(item!["totalComment"]!) comments"
+            }
+            
+            
+            cell.btn_like.tag = indexPath.row-1
+            if (item!["ulike"] as! String) == "No" {
+                cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
+                cell.btn_like.setImage(UIImage(systemName: "heart"), for: .normal)
+                cell.btn_like.tintColor = .gray
+            } else {
+                cell.btn_like.addTarget(self, action: #selector(like_dislike_check_before_hit), for: .touchUpInside)
+                cell.btn_like.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                cell.btn_like.tintColor = .systemPink
+            }
+            
+            cell.btn_comment.tag = indexPath.row-1
+            cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
+            
+            cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
+            self.userWhichIndex = "1"
+            
+            if (item!["image_1"] as! String) != "" {
+                self.data.append([item!["image_1"] as! String])
+                self.dataMutable.add(item!["image_1"] as! String)
+            }
+            if (item!["image_2"] as! String) != "" {
+                self.data.append([item!["image_2"] as! String])
+                self.dataMutable.add(item!["image_2"] as! String)
+            }
+            if (item!["image_3"] as! String) != "" {
+                self.data.append([item!["image_3"] as! String])
+                self.dataMutable.add(item!["image_3"] as! String)
+            }
+            if (item!["image_4"] as! String) != "" {
+                self.data.append([item!["image_4"] as! String])
+                self.dataMutable.add(item!["image_4"] as! String)
+            }
+            if (item!["image_5"] as! String) != "" {
+                self.data.append([item!["image_5"] as! String])
+                self.dataMutable.add(item!["image_5"] as! String)
+            }
+            if (item!["image_6"] as! String) != "" {
+                self.data.append([item!["image_6"] as! String])
+                self.dataMutable.add(item!["image_6"] as! String)
+            }
+            if (item!["image_7"] as! String) != "" {
+                self.data.append([item!["image_7"] as! String])
+                self.dataMutable.add(item!["image_7"] as! String)
+            }
+            if (item!["image_8"] as! String) != "" {
+                self.data.append([item!["image_8"] as! String])
+                self.dataMutable.add(item!["image_8"] as! String)
+            }
+            if (item!["image_9"] as! String) != "" {
+                self.data.append([item!["image_9"] as! String])
+                self.dataMutable.add(item!["image_9"] as! String)
+            }
+            
+            cell.collectionView2.tag = indexPath.row
+            cell.collectionView2.delegate = self
+            cell.collectionView2.dataSource = self
+            cell.collectionView2.reloadData()
+            cell.collectionView2.reloadData()
+          
+            return cell
             
         }
         
     }
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-        
-        
-            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "main_profile_id") as? main_profile
-            
-            self.navigationController?.pushViewController(push!, animated: true)
-         
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "main_profile_id") as? main_profile
+        self.navigationController?.pushViewController(push!, animated: true)
     }
     
     @objc func playVideo(_ sender:UIButton) {
@@ -829,7 +679,7 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             }
             
         } else {
-            return UITableView.automaticDimension
+            return 500 // UITableView.automaticDimension
         }
         
     }
@@ -850,6 +700,14 @@ class home_table_cell : UITableViewCell {
         didSet {
             collectionView1.isPagingEnabled = false
             collectionView1.backgroundColor = .clear
+        }
+    }
+    
+    @IBOutlet weak var collectionView2:UICollectionView! {
+        didSet {
+            collectionView2.isPagingEnabled = true
+            collectionView2.backgroundColor = .clear
+            collectionView2.isScrollEnabled = true
         }
     }
     
@@ -904,6 +762,11 @@ class home_table_cell : UITableViewCell {
     @IBOutlet weak var btn_play:UIButton!
     
     @IBOutlet weak var btn_comment:UIButton!
+    
+    @IBOutlet weak var scrollView2: UIScrollView!
+  
+
+    
 }
 
 //MARK:- COLLECTION VIEW -
@@ -913,37 +776,71 @@ extension home: UICollectionViewDelegate ,
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return self.liveArray.count
+        if (self.userWhichIndex == "0") {
+            return self.liveArray.count
+        } else {
+            let rowIndex = collectionView.tag
+             // return data[rowIndex].count
+            return self.dataMutable.count
+//            return data.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "home_collection_view_cell", for: indexPath as IndexPath) as! home_collection_view_cell
+        if (self.userWhichIndex == "0") {
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "home_collection_view_cell", for: indexPath as IndexPath) as! home_collection_view_cell
 
-        cell.backgroundColor  = .clear
-        
-        let item = self.liveArray[indexPath.row] as? [String:Any]
-        
-        cell.lbl_username.text = (item!["userName"] as! String)
-        cell.img_view.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-        cell.img_view.sd_setImage(with: URL(string: (item!["userImage"] as! String)), placeholderImage: UIImage(named: "1024"))
-        
-        cell.img_user.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-        cell.img_user.sd_setImage(with: URL(string: (item!["userImage"] as! String)), placeholderImage: UIImage(named: "1024"))
-        
-        return cell
-        
+            cell.backgroundColor  = .clear
+            
+            let item = self.liveArray[indexPath.row] as? [String:Any]
+            
+            cell.lbl_username.text = (item!["userName"] as! String)
+            cell.img_view.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_view.sd_setImage(with: URL(string: (item!["userImage"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
+            cell.img_user.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_user.sd_setImage(with: URL(string: (item!["userImage"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
+            return cell
+            
+        } else {
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "two2", for: indexPath as IndexPath) as! home_collection_view_cell2
+
+            cell.backgroundColor  = .clear
+            
+            let imageUrl = dataMutable[indexPath.item]
+            cell.img_view.sd_setImage(with: URL(string: imageUrl as! String), placeholderImage: UIImage(named: "1024"))
+            
+            cell.img_view.isUserInteractionEnabled = true
+            cell.img_view.tag = indexPath.item
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+            cell.img_view.addGestureRecognizer(tapGesture)
+            
+            return cell
+            
+        }
+    }
+    
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        if let imageView = sender.view as? UIImageView {
+            ImageZoomHelper.presentZoomedImage(from: imageView, in: self)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = self.liveArray[indexPath.row] as? [String:Any]
-        
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "liveStreamingController_id") as? liveStreamingController
-        
-        push!.str_audience = "yes"
-        push!.str_channel_name = (item!["channelName"] as! String)
-        
-        self.navigationController?.pushViewController(push!, animated: true)
+        if (self.userWhichIndex == "0") {
+            let item = self.liveArray[indexPath.row] as? [String:Any]
+            
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "liveStreamingController_id") as? liveStreamingController
+            
+            push!.str_audience = "yes"
+            push!.str_channel_name = (item!["channelName"] as! String)
+            
+            self.navigationController?.pushViewController(push!, animated: true)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -953,7 +850,11 @@ extension home: UICollectionViewDelegate ,
         var sizes: CGSize
         let result = UIScreen.main.bounds.size
         NSLog("%f",result.height)
-        sizes = CGSize(width: 140, height: 140)
+        if (self.userWhichIndex == "0") {
+            sizes = CGSize(width: 140, height: 140)
+        } else {
+            sizes = CGSize(width: collectionView.frame.size.width, height: 370)
+        }
         
         return sizes
     }
@@ -961,20 +862,35 @@ extension home: UICollectionViewDelegate ,
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        if (self.userWhichIndex == "0") {
+            return 10
+        } else {
+            return 0
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout
                         collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
-        return 10
+         
+        if (self.userWhichIndex == "0") {
+            return 10
+        } else {
+            return 0
+        }
         
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+ 
+        if (self.userWhichIndex == "0") {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        } else {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
         
-        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
     
 }
@@ -1017,4 +933,29 @@ class home_collection_view_cell: UICollectionViewCell , UITextFieldDelegate {
     
 }
 
+class home_collection_view_cell2: UICollectionViewCell , UITextFieldDelegate {
+    
+    @IBOutlet weak var img_view:UIImageView! {
+        didSet {
+            img_view.layer.cornerRadius = 12
+            img_view.clipsToBounds = true
+            img_view.backgroundColor = .brown
+        }
+    }
+    
+    
+    
+}
 
+extension UIImageView {
+    func loadImage(from url: String) {
+        guard let url = URL(string: url) else { return }
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            DispatchQueue.main.async {
+                self.image = UIImage(data: data)
+            }
+        }
+        task.resume()
+    }
+}

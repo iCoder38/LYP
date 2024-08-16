@@ -16,6 +16,8 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
     var img_data_banner : Data!
     var img_Str_banner : String!
     
+    var strUserClickBannerImage:String!
+    
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
             btn_back.tintColor = .white
@@ -46,6 +48,11 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
     
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        self.open_camera_gallery()
+    }
+    
+    @objc func imageTappedBanner(tapGestureRecognizer: UITapGestureRecognizer) {
+        self.strUserClickBannerImage = "1"
         self.open_camera_gallery()
     }
     
@@ -99,14 +106,25 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
         
         let image_data = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
 
-        cell.img_profile.image = image_data
+        if (self.strUserClickBannerImage == "1") {
+            cell.img_banner.image = image_data
+        } else {
+            cell.img_profile.image = image_data
+        }
+        
         let imageData:Data = image_data!.pngData()!
         self.img_Str_banner = imageData.base64EncodedString()
         self.dismiss(animated: true, completion: nil)
         self.img_data_banner = image_data!.jpegData(compressionQuality: 0.2)!
         self.dismiss(animated: true, completion: nil)
    
-        self.str_user_select_image = "1"
+        if (self.strUserClickBannerImage == "1") {
+            self.strUserClickBannerImage = "0"
+            self.uploadBannerImageWB()
+        } else {
+            self.str_user_select_image = "1"
+        }
+        
     }
     
     @objc func date_click_start() {
@@ -472,6 +490,206 @@ class edit_profile: UIViewController, UITextFieldDelegate, UINavigationControlle
             }
         }
     }
+    
+    
+    
+    
+    @objc func uploadBannerImageWB() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tble_view.cellForRow(at: indexPath) as! edit_profile_table_cell
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                //            let headers: HTTPHeaders = [
+                //                "token":String(token_id_is),
+                //            ]
+                //Set Your URL
+                let api_url = application_base_url
+                guard let url = URL(string: api_url) else {
+                    return
+                }
+                
+                var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10.0 * 1000)
+                urlRequest.httpMethod = "POST"
+                urlRequest.allHTTPHeaderFields = ["token":String(token_id_is)]
+                urlRequest.addValue("application/json",
+                                    forHTTPHeaderField: "Accept")
+                
+                //urlRequest.addValue("Bearer \(token_id_is)", forHTTPHeaderField: "Authorization")
+                
+                //Set Your Parameter
+                let parameterDict = NSMutableDictionary()
+                
+                // car information
+                parameterDict.setValue("editprofile", forKey: "action")
+                parameterDict.setValue(String(myString), forKey: "userId")
+                parameterDict.setValue(String(cell.txt_username.text!), forKey: "fullName")
+                parameterDict.setValue(String(cell.txt_phone.text!), forKey: "contactNumber")
+                 parameterDict.setValue(String(cell.txt_gender.text!), forKey: "gender")
+                parameterDict.setValue(String(cell.txt_dob.text!), forKey: "dob")
+                parameterDict.setValue(String(cell.txt_view.text!), forKey: "about")
+                parameterDict.setValue("iOS", forKey: "device")
+                
+                
+                print(parameterDict as Any)
+                
+                // Now Execute
+                AF.upload(multipartFormData: { multiPart in
+                    for (key, value) in parameterDict {
+                        if let temp = value as? String {
+                            multiPart.append(temp.data(using: .utf8)!, withName: key as! String)
+                        }
+                        if let temp = value as? Int {
+                            multiPart.append("\(temp)".data(using: .utf8)!, withName: key as! String)
+                        }
+                        if let temp = value as? NSArray {
+                            temp.forEach({ element in
+                                let keyObj = key as! String + "[]"
+                                if let string = element as? String {
+                                    multiPart.append(string.data(using: .utf8)!, withName: keyObj)
+                                } else
+                                if let num = element as? Int {
+                                    let value = "\(num)"
+                                    multiPart.append(value.data(using: .utf8)!, withName: keyObj)
+                                }
+                            })
+                        }
+                    }
+                    multiPart.append(self.img_data_banner, withName: "banner", fileName: "editBanner.png", mimeType: "image/png")
+                }, with: urlRequest)
+                .uploadProgress(queue: .main, closure: { progress in
+                    //Current upload progress of file
+                    print("Upload Progress: \(progress.fractionCompleted)")
+                })
+                .responseJSON(completionHandler: { data in
+                    
+                    switch data.result {
+                        
+                    case .success(_):
+                        do {
+                            
+                            let dictionary = try JSONSerialization.jsonObject(with: data.data!, options: .fragmentsAllowed) as! NSDictionary
+                            print(dictionary)
+                            
+                            var message : String!
+                            message = (dictionary["msg"] as? String)
+                            
+                            if (dictionary["status"] as! String) == "success" {
+                                print("yes")
+                                
+                                var dict: Dictionary<AnyHashable, Any>
+                                dict = dictionary["data"] as! Dictionary<AnyHashable, Any>
+                                
+                                let defaults = UserDefaults.standard
+                                defaults.setValue(dict, forKey: str_save_login_user_data)
+                                
+                                self.tble_view.reloadData()
+                                
+                                ERProgressHud.sharedInstance.hide()
+                                
+                                
+                                
+                            } else if (dictionary["status"] as! String) == "Success" {
+                                print("yes")
+                                
+                                var dict: Dictionary<AnyHashable, Any>
+                                dict = dictionary["data"] as! Dictionary<AnyHashable, Any>
+                                
+                                let defaults = UserDefaults.standard
+                                defaults.setValue(dict, forKey: str_save_login_user_data)
+                                
+                                self.tble_view.reloadData()
+                                ERProgressHud.sharedInstance.hide()
+                                
+                                
+                                
+                            } else {
+                                ERProgressHud.sharedInstance.hide()
+                                self.refreshTokenForUploadBannerWB()
+                                
+                            }
+                            
+                        } catch {
+                            // catch error.
+                            print("catch error")
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        break
+                        
+                    case .failure(_):
+                        print("failure")
+                        ERProgressHud.sharedInstance.hide()
+                        break
+                        
+                    }
+                    
+                })
+            }
+        }
+    }
+    
+    @objc func refreshTokenForUploadBannerWB() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            parameters = [
+                "action"    : "gettoken",
+                "userId"    : String(myString),
+                "email"     : (person["email"] as! String),
+                "role"      : "Member"
+            ]
+        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.uploadBannerImageWB()
+                        
+                    } else {
+                        ERProgressHud.sharedInstance.hide()
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                ERProgressHud.sharedInstance.hide()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
 }
 
 //MARK:- TABLE VIEW -
@@ -496,7 +714,7 @@ extension edit_profile: UITableViewDataSource , UITableViewDelegate {
         cell.selectedBackgroundView = backgroundView
          
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-            print(person)
+            // print(person)
             
             cell.txt_dob.delegate = self
             cell.txt_email.delegate = self
@@ -514,9 +732,16 @@ extension edit_profile: UITableViewDataSource , UITableViewDelegate {
             cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
             cell.img_profile.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
             
+            cell.img_banner.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_banner.sd_setImage(with: URL(string: (person["banner"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
             cell.img_profile.isUserInteractionEnabled = true
             cell.img_profile.addGestureRecognizer(tapGestureRecognizer)
+            
+            let tapGestureRecognizerBanner = UITapGestureRecognizer(target: self, action: #selector(imageTappedBanner(tapGestureRecognizer:)))
+            cell.img_banner.isUserInteractionEnabled = true
+            cell.img_banner.addGestureRecognizer(tapGestureRecognizerBanner)
         }
         cell.btn_date_one.addTarget(self, action: #selector(date_click_start), for: .touchUpInside)
         cell.btn_update.addTarget(self, action: #selector(edit_profile_WB), for: .touchUpInside)
@@ -544,6 +769,14 @@ class edit_profile_table_cell : UITableViewCell {
             img_profile.layer.cornerRadius = 80
             img_profile.clipsToBounds = true
             img_profile.backgroundColor = .clear
+        }
+    }
+    
+    @IBOutlet weak var img_banner:UIImageView! {
+        didSet {
+            img_banner.layer.cornerRadius = 0
+            img_banner.clipsToBounds = true
+            img_banner.backgroundColor = .clear
         }
     }
     
