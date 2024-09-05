@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import Alamofire
 
 class main_profile: UIViewController {
 
-    var arr_profile = ["My Profile","Change password","My order","Wishlist","Logout"]
-    var arr_profile_name = ["person","lock","newspaper","heart.fill","lock"]
+    var arr_profile = ["My Profile","Change password","My order","Wishlist","Notification setting","Who can view my profile","Help","Account delete","Logout"]
+    var arr_profile_name = ["person","lock","newspaper","heart.fill","heart.fill","heart.fill","heart.fill","heart.fill","lock"]
     
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
@@ -33,6 +34,99 @@ class main_profile: UIViewController {
         self.tble_view.reloadData()
         
         self.view.backgroundColor = app_BG
+    }
+    
+    @objc func updateWhoCanViewMyProfileWB(key:String,value:String) {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"    : "editProfile",
+                    "userId"    : String(myString),
+                    key   : value,
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
+                                
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.updateWhoCanViewMyProfileWB(key: key, value: value)
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.updateWhoCanViewMyProfileWB(key: key, value: value)
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
     }
     
 }
@@ -91,27 +185,67 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
             
         } else if (indexPath.row == 4) {
             
-            let alert = NewYorkAlertController(title: String("Logout").uppercased(), message: String("Are you sure your want to logout"), style: .alert)
-            let yes = NewYorkButton(title: "Yes, logout", style: .default) {
-                _ in
-                let defaults = UserDefaults.standard
-                defaults.setValue("", forKey: str_save_login_user_data)
-                defaults.setValue(nil, forKey: str_save_login_user_data)
-                
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "welcome_id")
-                self.navigationController?.pushViewController(push, animated: true)
-                
-            }
-            let no = NewYorkButton(title: "dismiss", style: .cancel) {
-                _ in
-                
-            }
-            alert.addButtons([yes,no])
-            self.present(alert, animated: true)
+            self.openAppSetting()
+        } else if (indexPath.row == 5) {
+            
+            self.showSheetOfWhoCanViewMyProfile()
+        } else if (indexPath.row == 6) {
+            
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "help_id") as? help
+            self.navigationController?.pushViewController(push!, animated: true)
             
         }
         
-        
+    }
+    
+    @objc func showSheetOfWhoCanViewMyProfile() {
+        let alert = UIAlertController(title: "Who can view my profile", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "All", style: .default , handler:{ (UIAlertAction)in
+            print("User click Approve button")
+            self.updateWhoCanViewMyProfileWB(key: "who_can_show", value: "0")
+        }))
+        alert.addAction(UIAlertAction(title: "Friends only", style: .default , handler:{ (UIAlertAction)in
+            print("User click Edit button")
+            self.updateWhoCanViewMyProfileWB(key: "who_can_show", value: "1")
+        }))
+        alert.addAction(UIAlertAction(title: "Only me", style: .default , handler:{ (UIAlertAction)in
+            print("User click Delete button")
+            self.updateWhoCanViewMyProfileWB(key: "who_can_show", value: "2")
+        }))
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler:{ (UIAlertAction)in
+            print("User click Dismiss button")
+        }))
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
+    }
+    
+    @objc func openAppSetting() {
+        if let appSettingsURL = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(appSettingsURL) {
+                UIApplication.shared.open(appSettingsURL, options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
+    @objc func logoutpopup() {
+        let alert = NewYorkAlertController(title: String("Logout").uppercased(), message: String("Are you sure your want to logout"), style: .alert)
+        let yes = NewYorkButton(title: "Yes, logout", style: .default) {
+            _ in
+            let defaults = UserDefaults.standard
+            defaults.setValue("", forKey: str_save_login_user_data)
+            defaults.setValue(nil, forKey: str_save_login_user_data)
+            
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "welcome_id")
+            self.navigationController?.pushViewController(push, animated: true)
+            
+        }
+        let no = NewYorkButton(title: "dismiss", style: .cancel) {
+            _ in
+            
+        }
+        alert.addButtons([yes,no])
+        self.present(alert, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -21,7 +21,7 @@ class home: UIViewController, UITextFieldDelegate {
     var listener: ListenerRegistration?
     
     var userWhichIndex:String! = "0"
-    var data: [[String]] = []
+    var data: [String] = []
     var dataMutable:NSMutableArray! = []
     
     var strVideoKeyHit:Bool! = false
@@ -604,7 +604,7 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             self.data.removeAll()
             
             if (item!["image_1"] as! String) != "" {
-                 self.data.append(contentsOf: (item!["image_1"] as! String))
+                self.data.append(item!["image_1"] as! String)
                 self.dataMutable.add(item!["image_1"] as! String)
                 self.strVideoKeyHit = false
             }
@@ -656,9 +656,9 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             
              print(data as Any)
             // print(dataMutable as Any)
-            cell.collectionView2.tag = indexPath.row
+            /*cell.collectionView2.tag = indexPath.row
             cell.collectionView2.delegate = self
-            cell.collectionView2.dataSource = self
+            cell.collectionView2.dataSource = self*/
             // cell.collectionView2.reloadData()
             
           
