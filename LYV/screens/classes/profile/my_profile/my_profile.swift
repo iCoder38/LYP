@@ -18,6 +18,12 @@ class my_profile: UIViewController {
     var arr_feeds:NSMutableArray! = []
     var dictUserData: NSDictionary!
     
+    @IBOutlet weak var isThisProfilePrivate:UILabel! {
+        didSet {
+            isThisProfilePrivate.isHidden = true
+        }
+    }
+    
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
             btn_back.tintColor = .white
@@ -111,7 +117,7 @@ class my_profile: UIViewController {
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
-            if (String(self.self.strUserId) == "\(person["userId"]!)") {
+            if (String(self.strUserId) == "\(person["userId"]!)") {
                 self.lbl_name.text = (person["fullName"] as! String)
                 self.lbl_email.text = (person["email"] as! String)
                 
@@ -285,7 +291,67 @@ class my_profile: UIViewController {
                                 
                                 self.btn_follow_unfollow.addTarget(self, action: #selector(followUnfollowClickMethod), for: .touchUpInside)
                                 
-                                self.othersFeedsWB(loader: "no")
+                                if ("\(self.dictUserData["who_can_show"]!)" == "") {
+                                    self.othersFeedsWB(loader: "no")
+                                    
+                                    self.tble_view.isHidden = false
+                                    self.isThisProfilePrivate.isHidden = true
+                                    self.isThisProfilePrivate.text = "This profile is locked"
+                                    self.isThisProfilePrivate.textColor = .white
+                                    
+                                    self.btn_post.isHidden = false
+                                    self.btn_followers.isHidden = false
+                                    self.btn_following.isHidden = false
+                                    
+                                } else if ("\(self.dictUserData["who_can_show"]!)" == "0") {
+                                    self.othersFeedsWB(loader: "no")
+                                } else if ("\(self.dictUserData["who_can_show"]!)" == "1") {
+                                    if ("\(self.dictUserData["youfollowed"]!)" == "Yes"
+                                        &&
+                                        "\(self.dictUserData["youfollowing"]!)" == "Yes") {
+                                        // yes they are friends
+                                        
+                                        
+                                        self.tble_view.isHidden = false
+                                        self.isThisProfilePrivate.isHidden = true
+                                        self.isThisProfilePrivate.text = "This profile is locked"
+                                        self.isThisProfilePrivate.textColor = .white
+                                        
+                                        self.btn_post.isHidden = false
+                                        self.btn_followers.isHidden = false
+                                        self.btn_following.isHidden = false
+                                        
+                                        self.othersFeedsWB(loader: "no")
+                                    } else {
+                                        // no they are not friends
+                                        self.tble_view.isHidden = true
+                                        self.isThisProfilePrivate.isHidden = false
+                                        self.isThisProfilePrivate.text = "This profile is locked"
+                                        self.isThisProfilePrivate.textColor = .white
+                                        
+                                        self.btn_post.isHidden = true
+                                        self.btn_followers.isHidden = true
+                                        self.btn_following.isHidden = true
+                                        
+                                        ERProgressHud.sharedInstance.hide()
+                                    }
+                                    
+                                } else if ("\(self.dictUserData["who_can_show"]!)" == "2") {
+                                    // self.othersFeedsWB(loader: "no")
+                                    
+                                    self.tble_view.isHidden = true
+                                    self.isThisProfilePrivate.isHidden = false
+                                    self.isThisProfilePrivate.text = "This profile is locked"
+                                    self.isThisProfilePrivate.textColor = .white
+                                    
+                                    self.btn_post.isHidden = true
+                                    self.btn_followers.isHidden = true
+                                    self.btn_following.isHidden = true
+                                    
+                                    
+                                    ERProgressHud.sharedInstance.hide()
+                                }
+                               
                             }
                             else {
                                 TokenManager.shared.refresh_token_WB { token, error in

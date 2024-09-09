@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 
 class main_profile: UIViewController {
-
+    
     var arr_profile = ["My Profile","Change password","My order","Wishlist","Notification setting","Who can view my profile","Help","Account delete","Logout"]
     var arr_profile_name = ["person","lock","newspaper","heart.fill","heart.fill","heart.fill","heart.fill","heart.fill","lock"]
     
@@ -129,6 +129,97 @@ class main_profile: UIViewController {
         
     }
     
+    @objc func deletemyAccountWB() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"    : "userdelete",
+                    "userId"    : String(myString),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
+                                
+                                let defaults = UserDefaults.standard
+                                defaults.setValue("", forKey: str_save_login_user_data)
+                                defaults.setValue(nil, forKey: str_save_login_user_data)
+                                
+                            } else {
+                                
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        self.deletemyAccountWB()
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.deletemyAccountWB()
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
+    
 }
 
 //MARK:- TABLE VIEW -
@@ -193,9 +284,31 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
             
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "help_id") as? help
             self.navigationController?.pushViewController(push!, animated: true)
+        } else if (indexPath.row == 7) {
             
+            self.deleteMyAccount()
+        } else if (indexPath.row == 8) {
+            
+            self.logoutpopup()
         }
         
+    }
+    
+    @objc func deleteMyAccount() {
+        let alert = UIAlertController(title: "Are you sure you want to delete account?", message: nil, preferredStyle: .actionSheet)
+       
+        alert.addAction(UIAlertAction(title: "Yes, delete", style: .default , handler:{ (UIAlertAction)in
+            print("User click Edit button")
+            
+        }))
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .default , handler:{ (UIAlertAction)in
+            print("User click Delete button")
+            
+        }))
+        
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
     }
     
     @objc func showSheetOfWhoCanViewMyProfile() {
@@ -232,6 +345,7 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
         let alert = NewYorkAlertController(title: String("Logout").uppercased(), message: String("Are you sure your want to logout"), style: .alert)
         let yes = NewYorkButton(title: "Yes, logout", style: .default) {
             _ in
+            
             let defaults = UserDefaults.standard
             defaults.setValue("", forKey: str_save_login_user_data)
             defaults.setValue(nil, forKey: str_save_login_user_data)
@@ -240,7 +354,7 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
             self.navigationController?.pushViewController(push, animated: true)
             
         }
-        let no = NewYorkButton(title: "dismiss", style: .cancel) {
+        let no = NewYorkButton(title: "Dismiss", style: .cancel) {
             _ in
             
         }
@@ -264,13 +378,10 @@ class main_profile_table_cell : UITableViewCell {
         }
     }
     
-    
     @IBOutlet weak var lbl_title:UILabel! {
         didSet {
             lbl_title.textColor = .white
         }
     }
-    
-     
-   
+  
 }

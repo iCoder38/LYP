@@ -556,7 +556,7 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             cell.selectedBackgroundView = backgroundView
             
             cell.lbl_username.text = (item!["userName"] as! String)
-            cell.lbl_description.text = (item!["title"] as! String)
+            cell.lbl_description.text = item!["title"] as? String ?? ""
             cell.lbl_time.text = (item!["created"] as! String)
             
             if "\(item!["totalLike"]!)" == "0" {
@@ -598,70 +598,57 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
             
             self.userWhichIndex = "1"
+             
+                // Create array of image URLs, filtering out empty strings
+                var images = [String]()
+                if let image1 = item!["image_1"] as? String, !image1.isEmpty {
+                    images.append(image1)
+                }
+                if let image2 = item!["image_2"] as? String, !image2.isEmpty {
+                    images.append(image2)
+                }
+                if let image3 = item!["image_3"] as? String, !image3.isEmpty {
+                    images.append(image3)
+                }
+                if let image4 = item!["image_4"] as? String, !image4.isEmpty {
+                    images.append(image4)
+                }
+                if let image5 = item!["image_5"] as? String, !image5.isEmpty {
+                    images.append(image5)
+                }
+                if let image6 = item!["image_6"] as? String, !image6.isEmpty {
+                    images.append(image6)
+                }
+                if let image7 = item!["image_7"] as? String, !image7.isEmpty {
+                    images.append(image7)
+                }
+                if let image8 = item!["image_8"] as? String, !image8.isEmpty {
+                    images.append(image8)
+                }
+                if let image9 = item!["image_9"] as? String, !image9.isEmpty {
+                    images.append(image9)
+                }
+                
+                let videoUrl = item!["video"] as? String
+                cell.videoUrl = videoUrl?.isEmpty == false ? videoUrl : nil
+                
+                // Check if there are any images or a video
+                if images.isEmpty && (videoUrl == nil || videoUrl!.isEmpty) {
+                    // No images or video, set the scroll view height to 0
+                    cell.scrollViewHeight = 0
+                    cell.lbl_description.textAlignment = .center
+                } else {
+                    // Images or video exist, set the scroll view height to 260 (or any preferred value)
+                    cell.images = images
+                    cell.scrollViewHeight = 260
+                    cell.setupScrollViewImages()
+                    cell.lbl_description.textAlignment = .left
+                }
             
-            // self.dataMutable.removeAllObjects()
             
-            self.data.removeAll()
             
-            if (item!["image_1"] as! String) != "" {
-                self.data.append(item!["image_1"] as! String)
-                self.dataMutable.add(item!["image_1"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_2"] as! String) != "" {
-                self.data.append(item!["image_2"] as! String)
-                self.dataMutable.add(item!["image_2"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_3"] as! String) != "" {
-                self.data.append(item!["image_3"] as! String)
-                self.dataMutable.add(item!["image_3"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_4"] as! String) != "" {
-                self.data.append(item!["image_4"] as! String)
-                self.dataMutable.add(item!["image_4"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_5"] as! String) != "" {
-                self.data.append(item!["image_5"] as! String)
-                self.dataMutable.add(item!["image_5"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_6"] as! String) != "" {
-                 self.data.append(item!["image_6"] as! String)
-                self.dataMutable.add(item!["image_6"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_7"] as! String) != "" {
-                 self.data.append(item!["image_7"] as! String)
-                self.dataMutable.add(item!["image_7"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_8"] as! String) != "" {
-                 self.data.append(item!["image_8"] as! String)
-                self.dataMutable.add(item!["image_8"] as! String)
-                self.strVideoKeyHit = false
-            }
-            if (item!["image_9"] as! String) != "" {
-                 self.data.append(item!["image_9"] as! String)
-                self.dataMutable.add(item!["image_9"] as! String)
-                self.strVideoKeyHit = false
-            }
-            /*if (item!["video"] as! String) != "" {
-                // self.data.append([item!["video"] as! String])
-                self.dataMutable.add(item!["video"] as! String)
-                self.strVideoKeyHit = true
-            }*/
             
-             print(data as Any)
-            // print(dataMutable as Any)
-            /*cell.collectionView2.tag = indexPath.row
-            cell.collectionView2.delegate = self
-            cell.collectionView2.dataSource = self*/
-            // cell.collectionView2.reloadData()
             
-          
             return cell
             
         }
@@ -702,7 +689,50 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             }
             
         } else {
-            return 500 // UITableView.automaticDimension
+            // return 394
+            
+            let item = self.arr_feeds[indexPath.row - 1] as! [String: Any]
+                
+                // Create array of image URLs, filtering out empty strings
+                var images = [String]()
+                if let image1 = item["image_1"] as? String, !image1.isEmpty {
+                    images.append(image1)
+                }
+                if let image2 = item["image_2"] as? String, !image2.isEmpty {
+                    images.append(image2)
+                }
+                if let image3 = item["image_3"] as? String, !image3.isEmpty {
+                    images.append(image3)
+                }
+                if let image4 = item["image_4"] as? String, !image4.isEmpty {
+                    images.append(image4)
+                }
+                if let image5 = item["image_5"] as? String, !image5.isEmpty {
+                    images.append(image5)
+                }
+                if let image6 = item["image_6"] as? String, !image6.isEmpty {
+                    images.append(image6)
+                }
+                if let image7 = item["image_7"] as? String, !image7.isEmpty {
+                    images.append(image7)
+                }
+                if let image8 = item["image_8"] as? String, !image8.isEmpty {
+                    images.append(image8)
+                }
+                if let image9 = item["image_9"] as? String, !image9.isEmpty {
+                    images.append(image9)
+                }
+                
+                let videoUrl = item["video"] as? String
+                
+                // If there are no images and no video, return the height without the scroll view
+                if images.isEmpty && (videoUrl == nil || videoUrl!.isEmpty) {
+                    return UITableView.automaticDimension
+                }
+                
+                // Otherwise, return a height that includes the scroll view
+                return 394
+            
         }
         
     }
@@ -765,7 +795,7 @@ class home_table_cell : UITableViewCell {
     }
     @IBOutlet weak var btn_like:UIButton! {
         didSet {
-             
+            
         }
     }
     
@@ -787,7 +817,162 @@ class home_table_cell : UITableViewCell {
     @IBOutlet weak var btn_comment:UIButton!
     
     @IBOutlet weak var scrollView2: UIScrollView!
-  
+    
+        var scrollView: UIScrollView!
+        
+        // Variable to dynamically manage the scroll view height
+        var scrollViewHeight: CGFloat = 260 {
+            didSet {
+                updateScrollViewHeight()
+            }
+        }
+        
+        // The images and video (if available)
+        var images: [String] = []
+        var videoUrl: String? = nil
+        
+        // Store the height constraint so we can update it dynamically
+        private var scrollViewHeightConstraint: NSLayoutConstraint?
+
+        override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+            super.init(style: style, reuseIdentifier: reuseIdentifier)
+            setupScrollView()
+        }
+        
+        required init?(coder: NSCoder) {
+            super.init(coder: coder)
+            setupScrollView()
+        }
+        
+        // Function to set up the scroll view programmatically
+        func setupScrollView() {
+            scrollView = UIScrollView()
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
+            scrollView.showsHorizontalScrollIndicator = false
+            scrollView.showsVerticalScrollIndicator = false
+            scrollView.isPagingEnabled = false
+            scrollView.bounces = true
+            scrollView.backgroundColor = .clear
+            
+            contentView.addSubview(scrollView)
+            
+            // Set scroll view constraints with dynamic height
+            NSLayoutConstraint.activate([
+                scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor), // Full screen width
+                scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor), // Full screen width
+                scrollView.topAnchor.constraint(equalTo: lbl_description.bottomAnchor, constant: 10), // Below description label
+            ])
+            
+            // Add the height constraint to the scroll view (initially set to scrollViewHeight)
+            scrollViewHeightConstraint = scrollView.heightAnchor.constraint(equalToConstant: scrollViewHeight)
+            scrollViewHeightConstraint?.isActive = true
+        }
+        
+        // Function to update the scroll view height constraint dynamically
+        private func updateScrollViewHeight() {
+            scrollViewHeightConstraint?.constant = scrollViewHeight
+            layoutIfNeeded() // This will update the layout
+        }
+
+        // Function to set up images and video in the scroll view
+        func setupScrollViewImages() {
+            // Clear any existing images or video placeholders in the scroll view
+            for subview in scrollView.subviews {
+                subview.removeFromSuperview()
+            }
+            
+            let imageHeight: CGFloat = scrollViewHeight
+            let imageWidth: CGFloat = contentView.frame.width // Make image width the full width of the scroll view
+            let padding: CGFloat = 10
+            
+            var xOffset: CGFloat = 0
+            
+            // Add video if available
+            if let videoUrl = videoUrl, !videoUrl.isEmpty {
+                let videoThumbnailView = UIImageView()
+                videoThumbnailView.frame = CGRect(x: xOffset, y: 0, width: imageWidth, height: imageHeight)
+                videoThumbnailView.contentMode = .scaleAspectFill
+                videoThumbnailView.clipsToBounds = true
+                videoThumbnailView.layer.cornerRadius = 8
+                scrollView.addSubview(videoThumbnailView)
+                
+                // Generate thumbnail for video
+                generateVideoThumbnail(from: videoUrl) { [weak self] thumbnail in
+                    DispatchQueue.main.async {
+                        videoThumbnailView.image = thumbnail
+                    }
+                }
+                
+                // Add a play button or video thumbnail overlay
+                let playButton = UIButton(type: .custom)
+                playButton.frame = CGRect(x: (imageWidth / 2) - 25, y: (imageHeight / 2) - 25, width: 50, height: 50)
+                playButton.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
+                playButton.tintColor = .white
+                playButton.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
+                scrollView.addSubview(playButton)
+                
+                xOffset += imageWidth + padding
+            }
+            
+            // Add images
+            for imageUrl in images {
+                let imageView = UIImageView()
+                imageView.frame = CGRect(x: xOffset, y: 0, width: imageWidth, height: imageHeight)
+                imageView.loadImage(from: imageUrl, placeholder: "logo") // Load image with placeholder "logo"
+                imageView.contentMode = .scaleAspectFill
+                imageView.clipsToBounds = true
+                imageView.layer.cornerRadius = 8
+                
+                scrollView.addSubview(imageView)
+                xOffset += imageWidth + padding
+            }
+            
+            // Set content size of scroll view based on the number of images and video
+            let contentWidth = xOffset
+            scrollView.contentSize = CGSize(width: contentWidth, height: imageHeight)
+        }
+        
+        // Generate thumbnail for video
+        private func generateVideoThumbnail(from url: String, completion: @escaping (UIImage?) -> Void) {
+            guard let videoURL = URL(string: url) else {
+                completion(nil)
+                return
+            }
+            
+            let asset = AVAsset(url: videoURL)
+            let imageGenerator = AVAssetImageGenerator(asset: asset)
+            imageGenerator.appliesPreferredTrackTransform = true
+            
+            // Capture the first frame at time 1 second
+            let time = CMTime(seconds: 1, preferredTimescale: 60)
+            
+            DispatchQueue.global().async {
+                do {
+                    let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
+                    let thumbnail = UIImage(cgImage: cgImage)
+                    completion(thumbnail)
+                } catch {
+                    print("Error generating thumbnail: \(error)")
+                    completion(nil)
+                }
+            }
+        }
+        
+        // Play video action
+        @objc func playVideo() {
+            if let videoUrl = videoUrl, let url = URL(string: videoUrl) {
+                let player = AVPlayer(url: url)
+                let playerViewController = AVPlayerViewController()
+                playerViewController.player = player
+                
+                if let topController = UIApplication.shared.windows.first?.rootViewController {
+                    topController.present(playerViewController, animated: true) {
+                        player.play()
+                    }
+                }
+            }
+        }
+    
 
     
 }
@@ -986,15 +1171,23 @@ class home_collection_view_cell2: UICollectionViewCell , UITextFieldDelegate {
     
 }
 
+// Extension to load images asynchronously with placeholder
 extension UIImageView {
-    func loadImage(from url: String) {
-        guard let url = URL(string: url) else { return }
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else { return }
-            DispatchQueue.main.async {
-                self.image = UIImage(data: data)
+    func loadImage(from urlString: String, placeholder: String = "logo") {
+        // Set placeholder image initially
+        self.image = UIImage(named: placeholder)
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        // Load the actual image asynchronously
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.image = image
+                }
             }
         }
-        task.resume()
     }
 }
+
+

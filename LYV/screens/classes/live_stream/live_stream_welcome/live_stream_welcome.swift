@@ -8,7 +8,7 @@
 import UIKit
 
 class live_stream_welcome: UIViewController, UITextFieldDelegate {
-
+    
     @IBOutlet weak var txt_password:UITextField! {
         didSet {
             txt_password.backgroundColor = UIColor.black.withAlphaComponent(0.2)
@@ -48,8 +48,8 @@ class live_stream_welcome: UIViewController, UITextFieldDelegate {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "liveStreamingController_id") as? liveStreamingController
         
         push!.str_audience = "no"
-//        push!.str_channel_name = String(self.txt_password.text!)
-         push!.str_channel_name = "iOS_Testing_LYV"
+        push!.str_channel_name = String(self.txt_password.text!)
+        // push!.str_channel_name = "iOS_Testing_LYV"
         
         self.navigationController?.pushViewController(push!, animated: true)
     }

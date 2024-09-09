@@ -14,6 +14,7 @@ class help: UIViewController {
             btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
