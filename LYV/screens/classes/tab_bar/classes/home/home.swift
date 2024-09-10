@@ -727,12 +727,11 @@ extension home: UITableViewDataSource , UITableViewDelegate {
                 
                 // If there are no images and no video, return the height without the scroll view
                 if images.isEmpty && (videoUrl == nil || videoUrl!.isEmpty) {
-                    return UITableView.automaticDimension
+                    return 60 // UITableView.automaticDimension
                 }
                 
                 // Otherwise, return a height that includes the scroll view
                 return 394
-            
         }
         
     }
@@ -818,163 +817,161 @@ class home_table_cell : UITableViewCell {
     
     @IBOutlet weak var scrollView2: UIScrollView!
     
-        var scrollView: UIScrollView!
+    var scrollView: UIScrollView!
+    
+    // Variable to dynamically manage the scroll view height
+    var scrollViewHeight: CGFloat = 240 {
+        didSet {
+            updateScrollViewHeight()
+        }
+    }
+    
+    // The images and video (if available)
+    var images: [String] = []
+    var videoUrl: String? = nil
+    
+    // Store the height constraint so we can update it dynamically
+    private var scrollViewHeightConstraint: NSLayoutConstraint?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupScrollView()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupScrollView()
+    }
+    
+    // Function to set up the scroll view programmatically
+    func setupScrollView() {
+        scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.isPagingEnabled = false
+        scrollView.bounces = true
+        scrollView.backgroundColor = .clear
         
-        // Variable to dynamically manage the scroll view height
-        var scrollViewHeight: CGFloat = 260 {
-            didSet {
-                updateScrollViewHeight()
-            }
+        contentView.addSubview(scrollView)
+        
+        // Set scroll view constraints with full width and fixed height of 240
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),  // Full screen width
+            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor), // Full screen width
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 96), // Adjust the position
+            scrollView.heightAnchor.constraint(equalToConstant: 260)
+        ])
+        
+        scrollViewHeightConstraint = scrollView.heightAnchor.constraint(equalToConstant: scrollViewHeight)
+        scrollViewHeightConstraint?.isActive = true
+    }
+    
+    // Function to update the scroll view height constraint dynamically (if needed)
+    private func updateScrollViewHeight() {
+        scrollViewHeightConstraint?.constant = scrollViewHeight
+        layoutIfNeeded() // This will update the layout
+    }
+    
+    func setupScrollViewImages() {
+        // Clear any existing images or video placeholders in the scroll view
+        for subview in scrollView.subviews {
+            subview.removeFromSuperview()
         }
         
-        // The images and video (if available)
-        var images: [String] = []
-        var videoUrl: String? = nil
+        // Get the actual contentView width, now that layoutSubviews has been called
+        let imageHeight: CGFloat = scrollViewHeight
+        let imageWidth: CGFloat = contentView.frame.width // Ensure the image width is the full width of the content view
+        let padding: CGFloat = 0 // Set padding to 0 to avoid spacing issues
         
-        // Store the height constraint so we can update it dynamically
-        private var scrollViewHeightConstraint: NSLayoutConstraint?
-
-        override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            super.init(style: style, reuseIdentifier: reuseIdentifier)
-            setupScrollView()
-        }
+        var xOffset: CGFloat = 0
         
-        required init?(coder: NSCoder) {
-            super.init(coder: coder)
-            setupScrollView()
-        }
-        
-        // Function to set up the scroll view programmatically
-        func setupScrollView() {
-            scrollView = UIScrollView()
-            scrollView.translatesAutoresizingMaskIntoConstraints = false
-            scrollView.showsHorizontalScrollIndicator = false
-            scrollView.showsVerticalScrollIndicator = false
-            scrollView.isPagingEnabled = false
-            scrollView.bounces = true
-            scrollView.backgroundColor = .clear
+        // Add video if available
+        if let videoUrl = videoUrl, !videoUrl.isEmpty {
+            let videoThumbnailView = UIImageView()
+            videoThumbnailView.frame = CGRect(x: xOffset, y: 0, width: imageWidth, height: imageHeight)
+            videoThumbnailView.contentMode = .scaleAspectFill
+            videoThumbnailView.clipsToBounds = true
+            videoThumbnailView.layer.cornerRadius = 8
+            scrollView.addSubview(videoThumbnailView)
             
-            contentView.addSubview(scrollView)
-            
-            // Set scroll view constraints with dynamic height
-            NSLayoutConstraint.activate([
-                scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor), // Full screen width
-                scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor), // Full screen width
-                scrollView.topAnchor.constraint(equalTo: lbl_description.bottomAnchor, constant: 10), // Below description label
-            ])
-            
-            // Add the height constraint to the scroll view (initially set to scrollViewHeight)
-            scrollViewHeightConstraint = scrollView.heightAnchor.constraint(equalToConstant: scrollViewHeight)
-            scrollViewHeightConstraint?.isActive = true
-        }
-        
-        // Function to update the scroll view height constraint dynamically
-        private func updateScrollViewHeight() {
-            scrollViewHeightConstraint?.constant = scrollViewHeight
-            layoutIfNeeded() // This will update the layout
-        }
-
-        // Function to set up images and video in the scroll view
-        func setupScrollViewImages() {
-            // Clear any existing images or video placeholders in the scroll view
-            for subview in scrollView.subviews {
-                subview.removeFromSuperview()
-            }
-            
-            let imageHeight: CGFloat = scrollViewHeight
-            let imageWidth: CGFloat = contentView.frame.width // Make image width the full width of the scroll view
-            let padding: CGFloat = 10
-            
-            var xOffset: CGFloat = 0
-            
-            // Add video if available
-            if let videoUrl = videoUrl, !videoUrl.isEmpty {
-                let videoThumbnailView = UIImageView()
-                videoThumbnailView.frame = CGRect(x: xOffset, y: 0, width: imageWidth, height: imageHeight)
-                videoThumbnailView.contentMode = .scaleAspectFill
-                videoThumbnailView.clipsToBounds = true
-                videoThumbnailView.layer.cornerRadius = 8
-                scrollView.addSubview(videoThumbnailView)
-                
-                // Generate thumbnail for video
-                generateVideoThumbnail(from: videoUrl) { [weak self] thumbnail in
-                    DispatchQueue.main.async {
-                        videoThumbnailView.image = thumbnail
-                    }
+            // Generate thumbnail for video
+            generateVideoThumbnail(from: videoUrl) { [weak self] thumbnail in
+                DispatchQueue.main.async {
+                    videoThumbnailView.image = thumbnail
                 }
-                
-                // Add a play button or video thumbnail overlay
-                let playButton = UIButton(type: .custom)
-                playButton.frame = CGRect(x: (imageWidth / 2) - 25, y: (imageHeight / 2) - 25, width: 50, height: 50)
-                playButton.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
-                playButton.tintColor = .white
-                playButton.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
-                scrollView.addSubview(playButton)
-                
-                xOffset += imageWidth + padding
             }
             
-            // Add images
-            for imageUrl in images {
-                let imageView = UIImageView()
-                imageView.frame = CGRect(x: xOffset, y: 0, width: imageWidth, height: imageHeight)
-                imageView.loadImage(from: imageUrl, placeholder: "logo") // Load image with placeholder "logo"
-                imageView.contentMode = .scaleAspectFill
-                imageView.clipsToBounds = true
-                imageView.layer.cornerRadius = 8
-                
-                scrollView.addSubview(imageView)
-                xOffset += imageWidth + padding
-            }
+            // Add a play button or video thumbnail overlay
+            let playButton = UIButton(type: .custom)
+            playButton.frame = CGRect(x: (imageWidth / 2) - 25, y: (imageHeight / 2) - 25, width: 50, height: 50)
+            playButton.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
+            playButton.tintColor = .white
+            playButton.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
+            scrollView.addSubview(playButton)
             
-            // Set content size of scroll view based on the number of images and video
-            let contentWidth = xOffset
-            scrollView.contentSize = CGSize(width: contentWidth, height: imageHeight)
+            xOffset += imageWidth // Move to the next x position
         }
         
-        // Generate thumbnail for video
-        private func generateVideoThumbnail(from url: String, completion: @escaping (UIImage?) -> Void) {
-            guard let videoURL = URL(string: url) else {
+        // Add images
+        for imageUrl in images {
+            let imageView = UIImageView()
+            imageView.frame = CGRect(x: xOffset, y: 0, width: imageWidth, height: imageHeight)
+            imageView.loadImage(from: imageUrl, placeholder: "logo") // Load image with placeholder "logo"
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            imageView.layer.cornerRadius = 8
+            
+            scrollView.addSubview(imageView)
+            xOffset += imageWidth // Move to the next x position for the next image
+        }
+        
+        // Set content size of scroll view based on the number of images and video
+        scrollView.contentSize = CGSize(width: xOffset, height: imageHeight)
+        
+    }
+    
+    // Generate thumbnail for video
+    private func generateVideoThumbnail(from url: String, completion: @escaping (UIImage?) -> Void) {
+        guard let videoURL = URL(string: url) else {
+            completion(nil)
+            return
+        }
+        
+        let asset = AVAsset(url: videoURL)
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        
+        // Capture the first frame at time 1 second
+        let time = CMTime(seconds: 1, preferredTimescale: 60)
+        
+        DispatchQueue.global().async {
+            do {
+                let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
+                let thumbnail = UIImage(cgImage: cgImage)
+                completion(thumbnail)
+            } catch {
+                print("Error generating thumbnail: \(error)")
                 completion(nil)
-                return
             }
+        }
+    }
+    
+    // Play video action
+    @objc func playVideo() {
+        if let videoUrl = videoUrl, let url = URL(string: videoUrl) {
+            let player = AVPlayer(url: url)
+            let playerViewController = AVPlayerViewController()
+            playerViewController.player = player
             
-            let asset = AVAsset(url: videoURL)
-            let imageGenerator = AVAssetImageGenerator(asset: asset)
-            imageGenerator.appliesPreferredTrackTransform = true
-            
-            // Capture the first frame at time 1 second
-            let time = CMTime(seconds: 1, preferredTimescale: 60)
-            
-            DispatchQueue.global().async {
-                do {
-                    let cgImage = try imageGenerator.copyCGImage(at: time, actualTime: nil)
-                    let thumbnail = UIImage(cgImage: cgImage)
-                    completion(thumbnail)
-                } catch {
-                    print("Error generating thumbnail: \(error)")
-                    completion(nil)
+            if let topController = UIApplication.shared.windows.first?.rootViewController {
+                topController.present(playerViewController, animated: true) {
+                    player.play()
                 }
             }
         }
-        
-        // Play video action
-        @objc func playVideo() {
-            if let videoUrl = videoUrl, let url = URL(string: videoUrl) {
-                let player = AVPlayer(url: url)
-                let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
-                
-                if let topController = UIApplication.shared.windows.first?.rootViewController {
-                    topController.present(playerViewController, animated: true) {
-                        player.play()
-                    }
-                }
-            }
-        }
-    
-
-    
+    }
+   
 }
 
 //MARK:- COLLECTION VIEW -
@@ -1022,6 +1019,7 @@ extension home: UICollectionViewDelegate ,
             print(data as Any)
             print(data[rowIndex] as Any)
             print(data[indexPath.item] as Any)
+            
             // print(data[rowIndex] as Any)
             // print(data[indexPath.item] as Any)
             // cell.img_view.sd_setImage(with: URL(string: data[indexPath.row]), placeholderImage: UIImage(named: "1024"))

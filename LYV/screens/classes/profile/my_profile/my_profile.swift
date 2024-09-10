@@ -101,8 +101,20 @@ class my_profile: UIViewController {
         
         print(self.strUserId as Any)
         
-        
-        
+        self.btn_followers.addTarget(self, action: #selector(pushToFollowersScreen), for: .touchUpInside)
+        self.btn_following.addTarget(self, action: #selector(pushToFollowingScreen), for: .touchUpInside)
+    }
+    
+    @objc func pushToFollowersScreen() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "follow_followers_id") as? follow_followers
+        push!.strType = "A"
+        self.navigationController?.pushViewController(push!, animated: true)
+    }
+    
+    @objc func pushToFollowingScreen() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "follow_followers_id") as? follow_followers
+        push!.strType = "B"
+        self.navigationController?.pushViewController(push!, animated: true)
     }
     
     @objc func edit_c_m() {
