@@ -13,6 +13,7 @@
 		B910D3A62C60B00C00639550 /* main_profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B910D3A52C60B00C00639550 /* main_profile.swift */; };
 		B910D3A92C60B47300639550 /* my_profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B910D3A82C60B47300639550 /* my_profile.swift */; };
 		B91C589E2C64A9800060169B /* add_post.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91C589D2C64A9800060169B /* add_post.swift */; };
+		B92230582C907F9D00EF6523 /* reviewProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92230572C907F9D00EF6523 /* reviewProduct.swift */; };
 		B927FCC72C65E7A7008456EB /* all_users.swift in Sources */ = {isa = PBXBuildFile; fileRef = B927FCC62C65E7A7008456EB /* all_users.swift */; };
 		B932B1232C64D89900916AB3 /* all_messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932B1222C64D89900916AB3 /* all_messages.swift */; };
 		B932B1272C64E0A800916AB3 /* BooCheckChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932B1252C64E0A800916AB3 /* BooCheckChat.swift */; };
@@ -93,6 +94,7 @@
 		B910D3A52C60B00C00639550 /* main_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main_profile.swift; sourceTree = "<group>"; };
 		B910D3A82C60B47300639550 /* my_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = my_profile.swift; sourceTree = "<group>"; };
 		B91C589D2C64A9800060169B /* add_post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = add_post.swift; sourceTree = "<group>"; };
+		B92230572C907F9D00EF6523 /* reviewProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewProduct.swift; sourceTree = "<group>"; };
 		B927FCC62C65E7A7008456EB /* all_users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = all_users.swift; sourceTree = "<group>"; };
 		B932B1222C64D89900916AB3 /* all_messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = all_messages.swift; sourceTree = "<group>"; };
 		B932B1252C64E0A800916AB3 /* BooCheckChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckChat.swift; sourceTree = "<group>"; };
@@ -213,6 +215,14 @@
 				B91C589D2C64A9800060169B /* add_post.swift */,
 			);
 			path = add_group;
+			sourceTree = "<group>";
+		};
+		B92230562C907F8C00EF6523 /* reviewpopup */ = {
+			isa = PBXGroup;
+			children = (
+				B92230572C907F9D00EF6523 /* reviewProduct.swift */,
+			);
+			path = reviewpopup;
 			sourceTree = "<group>";
 		};
 		B927FCC52C65E79B008456EB /* users */ = {
@@ -443,6 +453,7 @@
 		B9D61F862C60F238008C27D1 /* my_orders */ = {
 			isa = PBXGroup;
 			children = (
+				B92230562C907F8C00EF6523 /* reviewpopup */,
 				B9D61F872C60F243008C27D1 /* my_orders.swift */,
 				B9D61F892C60FA9C008C27D1 /* details.swift */,
 			);
@@ -885,6 +896,7 @@
 				B950BF042C5A0DBC00557F3E /* UIStackView+Utility.swift in Sources */,
 				B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */,
 				B950BEFF2C5A0DBC00557F3E /* Color.swift in Sources */,
+				B92230582C907F9D00EF6523 /* reviewProduct.swift in Sources */,
 				B950BF022C5A0DBC00557F3E /* AlertView.swift in Sources */,
 				B927FCC72C65E7A7008456EB /* all_users.swift in Sources */,
 				B9EC88C92C69E86F00710D2E /* live_stream.swift in Sources */,

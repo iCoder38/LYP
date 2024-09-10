@@ -36,11 +36,15 @@ class details: UIViewController {
         }
     }
     
+    @IBOutlet weak var btnReview:UIButton!
+    
     var arrAddImages:NSMutableArray! = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = app_BG
+        
+        self.btnReview.addTarget(self, action: #selector(reviewClickMethod), for: .touchUpInside)
         
         if (self.dict_product_details["p_image_1"] as! String) != "" {
             let originalURL = self.dict_product_details["p_image_1"] as! String
@@ -72,11 +76,50 @@ class details: UIViewController {
             var custom = ["image":encodedURL!]
             arrAddImages.add(custom)
         }
-        print(self.arrAddImages as Any)
+        // print(self.arrAddImages as Any)
+        
+        
+        print("\(self.dict_product_details["order_status"]!)")
+        
+        if ("\(self.dict_product_details["order_status"]!)" == "") {
+            self.btn_shipped.setTitle("Order placed", for: .normal)
+        }
+        
+        if ("\(self.dict_product_details["order_status"]!)" == "5") {
+            self.btn_shipped.setTitle("Cancelled", for: .normal)
+            self.btn_shipped.backgroundColor = .systemRed
+        }
+        
+        if ("\(self.dict_product_details["order_status"]!)" == "4") {
+            self.btn_shipped.setTitle("Delivered", for: .normal)
+            self.btn_shipped.backgroundColor = .systemGreen
+        }
+        
+        if ("\(self.dict_product_details["order_status"]!)" == "3") {
+            self.btn_shipped.setTitle("Out for delivery", for: .normal)
+            self.btn_shipped.backgroundColor = .systemOrange
+        }
+        
+        if ("\(self.dict_product_details["order_status"]!)" == "2") {
+            self.btn_shipped.setTitle("Order placed", for: .normal)
+            self.btn_shipped.backgroundColor = app_purple_color
+        }
+        
+        if ("\(self.dict_product_details["order_status"]!)" == "1") {
+            self.btn_shipped.setTitle("Order confirmed", for: .normal)
+            self.btn_shipped.backgroundColor = app_purple_color
+        }
         
         tble_view.delegate = self
         tble_view.dataSource = self
         tble_view.reloadData()
+    }
+    
+    @objc func reviewClickMethod() {
+        let reviewVC = ReviewPopupViewController()
+        reviewVC.modalPresentationStyle = .overFullScreen
+        present(reviewVC, animated: true, completion: nil)
+
     }
     
 }
@@ -320,6 +363,7 @@ extension details: UICollectionViewDelegate ,
         
         
         let item = self.arrAddImages[indexPath.row] as! [String:Any]
+        print(item as Any)
         
         cell.img_view.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 420)
         cell.img_view.contentMode = .scaleAspectFill

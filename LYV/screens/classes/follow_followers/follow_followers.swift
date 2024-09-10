@@ -92,9 +92,7 @@ class follow_followers: UIViewController {
                                 ar = (JSON["data"] as! Array<Any>) as NSArray
                                 
                                 self.arrNotificationsList.removeAllObjects()
-                                
                                 self.arrNotificationsList.addObjects(from: ar as! [Any])
-                                 
                                 self.tble_view.delegate = self
                                 self.tble_view.dataSource = self
                                 
@@ -238,7 +236,13 @@ extension follow_followers: UITableViewDataSource , UITableViewDelegate {
 
 class follow_followers_table_cell : UITableViewCell {
     
-    @IBOutlet weak var imgProfile:UIImageView!
+    @IBOutlet weak var imgProfile:UIImageView! {
+        didSet {
+            imgProfile.layer.cornerRadius = 6
+            imgProfile.clipsToBounds = true
+        }
+    }
+    
     @IBOutlet weak var lblUsername:UILabel!
     @IBOutlet weak var lblUsernameEmail:UILabel!
     
