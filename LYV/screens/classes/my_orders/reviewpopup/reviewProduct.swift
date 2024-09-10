@@ -1,8 +1,14 @@
 import UIKit
+import Alamofire
 
 class ReviewPopupViewController: UIViewController {
     
-    // MARK: - UI Components
+    var reviewTo:String!
+    var selectedStar:String!
+    var strEnteredMessage:String!
+    
+    // MARK: - UI Components -
+    let containerView = UIView()
     let starsStackView = UIStackView()
     var starButtons: [UIButton] = []
     var selectedRating: Int = 0
@@ -12,20 +18,34 @@ class ReviewPopupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(self.reviewTo as Any)
+        
+        setupContainerView()
         setupUI()
+    }
+    
+    private func setupContainerView() {
+        // Container View with rounded corners
+        containerView.backgroundColor = .white
+        containerView.layer.cornerRadius = 15
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(containerView)
+        
+        // Center the container in the middle of the screen with specific height/width
+        NSLayoutConstraint.activate([
+            containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            containerView.widthAnchor.constraint(equalToConstant: 300),
+            containerView.heightAnchor.constraint(equalToConstant: 300)
+        ])
     }
     
     // MARK: - Setup UI
     private func setupUI() {
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 15
-        view.layer.masksToBounds = true
-        
-        // Stars Stack View
         starsStackView.axis = .horizontal
         starsStackView.distribution = .fillEqually
         starsStackView.spacing = 8
-        view.addSubview(starsStackView)
+        containerView.addSubview(starsStackView)
         
         // Add Star Buttons
         for i in 1...5 {
@@ -45,10 +65,10 @@ class ReviewPopupViewController: UIViewController {
         commentTextView.layer.cornerRadius = 8
         commentTextView.font = UIFont.systemFont(ofSize: 16)
         commentTextView.textColor = .darkGray
-        commentTextView.text = "Write your comments here (optional)"
+        commentTextView.text = ""
         commentTextView.textAlignment = .left
         commentTextView.isScrollEnabled = false
-        view.addSubview(commentTextView)
+        containerView.addSubview(commentTextView)
         
         // Send Review Button
         sendReviewButton.setTitle("Send Review", for: .normal)
@@ -57,7 +77,7 @@ class ReviewPopupViewController: UIViewController {
         sendReviewButton.setTitleColor(.white, for: .normal)
         sendReviewButton.layer.cornerRadius = 8
         sendReviewButton.addTarget(self, action: #selector(sendReviewTapped), for: .touchUpInside)
-        view.addSubview(sendReviewButton)
+        containerView.addSubview(sendReviewButton)
         
         // Setup Constraints
         setupConstraints()
@@ -69,20 +89,20 @@ class ReviewPopupViewController: UIViewController {
         sendReviewButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            starsStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            starsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            starsStackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
+            starsStackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             starsStackView.heightAnchor.constraint(equalToConstant: 40),
             
             commentTextView.topAnchor.constraint(equalTo: starsStackView.bottomAnchor, constant: 20),
-            commentTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            commentTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            commentTextView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            commentTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             commentTextView.heightAnchor.constraint(equalToConstant: 80),
             
             sendReviewButton.topAnchor.constraint(equalTo: commentTextView.bottomAnchor, constant: 20),
-            sendReviewButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            sendReviewButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             sendReviewButton.widthAnchor.constraint(equalToConstant: 150),
             sendReviewButton.heightAnchor.constraint(equalToConstant: 50),
-            sendReviewButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            sendReviewButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20)
         ])
     }
     
@@ -99,10 +119,123 @@ class ReviewPopupViewController: UIViewController {
     }
     
     @objc private func sendReviewTapped() {
-        // Handle the send review action here
         let comment = commentTextView.text
         print("User selected \(selectedRating) stars and comment: \(comment ?? "")")
+        
+        self.selectedStar = "\(selectedRating)"
+        self.strEnteredMessage = "\(comment!)"
+        
         dismiss(animated: true, completion: nil)
+        
+        sendReviewWB(loader: "yes")
+    }
+    
+    @objc func sendReviewWB(loader:String) {
+       
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+       
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 /*
+                  self.selectedStar = "\(selectedRating)"
+                  self.strEnteredMessage = "\(comment!)"
+                  */
+                parameters = [
+                    "action"        : "submitreview",
+                    "reviewFrom"    : String(myString),
+                    "reviewTo"      : String(self.reviewTo),
+                    "star"          : String(self.selectedStar),
+                    "message"       : String(self.strEnteredMessage)
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
+                                // var ar : NSArray!
+                                // ar = (JSON["data"] as! Array<Any>) as NSArray
+                                
+                                /*self.arrNotificationsList.removeAllObjects()
+                                self.arrNotificationsList.addObjects(from: ar as! [Any])
+                                self.tble_view.delegate = self
+                                self.tble_view.dataSource = self*/
+                                
+                                // self.tble_view.reloadData()
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.sendReviewWB(loader: "no")
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.sendReviewWB(loader: "no")
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
     }
 }
 

@@ -79,7 +79,11 @@ class details: UIViewController {
         // print(self.arrAddImages as Any)
         
         
-        print("\(self.dict_product_details["order_status"]!)")
+        print("\(self.dict_product_details!)")
+        
+        if ("\(self.dict_product_details["your_review"]!)" == "Yes") {
+            self.btnReview.isHidden = true
+        }
         
         if ("\(self.dict_product_details["order_status"]!)" == "") {
             self.btn_shipped.setTitle("Order placed", for: .normal)
@@ -117,9 +121,11 @@ class details: UIViewController {
     
     @objc func reviewClickMethod() {
         let reviewVC = ReviewPopupViewController()
-        reviewVC.modalPresentationStyle = .overFullScreen
-        present(reviewVC, animated: true, completion: nil)
-
+        reviewVC.reviewTo = "\(self.dict_product_details["productId"]!)"
+        reviewVC.modalPresentationStyle = .overCurrentContext // Or .popover for iPad
+        reviewVC.preferredContentSize = CGSize(width: 300, height: 300) // Custom width and height
+        reviewVC.view.backgroundColor = UIColor(white: 0, alpha: 0.5) // Semi-transparent background
+        self.present(reviewVC, animated: true, completion: nil)
     }
     
 }
