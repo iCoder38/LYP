@@ -511,6 +511,285 @@ class home: UIViewController, UITextFieldDelegate {
         self.navigationController?.pushViewController(push!, animated: true)
     }
     
+    @objc func deleteOrReport(_ sender:UIButton) {
+        let item = self.arr_feeds[sender.tag] as? [String:Any]
+        print(item!)
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            let myID = String(myString)
+            
+            if (myID == "\(item!["userId"]!)") {
+                
+                let alert = NewYorkAlertController(title: String("Delete").uppercased(), message: String("Are you sure your want to delete this post."), style: .alert)
+                let yes = NewYorkButton(title: "Yes, delete", style: .default) {
+                    _ in
+                    
+                    self.deletePostWB(loader: "yes", postId: "\(item!["postId"]!)")
+                }
+                
+                let no = NewYorkButton(title: "Dismiss", style: .cancel) {
+                    _ in
+                    
+                }
+                alert.addButtons([yes,no])
+                self.present(alert, animated: true)
+                
+            } else {
+                let alert = NewYorkAlertController(title: String("Report").uppercased(), message: String("Are you sure your want to report this post."), style: .alert)
+                let yes = NewYorkButton(title: "Yes, report", style: .default) {
+                    _ in
+                    self.reportPostWB(loader: "yes", postId: "\(item!["postId"]!)")
+                }
+                
+                let no = NewYorkButton(title: "Dismiss", style: .cancel) {
+                    _ in
+                    
+                }
+                alert.addButtons([yes,no])
+                self.present(alert, animated: true)
+            }
+        }
+    }
+    
+    @objc func reportPostWB(loader:String,postId:String) {
+       
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+       
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"    : "report",
+                    "userId"    : String(myString),
+                     "postId"   : String(postId),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
+                               
+                                if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                                    print(person)
+                                    
+                                    let x : Int = person["userId"] as! Int
+                                    let myString = String(x)
+                                    let myID = String(myString)
+                                    // self.str_login_user_id = myID
+                                    
+                                    fetchFilteredData(myID: myID) { (dataArray, error) in
+                                        if let error = error {
+                                            print("Error: \(error)")
+                                        } else if let dataArray = dataArray {
+                                            print("Fetched data: \(dataArray)")
+                                            
+                                            self.feeds_list_WB(loader: "no")
+                                            
+                                        }
+                                    }
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    
+                                }
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.feeds_list_WB(loader: "no")
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.feeds_list_WB(loader: "no")
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    @objc func deletePostWB(loader:String,postId:String) {
+       
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+       
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"    : "postdelete",
+                    "userId"    : String(myString),
+                     "postId"      : String(postId),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
+                               
+                                if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                                    print(person)
+                                    
+                                    let x : Int = person["userId"] as! Int
+                                    let myString = String(x)
+                                    let myID = String(myString)
+                                    // self.str_login_user_id = myID
+                                    
+                                    fetchFilteredData(myID: myID) { (dataArray, error) in
+                                        if let error = error {
+                                            print("Error: \(error)")
+                                        } else if let dataArray = dataArray {
+                                            print("Fetched data: \(dataArray)")
+                                            
+                                            self.feeds_list_WB(loader: "no")
+                                            
+                                        }
+                                    }
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    
+                                }
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.feeds_list_WB(loader: "no")
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.feeds_list_WB(loader: "no")
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
 }
 
 //MARK:- TABLE VIEW -
@@ -594,6 +873,9 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             cell.btn_comment.tag = indexPath.row-1
             cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
             
+            cell.btn_more.tag = indexPath.row-1
+            cell.btn_more.addTarget(self, action: #selector(deleteOrReport), for: .touchUpInside)
+            
             cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
             cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
             
@@ -654,6 +936,8 @@ extension home: UITableViewDataSource , UITableViewDelegate {
         }
         
     }
+    
+   
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "main_profile_id") as? main_profile
@@ -812,6 +1096,8 @@ class home_table_cell : UITableViewCell {
     }
     
     @IBOutlet weak var btn_play:UIButton!
+    
+    @IBOutlet weak var btn_more:UIButton!
     
     @IBOutlet weak var btn_comment:UIButton!
     

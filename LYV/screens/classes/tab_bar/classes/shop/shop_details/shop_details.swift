@@ -158,13 +158,13 @@ class shop_details: UIViewController, BrandSelectionDelegate {
                 ]
                  
                 parameters = [
-                    "action"    : "productlist",
-                    "userId"    : String(myString),
-                    "category"    : String(self.str_product_id),
-                    "brand_id"    : String(brands),
-                    "price_min"    : String(min),
-                    "price_max"    : String(max),
-                     "size"    : String(size),
+                    "action"        : "productlist",
+                    "userId"        : String(myString),
+                    "category"      : String(self.str_product_id),
+                    "brand_id"      : String(brands),
+                    "price_min"     : String(min),
+                    "price_max"     : String(max),
+                     "size"         : String(size),
                 ]
                 
                 print("parameters-------\(String(describing: parameters))")

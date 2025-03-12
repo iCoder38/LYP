@@ -107,13 +107,15 @@ class my_profile: UIViewController {
     
     @objc func pushToFollowersScreen() {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "follow_followers_id") as? follow_followers
-        push!.strType = "A"
+        push!.strType = "B"
+        push!.strUserId = String(self.strUserId)
         self.navigationController?.pushViewController(push!, animated: true)
     }
     
     @objc func pushToFollowingScreen() {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "follow_followers_id") as? follow_followers
-        push!.strType = "B"
+        push!.strType = "A"
+        push!.strUserId = String(self.strUserId)
         self.navigationController?.pushViewController(push!, animated: true)
     }
     

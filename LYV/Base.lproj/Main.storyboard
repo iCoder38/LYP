@@ -628,6 +628,15 @@ nearby</string>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" systemColor="systemGray5Color"/>
                                                 </view>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejj-RY-2X2">
+                                                    <rect key="frame" x="291" y="11" width="50" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="50" id="1ZH-De-ykR"/>
+                                                        <constraint firstAttribute="height" constant="50" id="T8C-hl-vao"/>
+                                                    </constraints>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" image="ellipsis" catalog="system"/>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="cco-cG-F4P" firstAttribute="top" secondItem="XqI-Tp-V3G" secondAttribute="topMargin" id="46a-HB-1CU"/>
@@ -638,6 +647,8 @@ nearby</string>
                                                 <constraint firstItem="voY-Ss-upc" firstAttribute="trailing" secondItem="XqI-Tp-V3G" secondAttribute="trailingMargin" id="FtJ-XJ-e33"/>
                                                 <constraint firstItem="fG1-Xi-T5I" firstAttribute="leading" secondItem="cco-cG-F4P" secondAttribute="trailing" constant="8" symbolic="YES" id="Jn7-x2-yk1"/>
                                                 <constraint firstItem="veB-Lq-xyf" firstAttribute="top" secondItem="cco-cG-F4P" secondAttribute="bottom" constant="8" symbolic="YES" id="P0p-Fc-yJg"/>
+                                                <constraint firstItem="ejj-RY-2X2" firstAttribute="trailing" secondItem="XqI-Tp-V3G" secondAttribute="trailingMargin" id="QhV-Oa-cUu"/>
+                                                <constraint firstItem="ejj-RY-2X2" firstAttribute="top" secondItem="XqI-Tp-V3G" secondAttribute="topMargin" id="TNf-Q7-P83"/>
                                                 <constraint firstItem="voY-Ss-upc" firstAttribute="leading" secondItem="cco-cG-F4P" secondAttribute="trailing" constant="8" symbolic="YES" id="Uly-Zj-5rN"/>
                                                 <constraint firstAttribute="bottom" secondItem="3nT-vq-kut" secondAttribute="bottom" constant="5" id="Wt0-ad-bin"/>
                                                 <constraint firstItem="cco-cG-F4P" firstAttribute="leading" secondItem="XqI-Tp-V3G" secondAttribute="leadingMargin" id="XWN-6l-4BY"/>
@@ -649,6 +660,7 @@ nearby</string>
                                         <connections>
                                             <outlet property="btn_comment" destination="MTh-nt-MVX" id="4fR-9N-2As"/>
                                             <outlet property="btn_like" destination="Cva-5m-lEN" id="Bws-NF-Cie"/>
+                                            <outlet property="btn_more" destination="ejj-RY-2X2" id="ilx-Uk-g7h"/>
                                             <outlet property="img_profile" destination="cco-cG-F4P" id="V8C-Bv-fo4"/>
                                             <outlet property="lbl_comments" destination="RcT-DU-JrO" id="164-pF-TtS"/>
                                             <outlet property="lbl_description" destination="veB-Lq-xyf" id="jqS-f6-eEW"/>
@@ -5348,6 +5360,7 @@ shipped in 2-4 working days.</string>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="confirm_order" width="150" height="151"/>
         <image name="edit" width="24" height="24"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="filter" width="24" height="24"/>
         <image name="google" width="24" height="24"/>
         <image name="heart" catalog="system" width="128" height="107"/>

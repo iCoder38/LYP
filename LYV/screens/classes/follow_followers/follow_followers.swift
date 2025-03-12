@@ -11,6 +11,7 @@ import SDWebImage
 
 class follow_followers: UIViewController {
     
+    var strUserId:String!
     var strType:String!
     
     var arrNotificationsList:NSMutableArray! = []
@@ -67,7 +68,7 @@ class follow_followers: UIViewController {
                  
                 parameters = [
                     "action"    : "followlist",
-                    "userId"    : String(myString),
+                    "userId"    : String(self.strUserId),//String(myString),
                     "type"      : String(strType)
                 ]
                 
@@ -227,10 +228,10 @@ extension follow_followers: UITableViewDataSource , UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let item = self.arrNotificationsList[indexPath.row] as? [String:Any]
+        /*let item = self.arrNotificationsList[indexPath.row] as? [String:Any]
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_profile_id") as? my_profile
         push!.strUserId = "\(item!["userId"]!)"
-        self.navigationController?.pushViewController(push!, animated: true)
+        self.navigationController?.pushViewController(push!, animated: true)*/
         
     }
     
