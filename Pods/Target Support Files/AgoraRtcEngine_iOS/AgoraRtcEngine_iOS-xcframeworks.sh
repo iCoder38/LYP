@@ -23,10 +23,22 @@ variant_for_slice()
   "AgoraAiEchoCancellationExtension.xcframework/ios-arm64_x86_64-simulator")
     echo "simulator"
     ;;
+  "AgoraAiEchoCancellationLLExtension.xcframework/ios-arm64_armv7")
+    echo ""
+    ;;
+  "AgoraAiEchoCancellationLLExtension.xcframework/ios-arm64_x86_64-simulator")
+    echo "simulator"
+    ;;
   "AgoraAiNoiseSuppressionExtension.xcframework/ios-arm64_armv7")
     echo ""
     ;;
   "AgoraAiNoiseSuppressionExtension.xcframework/ios-arm64_x86_64-simulator")
+    echo "simulator"
+    ;;
+  "AgoraAiNoiseSuppressionLLExtension.xcframework/ios-arm64_armv7")
+    echo ""
+    ;;
+  "AgoraAiNoiseSuppressionLLExtension.xcframework/ios-arm64_x86_64-simulator")
     echo "simulator"
     ;;
   "AgoraAudioBeautyExtension.xcframework/ios-arm64_armv7")
@@ -167,10 +179,22 @@ archs_for_slice()
   "AgoraAiEchoCancellationExtension.xcframework/ios-arm64_x86_64-simulator")
     echo "arm64 x86_64"
     ;;
+  "AgoraAiEchoCancellationLLExtension.xcframework/ios-arm64_armv7")
+    echo "arm64 armv7"
+    ;;
+  "AgoraAiEchoCancellationLLExtension.xcframework/ios-arm64_x86_64-simulator")
+    echo "arm64 x86_64"
+    ;;
   "AgoraAiNoiseSuppressionExtension.xcframework/ios-arm64_armv7")
     echo "arm64 armv7"
     ;;
   "AgoraAiNoiseSuppressionExtension.xcframework/ios-arm64_x86_64-simulator")
+    echo "arm64 x86_64"
+    ;;
+  "AgoraAiNoiseSuppressionLLExtension.xcframework/ios-arm64_armv7")
+    echo "arm64 armv7"
+    ;;
+  "AgoraAiNoiseSuppressionLLExtension.xcframework/ios-arm64_x86_64-simulator")
     echo "arm64 x86_64"
     ;;
   "AgoraAudioBeautyExtension.xcframework/ios-arm64_armv7")
@@ -382,7 +406,9 @@ install_xcframework() {
 }
 
 install_xcframework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiEchoCancellationExtension.xcframework" "AgoraRtcEngine_iOS/AIAEC" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiEchoCancellationLLExtension.xcframework" "AgoraRtcEngine_iOS/AIAECLL" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-simulator"
 install_xcframework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiNoiseSuppressionExtension.xcframework" "AgoraRtcEngine_iOS/AINS" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiNoiseSuppressionLLExtension.xcframework" "AgoraRtcEngine_iOS/AINSLL" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-simulator"
 install_xcframework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAudioBeautyExtension.xcframework" "AgoraRtcEngine_iOS/AudioBeauty" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-simulator"
 install_xcframework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraClearVisionExtension.xcframework" "AgoraRtcEngine_iOS/ClearVision" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-simulator"
 install_xcframework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraContentInspectExtension.xcframework" "AgoraRtcEngine_iOS/ContentInspect" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-simulator"

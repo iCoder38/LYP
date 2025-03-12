@@ -9,7 +9,9 @@ import UIKit
 import Alamofire
 import SDWebImage
 
-class shop_details: UIViewController {
+class shop_details: UIViewController, BrandSelectionDelegate {
+     
+    
 
     var str_nav_name:String!
     var get_details:NSDictionary!
@@ -18,6 +20,13 @@ class shop_details: UIViewController {
     var arr_category_products:NSMutableArray! = []
     var str_product_id:String!
     
+    @IBOutlet weak var btnFilter:UIButton! {
+        didSet {
+            btnFilter.layer.cornerRadius = 25
+            btnFilter.clipsToBounds = true
+            btnFilter.backgroundColor = app_purple_color
+        }
+    }
     
     
     @IBOutlet weak var lbl_nav:UILabel! {
@@ -53,6 +62,8 @@ class shop_details: UIViewController {
         self.view.backgroundColor = app_BG
         
         self.lbl_nav.text = String(self.str_nav_name)
+        
+        self.btnFilter.addTarget(self, action: #selector(filterClickMethod), for: .touchUpInside)
         
         var ar2 : NSArray!
         ar2 = (self.get_details!["child"] as! Array<Any>) as NSArray
@@ -93,6 +104,154 @@ class shop_details: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.product_list_WB(loader: "yes")
+    }
+    
+    @objc func filterClickMethod() {
+        // To present the view controller
+        let brandVC = BrandSelectionViewController()
+        brandVC.delegate = self // Set delegate
+        let navController = UINavigationController(rootViewController: brandVC)
+        self.present(navController, animated: true, completion: nil)
+    }
+    
+    func didSelectFilters(brands: String, minPrice: CGFloat, maxPrice: CGFloat, size: String?) {
+        print("Selected Brand IDs: \(brands)")
+        print("Selected Min Price: \(Int(minPrice))")
+        print("Selected Max Price: \(Int(maxPrice))")
+        print("Selected Size: \(size ?? "")")
+        
+        // Update UI based on selected values
+        /*
+         api
+         [action] => productlist
+         [userId] => 32
+         [category] => 1
+         [brand_id] => 2,7,19
+         [price_min] => 100
+         [price_max] => 10000
+         [size] => XL
+         [pageNo] => 1
+         */
+        
+        filter_product_list_WB(loader: "yes", brands: brands, min: "\(Int(minPrice))", max: "\(Int(maxPrice))", size: "\(size ?? "")")
+    }
+    
+    @objc func filter_product_list_WB(loader:String,brands:String,min:String,max:String,size:String) {
+       
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
+      
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"    : "productlist",
+                    "userId"    : String(myString),
+                    "category"    : String(self.str_product_id),
+                    "brand_id"    : String(brands),
+                    "price_min"    : String(min),
+                    "price_max"    : String(max),
+                     "size"    : String(size),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                            
+                                ERProgressHud.sharedInstance.hide()
+                                
+                                var ar : NSArray!
+                                ar = (JSON["data"] as! Array<Any>) as NSArray
+                                
+                                self.arr_category_products.removeAllObjects()
+                                
+                                self.arr_category_products.addObjects(from: ar as! [Any])
+                                print(self.arr_category_products.count)
+                                
+                                if (self.arr_category_products.count != 0) {
+                                    self.collectionView2.isHidden = false
+                                    self.collectionView2.delegate = self
+                                    self.collectionView2.dataSource = self
+                                    self.collectionView2.reloadData()
+                                } else {
+                                    self.collectionView2.isHidden = true
+                                }
+//
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.product_list_WB(loader: "no")
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.product_list_WB(loader: "no")
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
     }
     
     @objc func product_list_WB(loader:String) {

@@ -1,6 +1,8 @@
 ${PODS_ROOT}/Target Support Files/AgoraRtcEngine_iOS/AgoraRtcEngine_iOS-xcframeworks.sh
 ${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiEchoCancellationExtension.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiEchoCancellationLLExtension.xcframework
 ${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiNoiseSuppressionExtension.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAiNoiseSuppressionLLExtension.xcframework
 ${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAudioBeautyExtension.xcframework
 ${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraClearVisionExtension.xcframework
 ${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraContentInspectExtension.xcframework

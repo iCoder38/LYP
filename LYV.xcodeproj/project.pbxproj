@@ -19,6 +19,7 @@
 		B932B1272C64E0A800916AB3 /* BooCheckChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932B1252C64E0A800916AB3 /* BooCheckChat.swift */; };
 		B932B1282C64E0A800916AB3 /* BooCheckTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B932B1262C64E0A800916AB3 /* BooCheckTableCell.swift */; };
 		B932B12A2C64E76F00916AB3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B932B1292C64E76F00916AB3 /* GoogleService-Info.plist */; };
+		B94EDAAC2D816B48004115AB /* wishlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94EDAAB2D816B48004115AB /* wishlist.swift */; };
 		B950BEF12C5A0C4400557F3E /* token_manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF02C5A0C4400557F3E /* token_manager.swift */; };
 		B950BEF42C5A0CB100557F3E /* ERProgressHud.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */; };
 		B950BEFE2C5A0DBC00557F3E /* ActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */; };
@@ -38,6 +39,7 @@
 		B99FA28B2C57C8D5005DB636 /* registration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99FA28A2C57C8D5005DB636 /* registration.swift */; };
 		B99FA28F2C57CBBC005DB636 /* RPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99FA28D2C57CBBC005DB636 /* RPicker.swift */; };
 		B99FA2922C57D19B005DB636 /* home.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99FA2912C57D19B005DB636 /* home.swift */; };
+		B9C0DBF82C917733003EC72E /* filter_popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C0DBF72C917733003EC72E /* filter_popup.swift */; };
 		B9C137932C5BA17A00A09A00 /* product_details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C137922C5BA17A00A09A00 /* product_details.swift */; };
 		B9C137962C5BBC5800A09A00 /* cart_list.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C137952C5BBC5800A09A00 /* cart_list.swift */; };
 		B9C346D62C89CB0200FF3456 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C346D52C89CB0200FF3456 /* help.swift */; };
@@ -100,6 +102,7 @@
 		B932B1252C64E0A800916AB3 /* BooCheckChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckChat.swift; sourceTree = "<group>"; };
 		B932B1262C64E0A800916AB3 /* BooCheckTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckTableCell.swift; sourceTree = "<group>"; };
 		B932B1292C64E76F00916AB3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B94EDAAB2D816B48004115AB /* wishlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wishlist.swift; sourceTree = "<group>"; };
 		B950BEF02C5A0C4400557F3E /* token_manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = token_manager.swift; sourceTree = "<group>"; };
 		B950BEF32C5A0CB100557F3E /* ERProgressHud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ERProgressHud.swift; sourceTree = "<group>"; };
 		B950BEF62C5A0DBA00557F3E /* ActionSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetView.swift; sourceTree = "<group>"; };
@@ -119,6 +122,7 @@
 		B99FA28A2C57C8D5005DB636 /* registration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registration.swift; sourceTree = "<group>"; };
 		B99FA28D2C57CBBC005DB636 /* RPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RPicker.swift; sourceTree = "<group>"; };
 		B99FA2912C57D19B005DB636 /* home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = home.swift; sourceTree = "<group>"; };
+		B9C0DBF72C917733003EC72E /* filter_popup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filter_popup.swift; sourceTree = "<group>"; };
 		B9C137922C5BA17A00A09A00 /* product_details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = product_details.swift; sourceTree = "<group>"; };
 		B9C137952C5BBC5800A09A00 /* cart_list.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cart_list.swift; sourceTree = "<group>"; };
 		B9C346D32C89C64C00FF3456 /* LYV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LYV.entitlements; sourceTree = "<group>"; };
@@ -251,6 +255,14 @@
 			path = chat;
 			sourceTree = "<group>";
 		};
+		B94EDAAA2D816B33004115AB /* wishlist */ = {
+			isa = PBXGroup;
+			children = (
+				B94EDAAB2D816B48004115AB /* wishlist.swift */,
+			);
+			path = wishlist;
+			sourceTree = "<group>";
+		};
 		B950BEEF2C5A0C3B00557F3E /* token_manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,6 +323,7 @@
 		B97C7CBF2C5784B3006C4941 /* classes */ = {
 			isa = PBXGroup;
 			children = (
+				B94EDAAA2D816B33004115AB /* wishlist */,
 				B95698B52C90635B0066BC51 /* follow_followers */,
 				B9EC02572C8EE722003A6512 /* notifications */,
 				B9C346D42C89CAFA00FF3456 /* help */,
@@ -418,6 +431,14 @@
 			path = home;
 			sourceTree = "<group>";
 		};
+		B9C0DBF62C917720003EC72E /* filter_popup */ = {
+			isa = PBXGroup;
+			children = (
+				B9C0DBF72C917733003EC72E /* filter_popup.swift */,
+			);
+			path = filter_popup;
+			sourceTree = "<group>";
+		};
 		B9C137912C5BA16B00A09A00 /* product_details */ = {
 			isa = PBXGroup;
 			children = (
@@ -483,6 +504,7 @@
 		B9D7965F2C5A5A9300EBF515 /* shop */ = {
 			isa = PBXGroup;
 			children = (
+				B9C0DBF62C917720003EC72E /* filter_popup */,
 				B9D796602C5A5A9F00EBF515 /* shop.swift */,
 				B9D796622C5A5EB300EBF515 /* shop_details */,
 			);
@@ -870,6 +892,7 @@
 				B91C589E2C64A9800060169B /* add_post.swift in Sources */,
 				B9D7965D2C5A583E00EBF515 /* tab_bar_controller.swift in Sources */,
 				B9F560532C490186003462CA /* ViewController.swift in Sources */,
+				B9C0DBF82C917733003EC72E /* filter_popup.swift in Sources */,
 				B9E8917C2C6209730067422D /* edit_profile.swift in Sources */,
 				B9EB60F72C5CC7150029D192 /* checkout.swift in Sources */,
 				B9F5604F2C490186003462CA /* AppDelegate.swift in Sources */,
@@ -906,6 +929,7 @@
 				B950BF082C5A28F400557F3E /* comments.swift in Sources */,
 				B932B1272C64E0A800916AB3 /* BooCheckChat.swift in Sources */,
 				B99FA2882C57BF81005DB636 /* login.swift in Sources */,
+				B94EDAAC2D816B48004115AB /* wishlist.swift in Sources */,
 				B9C137932C5BA17A00A09A00 /* product_details.swift in Sources */,
 				B9C137962C5BBC5800A09A00 /* cart_list.swift in Sources */,
 				B99FA2922C57D19B005DB636 /* home.swift in Sources */,

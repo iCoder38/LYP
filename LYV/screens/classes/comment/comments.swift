@@ -393,6 +393,7 @@ extension comments: UITableViewDataSource , UITableViewDelegate {
         let item = self.arr_comment[indexPath.row] as? [String:Any]
         cell.lbl_username.text = (item!["userName"] as! String)
         cell.lbl_comment_message.text = (item!["comment"] as! String)
+        cell.lbl_comment_date.text = (item!["created"] as! String)
         
         cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
@@ -433,4 +434,10 @@ class comments_table_cell : UITableViewCell {
         }
     }
      
+    @IBOutlet weak var lbl_comment_date:UILabel! {
+        didSet {
+            lbl_comment_date.textColor = .white
+        }
+    }
+    
 }

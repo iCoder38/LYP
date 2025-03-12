@@ -274,6 +274,11 @@ extension main_profile: UITableViewDataSource , UITableViewDelegate {
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "my_orders_id") as? my_orders
             self.navigationController?.pushViewController(push!, animated: true)
             
+        } else  if (indexPath.row == 3) {
+            
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "wishlist_id") as? wishlist
+            self.navigationController?.pushViewController(push!, animated: true)
+            
         } else if (indexPath.row == 4) {
             
             self.openAppSetting()

@@ -84,12 +84,12 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1bb"
+                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - 6eeca17b54072ad4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "LYV.add_post.validation_before_upload() -&gt; ()"
-                  moduleName = "LYV"
+                  moduleName = "LYV.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
                   startingColumnNumber = "9223372036854775807"
@@ -98,12 +98,12 @@
                   endingLineNumber = "564">
                </Location>
                <Location
-                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - c2dc12d6585ba1bb"
+                  uuid = "A5E42B3E-468B-4221-82F9-CD6C239082AD - 6eeca17b54072ad4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "LYV.add_post.validation_before_upload() -&gt; ()"
-                  moduleName = "LYV"
+                  moduleName = "LYV.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/dishantrajput/Documents/evs/LYV/LYV/screens/classes/tab_bar/classes/home/add_group/add_post.swift"
                   startingColumnNumber = "9223372036854775807"
@@ -143,22 +143,6 @@
             startingLineNumber = "319"
             endingLineNumber = "319"
             landmarkName = "getProfileWB(loader:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "96F5483A-C3CB-45B5-8D32-DD09CEFF0964"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LYV/screens/classes/profile/my_profile/my_profile.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "pushToFollowersScreen()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -37,4 +37,6 @@ target 'LYV' do
   pod 'GrowingTextView'
   pod 'AgoraRtcEngine_iOS'
   
+  pod 'RangeSeekSlider'
+  
 end

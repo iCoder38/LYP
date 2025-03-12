@@ -13,6 +13,7 @@ class shop: UIViewController {
 
     var arr_category:NSMutableArray! = []
     
+    
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
             tble_view.backgroundColor = .clear
