@@ -4490,7 +4490,7 @@ shipped in 2-4 working days.</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Y7-7P-g3c">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Y7-7P-g3c">
                                 <rect key="frame" x="327" y="58" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="i2d-sn-L0W"/>
@@ -4543,6 +4543,7 @@ shipped in 2-4 working days.</string>
                     <tabBarItem key="tabBarItem" title="Message" image="message" catalog="system" selectedImage="message.fill" id="M06-ve-SRL"/>
                     <navigationItem key="navigationItem" id="F6c-LX-Ox6"/>
                     <connections>
+                        <outlet property="btnLocalContactUsers" destination="3Y7-7P-g3c" id="Xg6-RD-ZEo"/>
                         <outlet property="btn_back" destination="zk9-in-cax" id="gY3-73-yr9"/>
                         <outlet property="btn_search" destination="eGr-Kn-0hy" id="lSW-3x-Ond"/>
                         <outlet property="tble_view" destination="h2j-3A-JJ2" id="F7g-fd-4gK"/>
@@ -5343,6 +5344,75 @@ shipped in 2-4 working days.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="weG-gh-v8h" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="7974.8091603053435" y="295.77464788732397"/>
+        </scene>
+        <!--Message-->
+        <scene sceneID="FDx-hl-BsA">
+            <objects>
+                <viewController storyboardIdentifier="ContactsViewControllerId" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oW6-cP-l3n" customClass="ContactsViewController" customModule="LYV" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Bz5-Sh-4EW">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="m2z-09-Vur">
+                                <rect key="frame" x="16" y="59" width="4" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="UTK-b8-jz9"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ci-oc-8mw">
+                                <rect key="frame" x="16" y="59" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="0E2-R6-yk6"/>
+                                    <constraint firstAttribute="height" constant="50" id="qnq-aU-oab"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="chevron.left" catalog="system"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contacts" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R59-oW-wbp">
+                                <rect key="frame" x="74" y="69" width="295" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="ODM-0N-xd3"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="26"/>
+                                <color key="textColor" systemColor="viewFlipsideBackgroundColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wk6-Gw-s23">
+                                <rect key="frame" x="327" y="58" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="bpD-Zu-nkz"/>
+                                    <constraint firstAttribute="height" constant="50" id="ihe-f1-a8e"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="plus" catalog="system"/>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="PT6-SM-BD1"/>
+                        <color key="backgroundColor" systemColor="systemGray5Color"/>
+                        <constraints>
+                            <constraint firstItem="wk6-Gw-s23" firstAttribute="top" secondItem="Bz5-Sh-4EW" secondAttribute="top" constant="58" id="1pa-gB-yyu"/>
+                            <constraint firstItem="R59-oW-wbp" firstAttribute="leading" secondItem="8ci-oc-8mw" secondAttribute="trailing" constant="8" symbolic="YES" id="3aL-hG-mT9"/>
+                            <constraint firstItem="8ci-oc-8mw" firstAttribute="leading" secondItem="PT6-SM-BD1" secondAttribute="leading" constant="16" id="JrP-tk-fMB"/>
+                            <constraint firstItem="m2z-09-Vur" firstAttribute="leading" secondItem="PT6-SM-BD1" secondAttribute="leading" constant="16" id="UAb-Ke-yy2"/>
+                            <constraint firstItem="PT6-SM-BD1" firstAttribute="trailing" secondItem="wk6-Gw-s23" secondAttribute="trailing" constant="16" id="avQ-jW-9hZ"/>
+                            <constraint firstItem="m2z-09-Vur" firstAttribute="top" secondItem="PT6-SM-BD1" secondAttribute="top" id="bXk-bS-RXU"/>
+                            <constraint firstItem="PT6-SM-BD1" firstAttribute="trailing" secondItem="R59-oW-wbp" secondAttribute="trailing" constant="24" id="i2Q-cE-iU1"/>
+                            <constraint firstItem="R59-oW-wbp" firstAttribute="top" secondItem="PT6-SM-BD1" secondAttribute="top" constant="10" id="lHK-bD-iBc"/>
+                            <constraint firstItem="8ci-oc-8mw" firstAttribute="top" secondItem="PT6-SM-BD1" secondAttribute="top" id="p8e-s7-Eup"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Message" image="message" catalog="system" selectedImage="message.fill" id="u4z-up-BqK"/>
+                    <navigationItem key="navigationItem" id="Xv6-ce-uds"/>
+                    <connections>
+                        <outlet property="btn_back" destination="8ci-oc-8mw" id="IIx-rR-zEH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L02-6Y-6MN" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7039" y="1746"/>
         </scene>
     </scenes>
     <resources>

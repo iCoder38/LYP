@@ -32,6 +32,7 @@ class all_users: UIViewController, UITextFieldDelegate {
     }
 
     @IBOutlet weak var btn_search:UIButton!
+    @IBOutlet weak var btnLocalContactUsers:UIButton!
     @IBOutlet weak var txt_search:UITextField! {
         didSet {
             txt_search.backgroundColor = UIColor.black.withAlphaComponent(0.2)
@@ -54,8 +55,15 @@ class all_users: UIViewController, UITextFieldDelegate {
         
         self.btn_search.addTarget(self
                                   , action: #selector(search_user_c_m), for: .touchUpInside)
+        
+        self.btnLocalContactUsers.addTarget(self
+                                            , action: #selector(openLocalContactListClickMethod), for: .touchUpInside)
     }
     
+    @objc func openLocalContactListClickMethod() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ContactsViewControllerId") as? ContactsViewController
+        self.navigationController?.pushViewController(push!, animated: true)
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
