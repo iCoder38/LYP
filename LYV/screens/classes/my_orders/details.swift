@@ -82,7 +82,7 @@ class details: UIViewController {
         print("\(self.dict_product_details!)")
         
         if ("\(self.dict_product_details["your_review"]!)" == "Yes") {
-            self.btnReview.isHidden = true
+            // self.btnReview.isHidden = true
         }
         
         if ("\(self.dict_product_details["order_status"]!)" == "") {

@@ -10,12 +10,12 @@ import SDWebImage
 import Alamofire
 
 class product_details: UIViewController {
-
+    
     var dict_product_details:NSDictionary!
     
     var str_select_color:String! = "0"
     var str_select_size:String! = "0"
-     
+    
     let reverseColorDictionary: [String: String] = {
         var dict = [String: String]()
         for (key, value) in colorDictionary {
@@ -23,7 +23,7 @@ class product_details: UIViewController {
         }
         return dict
     }()
-
+    
     
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
@@ -41,6 +41,12 @@ class product_details: UIViewController {
         }
     }
     
+    @IBOutlet weak var btnRateAndReview:UIButton! {
+        didSet {
+            btnRateAndReview.isHidden = false
+        }
+    }
+    
     @IBOutlet weak var btn_cart:UIButton! {
         didSet {
             btn_cart.isHidden = true
@@ -53,6 +59,14 @@ class product_details: UIViewController {
         }
     }
     
+    @IBOutlet weak var starOne: UIButton!
+    @IBOutlet weak var starTwo: UIButton!
+    @IBOutlet weak var starThree: UIButton!
+    @IBOutlet weak var starFour: UIButton!
+    @IBOutlet weak var starFive: UIButton!
+    
+    var starButtons: [UIButton] = []
+    
     @IBOutlet weak var lbl_cart_counter:UILabel!  {
         didSet {
             lbl_cart_counter.isHidden = true
@@ -60,17 +74,20 @@ class product_details: UIViewController {
     }
     
     var imageArrays: [[String]] = [
-            ["https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2.png",
-             "https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2 (1).png"]
-        ]
+        ["https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2.png",
+         "https://demo4.evirtualservices.net/lyvapp/img/uploads/products/1723625862_mfoot2 (1).png"]
+    ]
     
     var arrAddImages:NSMutableArray! = []
+    var AVGRating: String = "2"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = app_BG
         
-        // print(self.dict_product_details as Any)
+        print(self.dict_product_details as Any)
+        starButtons = [starOne, starTwo, starThree, starFour, starFive]
+        updateStars(from: "\(self.dict_product_details["AVGRating"]!)")
         
         if (self.dict_product_details["image_1"] as! String) != "" {
             let originalURL = self.dict_product_details["image_1"] as! String
@@ -122,13 +139,33 @@ class product_details: UIViewController {
         
         self.btn_heart.addTarget(self, action: #selector(heart_click_method), for: .touchUpInside)
         
+        self.callProductListWB()
+        
         self.btn_cart.addTarget(self, action: #selector(push_to_Cart), for: .touchUpInside)
         self.tble_view.reloadData()
-         
+        
     }
+    
+    func displayStars(from rating: Int) {
+        for (index, button) in starButtons.enumerated() {
+            if index < rating {
+                button.setTitle("★", for: .normal)
+            } else {
+                button.setTitle("☆", for: .normal)
+            }
+        }
+    }
+    
+    func updateStars(from avgrating: String) {
+        let rating = Int(avgrating) ?? 0 // Convert string to integer, default to 0 if invalid
+        displayStars(from: rating)
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        
         self.cart_counter_WB()
     }
     
@@ -147,7 +184,7 @@ class product_details: UIViewController {
         let dummyList = colorNames
         
         RPicker.selectOption(title: "Color", cancelText: "Dismiss", dataArray: dummyList, selectedIndex: 0) { (selctedText, atIndex) in
-             
+            
             cell.btn_colors.setTitle(String(selctedText), for: .normal)
             self.str_select_color = String(selctedText)
             
@@ -169,7 +206,7 @@ class product_details: UIViewController {
         
         return colorNames
     }
-
+    
     
     @objc func size_click_method() {
         
@@ -182,7 +219,7 @@ class product_details: UIViewController {
         let dummyList = colorCodesArray
         
         RPicker.selectOption(title: "Size", cancelText: "Dismiss", dataArray: dummyList, selectedIndex: 0) { (selctedText, atIndex) in
-             
+            
             cell.btn_sizes.setTitle(String(selctedText), for: .normal)
             self.str_select_size = String(selctedText)
         }
@@ -192,11 +229,11 @@ class product_details: UIViewController {
     
     
     @objc func cart_counter_WB() {
-       
+        
         var parameters:Dictionary<AnyHashable, Any>!
         
         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-      
+        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
@@ -208,7 +245,7 @@ class product_details: UIViewController {
                 let headers: HTTPHeaders = [
                     "token":String(token_id_is),
                 ]
-                 
+                
                 parameters = [
                     "action"    : "cartlist",
                     "userId"    : String(myString),
@@ -230,7 +267,7 @@ class product_details: UIViewController {
                             strSuccess = JSON["status"] as? String
                             
                             if strSuccess.lowercased() == "success" {
-                            
+                                
                                 ERProgressHud.sharedInstance.hide()
                                 var ar : NSArray!
                                 ar = (JSON["data"] as! Array<Any>) as NSArray
@@ -259,7 +296,7 @@ class product_details: UIViewController {
                                         // Handle the error
                                     }
                                 }
-
+                                
                             }
                             
                         }
@@ -308,13 +345,12 @@ class product_details: UIViewController {
         
     }
     
-    
-    @objc func like_product_WB(like_status:String) {
-       
+    @objc func callProductListWB() {
+        
         var parameters:Dictionary<AnyHashable, Any>!
         
         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-      
+        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
@@ -326,7 +362,102 @@ class product_details: UIViewController {
                 let headers: HTTPHeaders = [
                     "token":String(token_id_is),
                 ]
-                 
+                
+                parameters = [
+                    "action"    : "productlist",
+                    "userId"    : String(myString),
+                    "categoryId" : "\(self.self.dict_product_details["categoryId"]!)",
+                    
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                
+                                ERProgressHud.sharedInstance.hide()
+                                
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.cart_counter_WB()
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.cart_counter_WB()
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    @objc func like_product_WB(like_status:String) {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
                 parameters = [
                     "action"    : "productlike",
                     "userId"    : String(myString),
@@ -350,7 +481,7 @@ class product_details: UIViewController {
                             strSuccess = JSON["status"] as? String
                             
                             if strSuccess.lowercased() == "success" {
-                            
+                                
                                 ERProgressHud.sharedInstance.hide()
                                 
                             }
@@ -370,7 +501,7 @@ class product_details: UIViewController {
                                         // Handle the error
                                     }
                                 }
-
+                                
                             }
                             
                         }
@@ -406,20 +537,20 @@ class product_details: UIViewController {
     
     /*
      [action] => cartadd
-         [userId] => 16
-         [productId] => 15
-         [quantity] => 1
-         [p_color] => 5
-         [p_size] => M
+     [userId] => 16
+     [productId] => 15
+     [quantity] => 1
+     [p_color] => 5
+     [p_size] => M
      */
     
     func getColorCode(for colorName: String) -> String? {
         return reverseColorDictionary[colorName]
     }
-
+    
     
     @objc func add_to_cart_WB() {
-       
+        
         if (self.str_select_color == "0") {
             return
         } else if (self.str_select_size == "0") {
@@ -432,7 +563,7 @@ class product_details: UIViewController {
             var parameters:Dictionary<AnyHashable, Any>!
             
             ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-          
+            
             if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
                 print(person)
                 
@@ -444,7 +575,7 @@ class product_details: UIViewController {
                     let headers: HTTPHeaders = [
                         "token":String(token_id_is),
                     ]
-                     
+                    
                     parameters = [
                         "action"    : "cartadd",
                         "userId"    : String(myString),
@@ -470,7 +601,7 @@ class product_details: UIViewController {
                                 strSuccess = JSON["status"] as? String
                                 
                                 if strSuccess.lowercased() == "success" {
-                                
+                                    
                                     cart_counter_WB()
                                 } else {
                                     TokenManager.shared.refresh_token_WB { token, error in
@@ -488,7 +619,7 @@ class product_details: UIViewController {
                                             // Handle the error
                                         }
                                     }
-
+                                    
                                 }
                                 
                             }

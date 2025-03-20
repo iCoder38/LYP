@@ -505,6 +505,7 @@ class home: UIViewController, UITextFieldDelegate {
     
     @objc func comment_click_method(_ sender:UIButton) {
         let item = self.arr_feeds[sender.tag] as? [String:Any]
+        print(item as Any)
         
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "comments_id") as? comments
         push!.str_post_id = "\(item!["postId"]!)"
@@ -873,6 +874,9 @@ extension home: UITableViewDataSource , UITableViewDelegate {
             cell.btn_comment.tag = indexPath.row-1
             cell.btn_comment.addTarget(self, action: #selector(comment_click_method), for: .touchUpInside)
             
+            cell.btnShare.tag = indexPath.row-1
+            cell.btnShare.addTarget(self, action: #selector(shareClickMethod), for: .touchUpInside)
+            
             cell.btn_more.tag = indexPath.row-1
             cell.btn_more.addTarget(self, action: #selector(deleteOrReport), for: .touchUpInside)
             
@@ -927,17 +931,31 @@ extension home: UITableViewDataSource , UITableViewDelegate {
                     cell.lbl_description.textAlignment = .left
                 }
             
-            
-            
-            
-            
             return cell
             
         }
         
     }
     
-   
+    @objc func shareClickMethod() {
+        shareContent(from: self)
+    }
+    
+    func shareContent(from viewController: UIViewController) {
+        let text = "Check out this amazing content!"
+        let url = URL(string: "https://example.com")!
+        
+        let activityViewController = UIActivityViewController(activityItems: [text, url], applicationActivities: nil)
+        
+        // Exclude certain activities if needed
+        activityViewController.excludedActivityTypes = [
+            .assignToContact,
+            .saveToCameraRoll
+        ]
+        
+        // Present the activity view controller
+        viewController.present(activityViewController, animated: true, completion: nil)
+    }
     
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "main_profile_id") as? main_profile
@@ -1100,6 +1118,13 @@ class home_table_cell : UITableViewCell {
     @IBOutlet weak var btn_more:UIButton!
     
     @IBOutlet weak var btn_comment:UIButton!
+    @IBOutlet weak var btnShare:UIButton! {
+        didSet {
+            btnShare.setTitle("Share", for: .normal)
+            btnShare.setTitleColor(.white, for: .normal)
+            btnShare.backgroundColor = .clear
+        }
+    }
     
     @IBOutlet weak var scrollView2: UIScrollView!
     

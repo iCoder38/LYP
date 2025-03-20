@@ -91,7 +91,7 @@ class comments: UIViewController, UITextFieldDelegate {
                  
                 parameters = [
                     "action"    : "commentlist",
-                    "userId"    : String(myString),
+                    // "userId"    : String(myString),
                     "postId"    : String(str_post_id),
                 ]
                 

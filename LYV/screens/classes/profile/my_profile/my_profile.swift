@@ -18,6 +18,8 @@ class my_profile: UIViewController {
     var arr_feeds:NSMutableArray! = []
     var dictUserData: NSDictionary!
     
+    var strShowChatIcon:String!
+    
     @IBOutlet weak var isThisProfilePrivate:UILabel! {
         didSet {
             isThisProfilePrivate.isHidden = true
@@ -127,6 +129,7 @@ class my_profile: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        print(self.dictUserData as Any)
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
@@ -195,7 +198,7 @@ class my_profile: UIViewController {
     @objc func chatClickMethod() {
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
-            // print(dictUserData as Any)
+            print(dictUserData as Any)
             
             let x : Int = person["userId"] as! Int
             let myString = String(x)
@@ -263,7 +266,6 @@ class my_profile: UIViewController {
                             if strSuccess.lowercased() == "success" {
                                 // ERProgressHud.sharedInstance.hide()
                                 
-                                
                                 dictUserData = (JSON["data"] as! NSDictionary)
                                 
                                 self.lbl_name.text = (dictUserData["fullName"] as! String)
@@ -283,6 +285,19 @@ class my_profile: UIViewController {
                                 self.btn_following.setTitle("\(dictUserData["TotalFollowing"]!)\nFollowing", for: .normal)
                                 self.btn_following.titleLabel?.lineBreakMode = .byWordWrapping
                                 self.btn_following.titleLabel?.textAlignment = .center
+                                
+                                if (dictUserData["youfollowed"] as! String == "Yes" && dictUserData["youfollowing"] as! String == "Yes"){
+                                    strShowChatIcon = "1"
+                                } else {
+                                    strShowChatIcon = "0"
+                                }
+                                
+                                if (strShowChatIcon == "1") {
+                                    self.btn_edit.isHidden = false
+                                } else {
+                                    self.btn_edit.isHidden = true
+                                }
+                                
                                 
                                 self.btn_follow_unfollow.layer.cornerRadius = 12
                                 self.btn_follow_unfollow.clipsToBounds = true
@@ -861,6 +876,7 @@ class my_profile: UIViewController {
     
     @objc func comment_click_method(_ sender:UIButton) {
         let item = self.arr_feeds[sender.tag] as? [String:Any]
+        print(item as Any)
         
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "comments_id") as? comments
         push!.str_post_id = "\(item!["postId"]!)"
