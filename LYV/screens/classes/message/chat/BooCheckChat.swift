@@ -627,7 +627,7 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         let db = Firestore.firestore()
         let messagesRef = db.collection(COLLECTION_PATH_DIALOG)
 
-        let randomString = generateRandomAlphanumericString(length: 10)
+      let randomString = generateRandomAlphanumericString(length: 10)
         
         let timestamp = getCurrentTimestampInMilliseconds()
         

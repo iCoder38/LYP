@@ -392,22 +392,126 @@ extension all_messages: UICollectionViewDelegate ,
         let item = self.arr_category[indexPath.row] as? [String:Any]
         print(item as Any)
         
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChat") as? BooCheckChat
-        push!.get_chat_data = item! as NSDictionary
-        push!.str_from_dialog = "yes"
-        if "\(item!["senderId"]!)" == self.str_login_user_id {
-            // login user
-            push!.str_receiver_firebase_id = "\(item!["receverId"]!)"
-            push!.str_receiver_firebase_name = "\(item!["receiver_name"]!)"
-            push!.str_receiver_firebase_image = "\(item!["receiver_image"]!)"
-        } else {
-            // receiver
-            push!.str_receiver_firebase_id = "\(item!["senderId"]!)"
-            push!.str_receiver_firebase_name = "\(item!["sender_name"]!)"
-            push!.str_receiver_firebase_image = "\(item!["sender_image"]!)"
-        }
-        self.navigationController?.pushViewController(push!, animated: true)
+        /**/
         
+        let db = Firestore.firestore()
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            let myID = String(myString)
+            
+            let user1id = String(myID)
+            let user2id = "\(item!["senderId"]!)"
+            
+            // Create both possible combinations
+            let combo1 = "\(user1id)+\(user2id)"
+            let combo2 = "\(user2id)+\(user1id)"
+            
+            print(combo1 as Any)
+            print(combo2 as Any)
+            
+            db.collection(COLLECTION_PATH_DIALOG)
+                .whereField("users", arrayContainsAny: [combo1, combo2])
+                .getDocuments { (snapshot, error) in
+                    if let error = error {
+                        print("Error fetching data: \(error)")
+                    } else if let snapshot = snapshot, !snapshot.isEmpty {
+                        for document in snapshot.documents {
+                            print("Matched document: \(document.data())")
+                            
+                            let data = document.data()
+                            
+                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChat") as? BooCheckChat
+                            push!.get_chat_data = data as NSDictionary
+                            push!.str_from_dialog = "yes"
+                            if "\(data["senderId"]!)" == self.str_login_user_id {
+                                // login user
+                                push!.str_receiver_firebase_id = "\(data["receverId"]!)"
+                                push!.str_receiver_firebase_name = "\(data["receiver_name"]!)"
+                                push!.str_receiver_firebase_image = "\(data["receiver_image"]!)"
+                            } else {
+                                // receiver
+                                push!.str_receiver_firebase_id = "\(data["senderId"]!)"
+                                push!.str_receiver_firebase_name = "\(data["sender_name"]!)"
+                                push!.str_receiver_firebase_image = "\(data["sender_image"]!)"
+                            }
+                            self.navigationController?.pushViewController(push!, animated: true)
+                            
+                            
+                        }
+                    } else {
+                        print("No matching data found")
+                        
+                        let randomString = self.generateRandomAlphanumericString(length: 10)
+                          
+                        let timestamp = self.getCurrentTimestampInMilliseconds()
+                        
+                        let messageData: [String: Any] = [
+                            "dialogId": randomString,
+                            "members": [user1id, user2id],
+                            "message": "",  // Empty message as specified
+                            "receiver_image": (item!["sender_profile_picture"] as! String),
+                            "receiver_name": (item!["sender_userName"] as! String),
+                            "receverId": user2id,
+                            "receiver_device": "iOS",
+                            "receiver_device_token": "",
+                            "senderId": user1id,
+                            "sender_device": "iOS",
+                            "sender_deviceToken": "",
+                            "sender_image": (person["image"] as! String),
+                            "sender_name": (person["fullName"] as! String),
+                            "time_stamp": timestamp,
+                            "type": "Text",
+                            "users": [combo1, combo2]
+                        ]
+                        
+                        db.collection(COLLECTION_PATH_DIALOG).addDocument(data: messageData) { error in
+                            if let error = error {
+                                print("Error adding document: \(error)")
+                            } else {
+                                print("New document added successfully!")
+                                
+                                db.collection(COLLECTION_PATH_DIALOG)
+                                    .whereField("users", arrayContainsAny: [combo1, combo2])
+                                    .getDocuments { (snapshot, error) in
+                                        if let error = error {
+                                            print("Error fetching data: \(error)")
+                                        } else if let snapshot = snapshot, !snapshot.isEmpty {
+                                            for document in snapshot.documents {
+                                                print("Matched document: \(document.data())")
+                                                
+                                                let data = document.data()
+                                                
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChat") as? BooCheckChat
+                                                push!.get_chat_data = data as NSDictionary
+                                                push!.str_from_dialog = "yes"
+                                                if "\(data["senderId"]!)" == self.str_login_user_id {
+                                                    // login user
+                                                    push!.str_receiver_firebase_id = "\(data["receverId"]!)"
+                                                    push!.str_receiver_firebase_name = "\(data["receiver_name"]!)"
+                                                    push!.str_receiver_firebase_image = "\(data["receiver_image"]!)"
+                                                } else {
+                                                    // receiver
+                                                    push!.str_receiver_firebase_id = "\(data["senderId"]!)"
+                                                    push!.str_receiver_firebase_name = "\(data["sender_name"]!)"
+                                                    push!.str_receiver_firebase_image = "\(data["sender_image"]!)"
+                                                }
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                                
+                                                
+                                            }
+                                        }
+                                        
+                                    }
+                            }
+                        }
+                        
+                    }
+                }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView,
