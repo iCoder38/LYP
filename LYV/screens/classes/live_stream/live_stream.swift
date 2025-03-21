@@ -56,6 +56,11 @@ class liveStreamingController: UIViewController {
     @IBOutlet weak var remoteView:UIView!
     @IBOutlet weak var joinButton: UIButton!
     
+    @IBOutlet weak var btnHeart: UIButton!
+    let db = Firestore.firestore()
+        var documentId: String = ""  // Store document ID for updating later
+        var isLiked: Bool = false    // Track current like status
+
     // Track if the local user is in a call
     var joined: Bool = false {
         didSet {
@@ -79,6 +84,8 @@ class liveStreamingController: UIViewController {
         self.initViews()
         
         self.initializeAgoraEngine()
+        
+        fetchData(channelName: "yourChannelName", userId: "yourUserId")
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
@@ -109,6 +116,112 @@ class liveStreamingController: UIViewController {
         }
         
     }
+    
+    /*func fetchData() {
+        
+        let db = Firestore.firestore()
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            let myID = String(myString)
+            
+            db.collection("mode/lyv/live_streaming_like/\(self.str_channel_name!)/list")
+                .whereField("channelName", isEqualTo: self.str_channel_name!)
+                .whereField("userId", isEqualTo: myID)
+                .getDocuments { (snapshot, error) in
+                    if let error = error {
+                        print("Error fetching documents: \(error)")
+                    } else {
+                        for document in snapshot!.documents {
+                            let data = document.data()
+                            let name = data["channelName"] as? String ?? "No Name"
+                            // Safely cast status as Bool
+                                if let status = data["like"] as? Bool {
+                                    print("status: \(status)")
+
+                                    if status {
+                                        // status is true
+                                        self.btnHeart.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                                        self.btnHeart.tintColor = .red
+                                    } else {
+                                        // status is false
+                                        self.btnHeart.setImage(UIImage(systemName: "heart"), for: .normal)
+                                    }
+                                } else {
+                                    print("Status field is missing or not a boolean")
+                                }
+                        }
+                    }
+                }
+            
+            
+            /* db.collection("mode/lyv/live_streaming_like/\(self.str_channel_name!)/list").document(documentID).getDocuments { (snapshot, error) in
+             if let error = error {
+             print("Error fetching documents: \(error)")
+             } else {
+             for document in snapshot!.documents {
+             let data = document.data()
+             let name = data["name"] as? String ?? "No Name"
+             let age = data["age"] as? Int ?? 0
+             print("Name: \(name), Age: \(age)")
+             }
+             }
+             }*/
+        }
+    }*/
+    
+    func fetchData(channelName: String, userId: String) {
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            let myID = String(myString)
+            
+        db.collection("mode/lyv/live_streaming_like/\(self.str_channel_name!)/list")
+            .whereField("channelName", isEqualTo: self.str_channel_name!)
+            .whereField("userId", isEqualTo: myID)
+            .getDocuments { (snapshot, error) in
+                if let error = error {
+                    print("Error fetching documents: \(error)")
+                } else {
+                    for document in snapshot!.documents {
+                        let data = document.data()
+                        self.documentId = document.documentID  // Store the document ID
+                        
+                        if let status = data["like"] as? Bool {
+                            self.isLiked = status  // Save the current like status
+                            self.updateHeartButton(status: status)
+                        }
+                    }
+                }
+            }
+    }
+        }
+
+        func updateHeartButton(status: Bool) {
+            let heartImage = status ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+            btnHeart.setImage(heartImage, for: .normal)
+            btnHeart.tintColor = status ? UIColor.red : UIColor.gray
+        }
+
+        @IBAction func heartButtonTapped(_ sender: UIButton) {
+            // Toggle the like status
+            isLiked.toggle()
+            updateHeartButton(status: isLiked)
+
+            // Update in Firestore
+            db.collection("mode/lyv/live_streaming_like/\(self.str_channel_name!)/list").document(documentId).updateData(["like": isLiked]) { error in
+                if let error = error {
+                    print("Error updating status: \(error)")
+                } else {
+                    print("Status updated successfully to \(self.isLiked)")
+                }
+            }
+        }
     
     func scrollToBottom() {
         if (self.liveChat.count != 0) {

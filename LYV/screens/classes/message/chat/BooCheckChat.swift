@@ -192,12 +192,19 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                 
                 let x : Int = person["userId"] as! Int
                 let myString = String(x)
-                if myString == (self.get_chat_data["senderId"] as! String) {
+                if myString == "\(self.get_chat_data["senderId"]!)" {
                     self.imgReceiverProfilePicture.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
                     self.imgReceiverProfilePicture.sd_setImage(with: URL(string: (get_chat_data!["receiver_image"] as! String)), placeholderImage: UIImage(named: "1024"))
                 } else {
                     self.imgReceiverProfilePicture.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-                    self.imgReceiverProfilePicture.sd_setImage(with: URL(string: (get_chat_data!["sender_image"] as! String)), placeholderImage: UIImage(named: "1024"))
+                    
+                    // str_receiver_firebase_id
+                    if (get_chat_data!["sender_image"] == nil) {
+                        self.imgReceiverProfilePicture.sd_setImage(with: URL(string: (get_chat_data!["sender_profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
+                    } else {
+                        self.imgReceiverProfilePicture.sd_setImage(with: URL(string: (get_chat_data!["sender_image"] as! String)), placeholderImage: UIImage(named: "1024"))
+                    }
+                    
                 }
             }
             

@@ -1364,8 +1364,9 @@ extension home: UICollectionViewDelegate ,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if (self.userWhichIndex == "0") {
+        if (self.userWhichIndex == "1") {
             let item = self.liveArray[indexPath.row] as? [String:Any]
+            print(item as Any)
             
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "liveStreamingController_id") as? liveStreamingController
             

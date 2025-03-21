@@ -20,6 +20,13 @@ class shop_details: UIViewController, BrandSelectionDelegate {
     var arr_category_products:NSMutableArray! = []
     var str_product_id:String!
     
+    var strSearch:String! = "no"
+    
+    var strBrand:String!
+    var strSize:String!
+    var strMin:String!
+    var strMax:String!
+    
     @IBOutlet weak var btnFilter:UIButton! {
         didSet {
             btnFilter.layer.cornerRadius = 25
@@ -133,7 +140,17 @@ class shop_details: UIViewController, BrandSelectionDelegate {
          [pageNo] => 1
          */
         
-        filter_product_list_WB(loader: "yes", brands: brands, min: "\(Int(minPrice))", max: "\(Int(maxPrice))", size: "\(size ?? "")")
+        self.strSearch = "yes"
+        
+        self.strBrand = String(brands)
+        self.strSize = "\(size ?? "")"
+        self.strMin = "\(Int(minPrice))"
+        self.strMax = "\(Int(maxPrice))"
+        
+        self.filter_product_list_WB(loader: "yes", brands: self.strBrand, min: "\(Int(minPrice))", max: "\(Int(maxPrice))", size: self.strSize)
+        
+         
+        
     }
     
     @objc func filter_product_list_WB(loader:String,brands:String,min:String,max:String,size:String) {
@@ -630,7 +647,13 @@ extension shop_details: UICollectionViewDelegate ,
             
             print(self.arr_category as Any)
             self.collectionView1.reloadData()
-            self.product_list_WB(loader: "no")
+            
+            if (self.strSearch == "yes"){
+                self.filter_product_list_WB(loader: "yes", brands: self.strBrand, min: self.strMin, max: self.strMax, size: self.strSize)
+            } else {
+                self.product_list_WB(loader: "no")
+            }
+            
             
         } else {
             let item = self.arr_category_products[indexPath.row] as? [String:Any]

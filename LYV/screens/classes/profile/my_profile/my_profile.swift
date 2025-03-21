@@ -50,6 +50,12 @@ class my_profile: UIViewController {
         }
     }
     
+    @IBOutlet weak var lblAbout:UILabel!  {
+        didSet {
+             
+        }
+    }
+    
     @IBOutlet weak var img_profile:UIImageView! {
         didSet {
             img_profile.layer.cornerRadius = 40
@@ -137,6 +143,8 @@ class my_profile: UIViewController {
             if (String(self.strUserId) == "\(person["userId"]!)") {
                 self.lbl_name.text = (person["fullName"] as! String)
                 self.lbl_email.text = (person["email"] as! String)
+                
+                self.lblAbout.text = (person["about"] as! String)
                 
                 self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
                 self.img_profile.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
@@ -270,6 +278,8 @@ class my_profile: UIViewController {
                                 
                                 self.lbl_name.text = (dictUserData["fullName"] as! String)
                                 self.lbl_email.text = (dictUserData["email"] as! String)
+                                
+                                self.lblAbout.text = (dictUserData["about"] as! String)
                                 
                                 self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
                                 self.img_profile.sd_setImage(with: URL(string: (dictUserData["image"] as! String)), placeholderImage: UIImage(named: "1024"))
@@ -960,12 +970,225 @@ extension my_profile: UITableViewDataSource , UITableViewDelegate {
         cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
         
-        
+        cell.btn_more.tag = indexPath.row
+        cell.btn_more.addTarget(self, action: #selector(deleteOrReport), for: .touchUpInside)
         
         cell.img_feed_image.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_feed_image.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
         
         return cell
+        
+    }
+    
+    @objc func deleteOrReport(_ sender:UIButton) {
+        let item = self.arr_feeds[sender.tag] as? [String:Any]
+        print(item!)
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            let myID = String(myString)
+            
+            if (myID == "\(item!["userId"]!)") {
+                
+                let alert = NewYorkAlertController(title: String("Delete").uppercased(), message: String("Are you sure your want to delete this post."), style: .alert)
+                let yes = NewYorkButton(title: "Yes, delete", style: .default) {
+                    _ in
+                    
+                    self.deletePostWB(loader: "yes", postId: "\(item!["postId"]!)")
+                }
+                
+                let no = NewYorkButton(title: "Dismiss", style: .cancel) {
+                    _ in
+                    
+                }
+                alert.addButtons([yes,no])
+                self.present(alert, animated: true)
+                
+            } else {
+                let alert = NewYorkAlertController(title: String("Report").uppercased(), message: String("Are you sure your want to report this post."), style: .alert)
+                let yes = NewYorkButton(title: "Yes, report", style: .default) {
+                    _ in
+                    // self.reportPostWB(loader: "yes", postId: "\(item!["postId"]!)")
+                }
+                
+                let no = NewYorkButton(title: "Dismiss", style: .cancel) {
+                    _ in
+                    
+                }
+                alert.addButtons([yes,no])
+                self.present(alert, animated: true)
+            }
+        }
+    }
+    
+    @objc func deletePostWB(loader:String,postId:String) {
+       
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if (loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+       
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                 
+                parameters = [
+                    "action"    : "postdelete",
+                    "userId"    : String(myString),
+                     "postId"      : String(postId),
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
+                               
+                                if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                                    print(person)
+                                    
+                                    let x : Int = person["userId"] as! Int
+                                    let myString = String(x)
+                                    let myID = String(myString)
+                                    // self.str_login_user_id = myID
+                                    
+                                    if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                                        print(person)
+                                        
+                                        if (String(self.strUserId) == "\(person["userId"]!)") {
+                                            self.lbl_name.text = (person["fullName"] as! String)
+                                            self.lbl_email.text = (person["email"] as! String)
+                                            
+                                            self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                                            self.img_profile.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
+                                            
+                                            self.imgBanner.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                                            self.imgBanner.sd_setImage(with: URL(string: (person["banner"] as! String)), placeholderImage: UIImage(named: "1024"))
+                                            
+                                            self.btn_post.setTitle("\(person["TotalPost"]!)\nPost", for: .normal)
+                                            self.btn_post.titleLabel?.lineBreakMode = .byWordWrapping
+                                            self.btn_post.titleLabel?.textAlignment = .center
+                                            
+                                            self.btn_followers.setTitle("\(person["TotalFollower"]!)\nFollowers", for: .normal)
+                                            self.btn_followers.titleLabel?.lineBreakMode = .byWordWrapping
+                                            self.btn_followers.titleLabel?.textAlignment = .center
+                                            
+                                            self.btn_following.setTitle("\(person["TotalFollowing"]!)\nFollowing", for: .normal)
+                                            self.btn_following.titleLabel?.lineBreakMode = .byWordWrapping
+                                            self.btn_following.titleLabel?.textAlignment = .center
+                                            
+                                            self.btn_follow_unfollow.layer.cornerRadius = 12
+                                            self.btn_follow_unfollow.clipsToBounds = true
+                                            self.btn_follow_unfollow.layer.borderColor = UIColor.black.cgColor
+                                            self.btn_follow_unfollow.layer.borderWidth = 0.4
+                                            self.btn_follow_unfollow.setTitle("Follow", for: .normal)
+                                            self.btn_follow_unfollow.backgroundColor = app_purple_color
+                                            
+                                            self.btn_edit.addTarget(self
+                                                                    , action: #selector(edit_c_m), for: .touchUpInside)
+                                            self.btn_edit.isHidden = false
+                                            
+                                            if (person["youfollowing"] as! String) == "Yes" {
+                                                self.btn_follow_unfollow.setTitle("Unfollow", for: .normal)
+                                                self.btn_follow_unfollow.backgroundColor = app_BG
+                                                self.btn_follow_unfollow.layer.borderWidth = 0.5
+                                                self.btn_follow_unfollow.layer.borderColor = UIColor.white.cgColor
+                                            } else {
+                                                self.btn_follow_unfollow.setTitle("Follow", for: .normal)
+                                                self.btn_follow_unfollow.backgroundColor = app_purple_color
+                                                self.btn_follow_unfollow.layer.borderWidth = 0.5
+                                                self.btn_follow_unfollow.layer.borderColor = UIColor.clear.cgColor
+                                            }
+                                            self.btn_follow_unfollow.isHidden = true
+                                            self.feeds_list_WB(loader: "yes")
+                                            self.btn_edit.setImage(UIImage(named: "edit"), for: .normal)
+                                        } else {
+                                            self.btn_edit.setImage(UIImage(systemName: "message.fill"), for: .normal)
+                                            self.btn_edit.tintColor = .white
+                                            self.btn_edit.addTarget(self, action: #selector(chatClickMethod), for: .touchUpInside)
+                                            self.btn_edit.isHidden = false
+                                            self.getProfileWB(loader: "yes")
+                                        }
+                                        
+                                        
+                                    }
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    
+                                }
+                            }
+                            else {
+                                TokenManager.shared.refresh_token_WB { token, error in
+                                    if let token = token {
+                                        print("Token received: \(token)")
+                                        
+                                        let str_token = "\(token)"
+                                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                        
+                                        self.feeds_list_WB(loader: "no")
+                                        
+                                    } else if let error = error {
+                                        print("Failed to refresh token: \(error.localizedDescription)")
+                                        // Handle the error
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        ERProgressHud.sharedInstance.hide()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            } else {
+                TokenManager.shared.refresh_token_WB { token, error in
+                    if let token = token {
+                        print("Token received: \(token)")
+                        
+                        let str_token = "\(token)"
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        self.feeds_list_WB(loader: "no")
+                        
+                    } else if let error = error {
+                        print("Failed to refresh token: \(error.localizedDescription)")
+                        // Handle the error
+                    }
+                }
+            }
+        }
         
     }
     
