@@ -82,7 +82,7 @@ class details: UIViewController {
         print("\(self.dict_product_details!)")
         
         if ("\(self.dict_product_details["your_review"]!)" == "Yes") {
-            // self.btnReview.isHidden = true
+            self.btnReview.isHidden = true
         }
         
         if ("\(self.dict_product_details["order_status"]!)" == "") {
@@ -105,7 +105,7 @@ class details: UIViewController {
         }
         
         if ("\(self.dict_product_details["order_status"]!)" == "2") {
-            self.btn_shipped.setTitle("Order placed", for: .normal)
+            self.btn_shipped.setTitle("Shipped", for: .normal)
             self.btn_shipped.backgroundColor = app_purple_color
         }
         

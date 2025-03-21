@@ -174,33 +174,58 @@ class liveStreamingController: UIViewController {
     
     func fetchData(channelName: String, userId: String) {
         
-        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String: Any] {
             print(person)
-            
-            let x : Int = person["userId"] as! Int
-            let myString = String(x)
-            let myID = String(myString)
-            
-        db.collection("mode/lyv/live_streaming_like/\(self.str_channel_name!)/list")
-            .whereField("channelName", isEqualTo: self.str_channel_name!)
-            .whereField("userId", isEqualTo: myID)
-            .getDocuments { (snapshot, error) in
-                if let error = error {
-                    print("Error fetching documents: \(error)")
-                } else {
-                    for document in snapshot!.documents {
-                        let data = document.data()
-                        self.documentId = document.documentID  // Store the document ID
-                        
-                        if let status = data["like"] as? Bool {
-                            self.isLiked = status  // Save the current like status
-                            self.updateHeartButton(status: status)
+
+            let x: Int = person["userId"] as! Int
+            let myID = String(x)
+
+            db.collection("mode/lyv/live_streaming_like/\(self.str_channel_name!)/list")
+                .whereField("channelName", isEqualTo: self.str_channel_name!)
+                .whereField("userId", isEqualTo: myID)
+                .getDocuments { (snapshot, error) in
+                    if let error = error {
+                        print("Error fetching documents: \(error)")
+                        return
+                    }
+
+                    if let snapshot = snapshot, snapshot.isEmpty {
+                        // If no document found, insert new data
+                        self.insertNewLikeData(channelName: self.str_channel_name!, userId: myID)
+                    } else {
+                        for document in snapshot!.documents {
+                            let data = document.data()
+                            self.documentId = document.documentID  // Store the document ID
+
+                            if let status = data["like"] as? Bool {
+                                self.isLiked = status
+                                self.updateHeartButton(status: status)
+                            }
                         }
                     }
                 }
-            }
-    }
         }
+
+        }
+    
+    func insertNewLikeData(channelName: String, userId: String) {
+        let newData: [String: Any] = [
+            "channelName": channelName,
+            "userId": userId,
+            "like": false
+        ]
+
+        db.collection("mode/lyv/live_streaming_like/\(channelName)/list").addDocument(data: newData) { error in
+            if let error = error {
+                print("Error adding new like data: \(error)")
+            } else {
+                print("New like data inserted with like: false")
+                self.isLiked = false
+                self.updateHeartButton(status: false)
+            }
+        }
+    }
+
 
         func updateHeartButton(status: Bool) {
             let heartImage = status ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
