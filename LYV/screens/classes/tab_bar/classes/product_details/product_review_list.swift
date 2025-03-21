@@ -12,10 +12,13 @@ import SDWebImage
 
 class product_review_list: UIViewController {
     
+    var strProductId:String!
     var arr_cart_list:NSMutableArray! = []
     
     var str_product_id_for_delete:String!
     var str_store_total_price:String!
+    
+    var starButtons: [UIButton] = []
     
     @IBOutlet weak var tble_view:UITableView! {
         didSet {
@@ -80,8 +83,8 @@ class product_review_list: UIViewController {
                 ]
                 
                 parameters = [
-                    "action"    : "cartlist",
-                    "userId"    : String(myString),
+                    "action"    : "reviewlist",
+                    "userId"    : String(self.strProductId),
                 ]
                 
                 print("parameters-------\(String(describing: parameters))")
@@ -108,7 +111,7 @@ class product_review_list: UIViewController {
                                 self.arr_cart_list.removeAllObjects()
                                 self.arr_cart_list.addObjects(from: ar as! [Any])
                                 
-                                var total: Decimal = 0.0
+                                /*var total: Decimal = 0.0
                                 for indexx in 0..<self.arr_cart_list.count {
                                     let item = self.arr_cart_list[indexx] as? [String:Any]
                                     
@@ -122,7 +125,7 @@ class product_review_list: UIViewController {
                                  print(total as Any)
                                 
                                 self.btn_checkout.setTitle("Checkout: $\(total)", for: .normal)
-                                self.str_store_total_price = "\(total)"
+                                self.str_store_total_price = "\(total)"*/
                                 
                                 self.tble_view.delegate = self
                                 self.tble_view.dataSource = self
@@ -529,29 +532,35 @@ extension product_review_list: UITableViewDataSource , UITableViewDelegate {
         
         let item = self.arr_cart_list[indexPath.row] as? [String:Any]
         
-        cell.lbl_product_price.text = "$\(item!["price"]!) (\(item!["quantity"]!))"
-        cell.lbl_product_title.text = "\(item!["name"]!)"
+        cell.lblUserName.text = "\(item!["userName"]!)"
         
-        cell.lbl_product_quantity.text = "\(item!["quantity"]!)"
+        cell.lblReviewMessage.text = "\(item!["message"]!)"
         
         cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-        cell.img_profile.sd_setImage(with: URL(string: (item!["image_1"] as! String)), placeholderImage: UIImage(named: "1024"))
+        cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "1024"))
         
-        cell.btnAddItemQuantity.tag = indexPath.row
-        cell.btnMinusItemQuantity.tag = indexPath.row
-        
-        cell.btnAddItemQuantity.addTarget(self
-                                          , action: #selector(addItemQuantityClick), for: .touchUpInside)
-        
-        cell.btnMinusItemQuantity.addTarget(self
-                                          , action: #selector(minusItemQuantityClick), for: .touchUpInside)
-        
-        
+        self.starButtons = [cell.starOne, cell.starTwo, cell.starThree, cell.starFour, cell.starFive]
+        updateStars(from: "\(item!["star"]!)")
         
         return cell
         
     }
      
+    func displayStars(from rating: Int) {
+        for (index, button) in starButtons.enumerated() {
+            if index < rating {
+                button.setTitle("★", for: .normal)
+            } else {
+                button.setTitle("☆", for: .normal)
+            }
+        }
+    }
+    
+    func updateStars(from avgrating: String) {
+        let rating = Int(avgrating) ?? 0 // Convert string to integer, default to 0 if invalid
+        displayStars(from: rating)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
            
@@ -579,6 +588,13 @@ extension product_review_list: UITableViewDataSource , UITableViewDelegate {
 
 class product_review_list_table_cell : UITableViewCell {
     
+    @IBOutlet weak var starOne: UIButton!
+    @IBOutlet weak var starTwo: UIButton!
+    @IBOutlet weak var starThree: UIButton!
+    @IBOutlet weak var starFour: UIButton!
+    @IBOutlet weak var starFive: UIButton!
+    
+    
     @IBOutlet weak var img_profile:UIImageView! {
         didSet {
             img_profile.layer.cornerRadius = 8
@@ -587,46 +603,19 @@ class product_review_list_table_cell : UITableViewCell {
         }
     }
     
-    
-    @IBOutlet weak var lbl_product_title:UILabel! {
+    @IBOutlet weak var lblReviewMessage:UILabel! {
         didSet {
-            lbl_product_title.textColor = .white
+            lblReviewMessage.textColor = .white
         }
     }
     
-    @IBOutlet weak var lbl_product_price:UILabel! {
+    @IBOutlet weak var lblUserName:UILabel!  {
         didSet {
-            lbl_product_price.textColor = .white
+            lblUserName.textColor = .white
         }
     }
     
-    @IBOutlet weak var lbl_product_quantity:UILabel! {
-        didSet {
-            lbl_product_quantity.textAlignment = .center
-            lbl_product_quantity.textColor = .white
-            lbl_product_quantity.layer.cornerRadius = 4
-            lbl_product_quantity.clipsToBounds = true
-            lbl_product_quantity.backgroundColor = UIColor.init(red: 47.0/255.0, green: 48.0/255.0, blue: 52.0/255.0, alpha: 1)
-        }
-    }
-   
-    @IBOutlet weak var btnAddItemQuantity:UIButton! {
-        didSet {
-            btnAddItemQuantity.tintColor = .white
-        }
-    }
     
-    @IBOutlet weak var btnMinusItemQuantity:UIButton! {
-        didSet {
-            btnMinusItemQuantity.tintColor = .white
-        }
-    }
     
-    @IBOutlet weak var viewBG:UIView! {
-        didSet {
-            viewBG.backgroundColor = app_BG
-            viewBG.layer.cornerRadius = 4
-            viewBG.clipsToBounds = true
-        }
-    }
+    
 }

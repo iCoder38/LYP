@@ -139,6 +139,12 @@ class product_details: UIViewController {
         
         self.btn_heart.addTarget(self, action: #selector(heart_click_method), for: .touchUpInside)
         
+        self.starOne.addTarget(self, action: #selector(starClickMethod), for: .touchUpInside)
+        self.starTwo.addTarget(self, action: #selector(starClickMethod), for: .touchUpInside)
+        self.starThree.addTarget(self, action: #selector(starClickMethod), for: .touchUpInside)
+        self.starFour.addTarget(self, action: #selector(starClickMethod), for: .touchUpInside)
+        self.starFive.addTarget(self, action: #selector(starClickMethod), for: .touchUpInside)
+        
         self.callProductListWB()
         
         self.btn_cart.addTarget(self, action: #selector(push_to_Cart), for: .touchUpInside)
@@ -167,6 +173,12 @@ class product_details: UIViewController {
         
         
         self.cart_counter_WB()
+    }
+    
+    @objc func starClickMethod() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "product_review_list_id") as? product_review_list
+        push!.strProductId = "\(self.dict_product_details["productId"]!)"
+        self.navigationController?.pushViewController(push!, animated: true)
     }
     
     @objc func push_to_Cart() {
